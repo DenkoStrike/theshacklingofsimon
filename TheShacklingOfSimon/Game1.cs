@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGameProject1;
+namespace TheShacklingOfSimon;
 
 public class Game1 : Game
 {
@@ -48,5 +48,18 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         base.Draw(gameTime);
+    }
+    
+    public void SetSprite(int choice)
+    {
+        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
+        Rectangle[] sprites = new Rectangle[]
+        {
+            // Rectangles for grabbing sprites off whatever spritesheets we decide to use
+        };
+        switch (choice)
+        {
+            // Add cases depending on how many sprites we have
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGameProject1", "MonoGameProject1\MonoGameProject1.csproj", "{7B737098-13C2-406B-953F-7E605FBFF1B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheShacklingOfSimon", "TheShacklingOfSimon\TheShacklingOfSimon.csproj", "{7B737098-13C2-406B-953F-7E605FBFF1B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
