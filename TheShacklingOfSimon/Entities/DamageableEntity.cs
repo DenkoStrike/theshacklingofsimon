@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Microsoft.Xna.Framework;
 
-namespace TheShacklingOfSimon.Controllers;
+namespace TheShacklingOfSimon.Entities;
 
 // Listing IEntity only for readability
 public abstract class DamageableEntity : IEntity, IDamageable

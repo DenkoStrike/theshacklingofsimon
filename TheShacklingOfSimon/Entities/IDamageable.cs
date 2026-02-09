@@ -1,4 +1,4 @@
-﻿namespace TheShacklingOfSimon;
+﻿namespace TheShacklingOfSimon.Entities;
 
 public interface IDamageable : IEntity
 {
