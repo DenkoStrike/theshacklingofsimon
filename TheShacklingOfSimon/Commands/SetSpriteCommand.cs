@@ -2,17 +2,17 @@ namespace TheShacklingOfSimon.Commands;
 
 public class SetSpriteCommand : ICommand
 {
-    private Game1 _game;
+    private IEntity _entity;
     private int _id;
 
-    public SetSpriteCommand(Game1 game, int id)
+    public SetSpriteCommand(IEntity p, int id)
     {
-        this._game = game;
+        this._entity = p;
         this._id = id;
     }
 
     public void Execute()
     {
-        _game.SetSprite(_id);
+        _entity.SetSprite(_id);
     }
 }
