@@ -9,11 +9,12 @@ internal interface IEntity
     public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
     public bool IsActive { get; set; }
-    public Vector2 Hitbox { get; set; }
+    public Rectangle Hitbox { get; set; }
 
     // Abstract methods that every Entity-extending class will have to define separately
     void Update(GameTime delta);
     void Draw(SpriteBatch spriteBatch);
+    void SetSprite();
 
     // Methods every Entity-extending class will need, but can also be overridden.
     //void Interact();
