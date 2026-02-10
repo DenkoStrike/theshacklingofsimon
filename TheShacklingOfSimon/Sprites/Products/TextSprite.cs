@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TheShacklingOfSimon.Sprites.Products;
 
-public class SpriteText : ISprite
+public class TextSprite : ISprite
 {
     private readonly SpriteFont _font;
     private readonly string _text;
 
     
-    public SpriteText(SpriteFont font, string text, Vector2 pos)
+    public TextSprite(SpriteFont font, string text)
     {
         this._font = font;
         this._text = text;
