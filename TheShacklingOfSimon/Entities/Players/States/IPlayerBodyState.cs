@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace TheShacklingOfSimon.Entities.Players;
 
 public interface IPlayerBodyState
 {
-    public void Update(GameTime delta, IPlayer player);
-    public void Enter(IPlayer player);
-    public void Exit(IPlayer player);
-    
+    void Update(IPlayer player, GameTime delta);
+    void Draw(SpriteBatch spriteBatch, Vector2 position);
+    void Enter(IPlayer player);
+    void Exit(IPlayer player);
+    void HandleMovement(IPlayer player, Vector2 direction);
 }

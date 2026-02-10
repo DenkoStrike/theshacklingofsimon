@@ -1,10 +1,18 @@
-﻿namespace TheShacklingOfSimon.Entities.Players.States;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-public class PlayerBodyMovingState
+namespace TheShacklingOfSimon.Entities.Players.States;
+
+public class PlayerBodyMovingState : IPlayerBodyState
 {
-    public void Update(IPlayer player)
+    public void Update(IPlayer player, GameTime delta)
     {
             
+    }
+
+    public void Draw(SpriteBatch spriteBatch, Vector2 position)
+    {
+        
     }
     
     public void Enter(IPlayer player)
@@ -16,5 +24,9 @@ public class PlayerBodyMovingState
     {
         
     }
-    
+
+    public void HandleMovement(IPlayer player)
+    {
+        
+    }
 }

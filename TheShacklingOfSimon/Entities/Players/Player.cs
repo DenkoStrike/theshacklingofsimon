@@ -23,9 +23,10 @@ public class Player : DamageableEntity, IPlayer
      */ 
 
     public float MoveSpeedStat { get; private set; }
-    public int DamageMultiplierStat { get; private set; }
+    public float DamageMultiplierStat { get; private set; }
     public Vector2 FacingDirection { get; private set; }
-    private Vector2 _headOffset = new Vector2(0, -15);
+    
+    private readonly Vector2 _headOffset = new Vector2(0, -15);
 
     public Player(Vector2 startPosition)
     {
@@ -47,6 +48,8 @@ public class Player : DamageableEntity, IPlayer
         this.Inventory.AddItem(new NoneItem());
         this.CurrentWeapon = Inventory.Weapons[0];
         this.CurrentItem = Inventory.Items[0];
+        this.DamageMultiplierStat = 1.0f;
+        this.MoveSpeedStat = 20.0f;
         
         this.CurrentHeadState = new PlayerHeadIdleState();
         this.CurrentBodyState = new PlayerBodyIdleState();
@@ -86,27 +89,24 @@ public class Player : DamageableEntity, IPlayer
         if (pos < Inventory.Items.Count)
         {
             CurrentItem = Inventory.Items[pos];
+            DamageMultiplierStat = 
         }
     }
 
     public void Attack(Vector2 direction)
     {
-        // No-op if no current weapon
-        if (CurrentWeapon != null)
-        {
-            CurrentWeapon.Fire(Position, direction, new ProjectileStats(1.0f * DamageMultiplierStat, 5.0f));
-        }
+        CurrentHeadState.HandleAttack(this, direction);
     }
 
     public void Move(Vector2 direction)
     {
-        Velocity = direction * MoveSpeedStat;
+        CurrentBodyState.HandleMovement(this, direction);
     }
 
     public override void Update(GameTime delta)
     {
-        CurrentHeadState.Update(delta, this);
-        CurrentBodyState.Update(delta, this);
+        CurrentHeadState.Update(this, delta);
+        CurrentBodyState.Update(this, delta);
         
         float dt = (float)delta.ElapsedGameTime.TotalSeconds;
         Position += Velocity * dt;
@@ -117,6 +117,7 @@ public class Player : DamageableEntity, IPlayer
     public override void Draw(SpriteBatch spriteBatch)
     {
         Sprite.Draw(spriteBatch, Position);
+        HeadSprite.Draw(spriteBatch, Position + _headOffset);
     }
 
     public void ChangeHeadState(IPlayerHeadState newHeadState)

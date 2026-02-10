@@ -17,4 +17,5 @@ public interface IWeapon
      *      The speed of the Projectile
      */
     void Fire(Vector2 pos, Vector2 direction, ProjectileStats stats);
+    IProjectile SwapProjectile(IProjectile newProjectile);
 }
