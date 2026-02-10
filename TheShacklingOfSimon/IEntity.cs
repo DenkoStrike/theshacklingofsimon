@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-interface Entity
+internal interface IEntity
 {
     // Common properties of *every* entity
     public Vector2 Position { get; set; }
@@ -17,7 +17,9 @@ interface Entity
     void Draw(SpriteBatch spriteBatch);
 
     // Methods every Entity-extending class will need, but can also be overridden.
-    void TakeDamage(float amt);
-
-    void Die();
+    void Interact();
+    void Discontinue()
+    {
+       IsActive = false;
+    }
 }
