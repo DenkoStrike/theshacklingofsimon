@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary.Graphics;
 
-namespace sprint0;
+namespace TheShacklingOfSimon;
 
 public class Game1 : Game
 {
@@ -27,7 +27,17 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
+        /*
+         * Controls will be initialized here using RegisterCommand()
+         * Use a Keys enum or MouseInput struct to register an input for mouse/keyboard
+         * Then use some ICommand variable to register *what* that input does.
+         *
+         * e.g., _keyboardController.RegisterCommand(Keys.D0, new ExitCommand(this));
+         * or _mouseController.RegisterCommand(
+         *      new MouseInput(new Rectangle(0, 0, screenDimensions.Width, screenDimensions.Height), ButtonState.Pressed, MouseButton.Right), 
+         *      new ExitCommand(this));
+         * to register the D0 key and right click to exit the game.
+         */
         base.Initialize();
     }
 
@@ -164,5 +174,18 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         base.Draw(gameTime);
+    }
+    
+    public void SetSprite(int choice)
+    {
+        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
+        Rectangle[] sprites = new Rectangle[]
+        {
+            // Rectangles for grabbing sprites off whatever spritesheets we decide to use
+        };
+        switch (choice)
+        {
+            // Add cases depending on how many sprites we have
+        }
     }
 }
