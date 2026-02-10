@@ -7,20 +7,27 @@ public interface IPlayer : IDamageable
 {
     /*
      * Inherits
-     * Vector2 Position { get; set; }
-     * Rectangle Hitbox { get; set; }
-     * void SetSprite(SpriteType type),
+     * Vector2 Position { get; }
+     * Vector2 Velocity { get; }
+     * bool IsActive { get; }
+     * Rectangle Hitbox { get; }
+     * ISprite Sprite { get; }
+     * 
      * void Update(GameTime delta),
-     * void Draw(SpriteBatch spriteBatch)
+     * void Draw(SpriteBatch spriteBatch),
+     * void Discontinue();
+     *
+     * To be implemented after Sprint 2:
+     * void Interact(IEntity other)
+     * 
      * from IEntity
      */
     /*
      * Inherits
-     * Health { get; set; },
-     * MaxHealth { get; set; },
+     * Health { get; },
+     * MaxHealth { get; },
      * void TakeDamage(float amt),
-     * void Heal(float amt),
-     * void Die()
+     * void Heal(float amt)
      * from IDamageable
      */ 
     
@@ -30,7 +37,7 @@ public interface IPlayer : IDamageable
     
     
     // IPlayer-implementing classes will act as the context for the State pattern
-    IPlayerState CurrentState { get; }
+    IPlayerHeadState CurrentHeadState { get; }
     
     void AddWeaponToInventory(IWeapon weapon);
 
@@ -47,8 +54,8 @@ public interface IPlayer : IDamageable
     void EquipWeapon(int pos);
     
     void Attack(Vector2 direction);
-    
     void Move(Vector2 direction);
-
-    void ChangeState(IPlayerState newState);
+    
+    void ChangeHeadState(IPlayerHeadState newHeadState);
+    void ChangeBodyState(IPlayerBodyState newBodyState);
 }

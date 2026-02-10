@@ -4,11 +4,11 @@ public interface IDamageable : IEntity
 {
     /*
      * Inherits
-     * Vector2 Position { get; set; }
-     * Vector2 Velocity { get; set; }
-     * bool IsActive { get; set; }
-     * Rectangle Hitbox { get; set; }
-     * ISprite Sprite { get; set; }
+     * Vector2 Position { get; }
+     * Vector2 Velocity { get; }
+     * bool IsActive { get; }
+     * Rectangle Hitbox { get; }
+     * ISprite Sprite { get; }
      * 
      * void Update(GameTime delta),
      * void Draw(SpriteBatch spriteBatch),

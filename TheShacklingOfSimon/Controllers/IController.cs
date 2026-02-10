@@ -1,7 +1,7 @@
 ﻿namespace TheShacklingOfSimon.Controllers;
 
 /*
- * Generic interface to allow client class (Game1) to link
+ * Generic interface to allow client class to link
  * inputs and commands easily.
  */
 public interface IController<T>

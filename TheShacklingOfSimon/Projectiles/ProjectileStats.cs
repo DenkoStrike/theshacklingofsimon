@@ -1,7 +1,13 @@
 ﻿namespace TheShacklingOfSimon.Projectiles;
 
-public struct ProjectileStats
+public record struct ProjectileStats
 {
     public float Damage;
     public float Speed;
+
+    public ProjectileStats(float damage, float speed)
+    {
+        Damage = damage;
+        Speed = speed;
+    }
 }
