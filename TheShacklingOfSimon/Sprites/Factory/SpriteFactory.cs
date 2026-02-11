@@ -43,6 +43,8 @@ public class SpriteFactory
         string jsonPath = Path.Combine(content.RootDirectory, jsonPathName);
         if (!File.Exists(jsonPath))
         {
+            // Prevent "ghost" instances
+            _textureStorage.Remove(spriteName);
             throw new FileNotFoundException("Could not find PlayerDefaultSprite.json at " + jsonPath + ".");
         }
 

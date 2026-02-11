@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Entities.Players.States;
 using TheShacklingOfSimon.Weapons;
 
 namespace TheShacklingOfSimon.Entities.Players;
@@ -54,6 +55,7 @@ public interface IPlayer : IDamageable
     void EquipWeapon(int pos);
     
     void Attack(Vector2 direction);
+    void AttackSecondary(Vector2 direction);
     void Move(Vector2 direction);
     
     void ChangeHeadState(IPlayerHeadState newHeadState);

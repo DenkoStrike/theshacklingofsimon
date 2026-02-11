@@ -25,7 +25,7 @@ public class PlayerBodyMovingState : IPlayerBodyState
         
     }
 
-    public void HandleMovement(IPlayer player)
+    public void HandleMovement(IPlayer player, Vector2 direction)
     {
         
     }

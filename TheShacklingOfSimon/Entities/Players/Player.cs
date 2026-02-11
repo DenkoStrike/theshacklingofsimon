@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Projectiles;
 using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.Weapons;
+using TheShacklingOfSimon.Entities.Players.States;
 
 namespace TheShacklingOfSimon.Entities.Players;
 
@@ -10,6 +11,7 @@ public class Player : DamageableEntity, IPlayer
 {
     public Inventory Inventory { get; private set; }
     public IWeapon CurrentWeapon { get; private set; }
+    public IWeapon CurrentSecondaryWeapon { get; private set; }
     public IItem CurrentItem { get; private set; }
     
     public IPlayerHeadState CurrentHeadState { get; private set; }
@@ -45,9 +47,12 @@ public class Player : DamageableEntity, IPlayer
         // Player properties
         this.Inventory = new Inventory();
         this.Inventory.AddWeapon(new BasicWeapon());
+        this.Inventory.AddWeapon(new BombWeapon());
         this.Inventory.AddItem(new NoneItem());
         this.CurrentWeapon = Inventory.Weapons[0];
+        this.CurrentWeapon = Inventory.Weapons[1];
         this.CurrentItem = Inventory.Items[0];
+        
         this.DamageMultiplierStat = 1.0f;
         this.MoveSpeedStat = 20.0f;
         
@@ -89,11 +94,16 @@ public class Player : DamageableEntity, IPlayer
         if (pos < Inventory.Items.Count)
         {
             CurrentItem = Inventory.Items[pos];
-            DamageMultiplierStat = 
+            DamageMultiplierStat = CurrentItem.
         }
     }
 
     public void Attack(Vector2 direction)
+    {
+        CurrentHeadState.HandleAttack(this, direction);
+    }
+
+    public void AttackSecondary(Vector2 direction)
     {
         CurrentHeadState.HandleAttack(this, direction);
     }

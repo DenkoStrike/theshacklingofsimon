@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TheShacklingOfSimon.Entities.Players;
+namespace TheShacklingOfSimon.Entities.Players.States;
 
 public interface IPlayerHeadState
 {
@@ -10,4 +10,5 @@ public interface IPlayerHeadState
     void Enter(IPlayer player);
     void Exit(IPlayer player);
     void HandleAttack(IPlayer player, Vector2 direction);
+    void HandleAttackSecondary(IPlayer player, Vector2 direction);
 }
