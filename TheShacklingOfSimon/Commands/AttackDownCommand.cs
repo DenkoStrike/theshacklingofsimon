@@ -14,6 +14,6 @@ public class AttackDownCommand : ICommand
 
     public void Execute()
     {
-        _player.Attack(new Vector2(0, 1));
+        _player.RegisterPrimaryAttackInput(new Vector2(0, 1));
     }
 }

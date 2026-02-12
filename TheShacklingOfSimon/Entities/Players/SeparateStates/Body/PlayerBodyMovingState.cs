@@ -1,17 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGameLibrary.Graphics;
 using TheShacklingOfSimon.Sprites.Factory;
-using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.Entities.Players.States;
+namespace TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
 
 public class PlayerBodyMovingState : IPlayerBodyState
 {
     private string _currentAnimation;
-    private IPlayer _player;
+    private PlayerWithTwoSprites _player;
 
-    public PlayerBodyMovingState(IPlayer player)
+    public PlayerBodyMovingState(PlayerWithTwoSprites player)
     {
         _player = player;
     }

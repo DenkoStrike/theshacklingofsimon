@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.Entities.Players.States;
+using TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
+using TheShacklingOfSimon.Entities.Players.SeparateStates.Head;
+using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.Weapons;
 
 namespace TheShacklingOfSimon.Entities.Players;
@@ -33,15 +35,18 @@ public interface IPlayer : IDamageable
      */ 
     
     Inventory Inventory { get; }
-    IWeapon CurrentWeapon { get; }
+    IWeapon CurrentPrimaryWeapon { get; }
+    IWeapon CurrentSecondaryWeapon { get; }
     IItem CurrentItem { get; }
     
     // IPlayer-implementing classes will act as the context for the State pattern
     IPlayerHeadState CurrentHeadState { get; }
     IPlayerBodyState CurrentBodyState { get; }
     
-    float MoveSpeedStat { get; }
-    float DamageMultiplierStat { get; }
+    float MoveSpeedStat { get; set; }
+    float DamageMultiplierStat { get; set; }
+    float PrimaryAttackCooldown { get; set; }
+    float SecondaryAttackCooldown { get; set; }
     
     void AddWeaponToInventory(IWeapon weapon);
 
@@ -51,15 +56,15 @@ public interface IPlayer : IDamageable
 
     IItem RemoveItemFromInventory(int pos);
     
-    // pos is the index of the IItem in the player's Inventory
     void EquipItem(int pos);
-    
-    // pos is the index of the IWeapon in the player's Inventory
-    void EquipWeapon(int pos);
+    void EquipPrimaryWeapon(int pos);
+    void EquipSecondaryWeapon(int pos);
     
     void Attack(Vector2 direction);
     void AttackSecondary(Vector2 direction);
     void RegisterMoveInput(Vector2 direction);
+    void RegisterPrimaryAttackInput(Vector2 direction);
+    void RegisterSecondaryAttackInput(Vector2 direction);
     
     void ChangeHeadState(IPlayerHeadState newHeadState);
     void ChangeBodyState(IPlayerBodyState newBodyState);

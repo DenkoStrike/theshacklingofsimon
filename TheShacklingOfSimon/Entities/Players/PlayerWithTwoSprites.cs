@@ -1,36 +1,45 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
+using TheShacklingOfSimon.Entities.Players.SeparateStates.Head;
 using TheShacklingOfSimon.Projectiles;
 using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.Weapons;
-using TheShacklingOfSimon.Entities.Players.States;
 
 namespace TheShacklingOfSimon.Entities.Players;
 
-public class Player : DamageableEntity, IPlayer
+public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 {
     public Inventory Inventory { get; private set; }
-    public IWeapon CurrentWeapon { get; private set; }
+    public IWeapon CurrentPrimaryWeapon { get; private set; }
     public IWeapon CurrentSecondaryWeapon { get; private set; }
     public IItem CurrentItem { get; private set; }
     
     public IPlayerHeadState CurrentHeadState { get; private set; }
     public IPlayerBodyState CurrentBodyState { get; private set; }
     
-    
-    public ISprite HeadSprite { get; private set; }
+    /*
+     * Additional sprite to handle the head.
+     * Allows non-combinatorial states
+     *      i.e., head can be in shooting state and body can
+     *      be in moving state, but they do so independently
+     *      as opposed to a ShootingMoving combined state.
+     */
+    public ISprite HeadSprite { get; set; }
     /*
      * Sprite property inherited from IEntity
-     * Sprite is the body sprite in this class.
+     * Sprite is arbitrarily the body sprite in this class.
      */ 
 
-    public float MoveSpeedStat { get; private set; }
-    public float DamageMultiplierStat { get; private set; }
+    public float MoveSpeedStat { get; set; }
+    public float DamageMultiplierStat { get; set; }
+    public float PrimaryAttackCooldown { get; set; }
+    public float SecondaryAttackCooldown { get; set; }
     
     private readonly Vector2 _headOffset = new Vector2(0, -15);
     private Vector2 _movementInput;
 
-    public Player(Vector2 startPosition)
+    public PlayerWithTwoSprites(Vector2 startPosition)
     {
         // IEntity properties
         Position = startPosition;
@@ -49,15 +58,18 @@ public class Player : DamageableEntity, IPlayer
         this.Inventory.AddWeapon(new BasicWeapon());
         this.Inventory.AddWeapon(new BombWeapon());
         this.Inventory.AddItem(new NoneItem());
-        this.CurrentWeapon = Inventory.Weapons[0];
-        this.CurrentWeapon = Inventory.Weapons[1];
+        this.CurrentPrimaryWeapon = Inventory.Weapons[0];
+        this.CurrentSecondaryWeapon = Inventory.Weapons[1];
         this.CurrentItem = Inventory.Items[0];
         
+        // These can all be overriden with public set method
         this.DamageMultiplierStat = 1.0f;
         this.MoveSpeedStat = 20.0f;
+        this.PrimaryAttackCooldown = 0.2f;
+        this.SecondaryAttackCooldown = 0.5f;
         
-        this.CurrentHeadState = new PlayerHeadIdleState();
-        this.CurrentBodyState = new PlayerBodyIdleState();
+        this.CurrentHeadState = new PlayerHeadIdleState(this, Velocity);
+        this.CurrentBodyState = new PlayerBodyIdleState(this);
         this._movementInput = Vector2.Zero;
     }
 
@@ -81,11 +93,19 @@ public class Player : DamageableEntity, IPlayer
         return Inventory.RemoveItem(pos);
     }
 
-    public void EquipWeapon(int pos)
+    public void EquipPrimaryWeapon(int pos)
     {
         if (pos < Inventory.Weapons.Count)
         {
-            CurrentWeapon = Inventory.Weapons[pos];
+            CurrentPrimaryWeapon = Inventory.Weapons[pos];
+        }
+    }
+
+    public void EquipSecondaryWeapon(int pos)
+    {
+        if (pos < Inventory.Weapons.Count)
+        {
+            CurrentSecondaryWeapon = Inventory.Weapons[pos];
         }
     }
 
@@ -99,12 +119,12 @@ public class Player : DamageableEntity, IPlayer
 
     public void Attack(Vector2 direction)
     {
-        CurrentHeadState.HandleAttack(direction);
+        CurrentHeadState.HandleAttack(direction, PrimaryAttackCooldown);
     }
 
     public void AttackSecondary(Vector2 direction)
     {
-        CurrentHeadState.HandleAttackSecondary(direction);
+        CurrentHeadState.HandleAttackSecondary(direction, SecondaryAttackCooldown);
     }
     
     public void RegisterMoveInput(Vector2 direction)
@@ -118,13 +138,23 @@ public class Player : DamageableEntity, IPlayer
         _movementInput += direction;
     }
 
+    public void RegisterPrimaryAttackInput(Vector2 direction)
+    {
+        // TODO
+    }
+
+    public void RegisterSecondaryAttackInput(Vector2 direction)
+    {
+        // TODO
+    }
+
     public override void Update(GameTime delta)
     {
         if (_movementInput.LengthSquared() > 0)
         {
             _movementInput.Normalize();
         }
-        CurrentBodyState.HandleMovement(this, _movementInput);
+        CurrentBodyState.HandleMovement(_movementInput);
         _movementInput = Vector2.Zero;
         
         float dt = (float)delta.ElapsedGameTime.TotalSeconds;
@@ -151,9 +181,9 @@ public class Player : DamageableEntity, IPlayer
     {
         if (CurrentHeadState != newHeadState)
         {
-            CurrentHeadState.Exit(this);
+            CurrentHeadState.Exit();
             CurrentHeadState = newHeadState;
-            CurrentHeadState.Enter(this);
+            CurrentHeadState.Enter();
         }
     }
 

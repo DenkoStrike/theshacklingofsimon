@@ -14,6 +14,6 @@ public class AttackLeftCommand : ICommand
 
     public void Execute()
     {
-        _player.Attack(new Vector2(-1, 0));
+        _player.RegisterPrimaryAttackInput(new Vector2(-1, 0));
     }
 }

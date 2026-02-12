@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Entities.Players.States;
+namespace TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
 
 public class PlayerBodyIdleState : IPlayerBodyState
 {
-    private IPlayer _player;
+    private PlayerWithTwoSprites _player;
     
-    public PlayerBodyIdleState(IPlayer player)
+    public PlayerBodyIdleState(PlayerWithTwoSprites player)
     {
         _player = player;
     }

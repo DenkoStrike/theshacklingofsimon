@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace TheShacklingOfSimon.Entities.Players.States;
+namespace TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
 
 public interface IPlayerBodyState
 {
