@@ -3,19 +3,22 @@ using System.Security.Principal;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGameLibrary.Graphics;
+using TheShacklingOfSimon.Commands;
+using TheShacklingOfSimon.Content.graphics;
+using TheShacklingOfSimon.Controllers;
+using TheShacklingOfSimon.Entities.Players;
 
 namespace TheShacklingOfSimon;
 
 public class Game1 : Game
 {
-    private AnimatedSprite _mario;
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private Vector2 _marioPosition;
-    private bool _marioVelocity;
-    private TextureAtlas atlas;
-    private int _currentAction = 1; // ranges from 1-4
+    private Texture2D _texture;
+    private SpriteFont _font;
+
+    private IController<Keys> _keyboardController;
+    private IController<MouseInput> _mouseController;
 
     public Game1()
     {
@@ -26,11 +29,17 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
+
+        IPlayer player =
+            new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
+        _keyboardController = new KeyboardController();
+        _mouseController = new MouseController();
+        
         /*
-         * Controls will be initialized here using RegisterCommand()
+         * Controls are initialized here using RegisterCommand()
          * Use a Keys enum or MouseInput struct to register an input for mouse/keyboard
-         * Then use some ICommand variable to register *what* that input does.
+         * Then use some ICommand concrete class to register *what* that input does.
          *
          * e.g., _keyboardController.RegisterCommand(Keys.D0, new ExitCommand(this));
          * or _mouseController.RegisterCommand(
@@ -38,6 +47,37 @@ public class Game1 : Game
          *      new ExitCommand(this));
          * to register the D0 key and right click to exit the game.
          */
+        // Movement controls
+        _keyboardController.RegisterCommand(Keys.W, new MoveUpCommand(player));
+        _keyboardController.RegisterCommand(Keys.A, new MoveLeftCommand(player));
+        _keyboardController.RegisterCommand(Keys.S, new MoveRightCommand(player));
+        _keyboardController.RegisterCommand(Keys.D, new MoveDownCommand(player));
+        
+        // Attacking controls
+        _keyboardController.RegisterCommand(Keys.E, new SecondaryAttackNeutralCommand(player));
+        _keyboardController.RegisterCommand(Keys.LeftShift, new SecondaryAttackNeutralCommand(player));
+        _keyboardController.RegisterCommand(Keys.RightShift, new SecondaryAttackNeutralCommand(player));
+        _keyboardController.RegisterCommand(Keys.Up, new PrimaryAttackUpCommand(player));
+        _keyboardController.RegisterCommand(Keys.Left, new PrimaryAttackLeftCommand(player));
+        _keyboardController.RegisterCommand(Keys.Down, new PrimaryAttackDownCommand(player));
+        _keyboardController.RegisterCommand(Keys.Right, new PrimaryAttackRightCommand(player));
+        
+        _mouseController.RegisterCommand(
+            new MouseInput(
+                new Rectangle(0, 0, screenDimensions.Width, screenDimensions.Height),
+                ButtonState.Pressed, 
+                MouseButton.Right), 
+            new SecondaryAttackNeutralCommand(player));
+        _mouseController.RegisterCommand(
+            new MouseInput(
+                new Rectangle(0, 0, screenDimensions.Width, screenDimensions.Height),
+                ButtonState.Pressed,
+                MouseButton.Left),
+            new PrimaryAttackDynamicMouseCommand(player)
+            );
+        
+        
+        // Link commands and controls
         base.Initialize();
     }
 
@@ -174,18 +214,5 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         base.Draw(gameTime);
-    }
-    
-    public void SetSprite(int choice)
-    {
-        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
-        Rectangle[] sprites = new Rectangle[]
-        {
-            // Rectangles for grabbing sprites off whatever spritesheets we decide to use
-        };
-        switch (choice)
-        {
-            // Add cases depending on how many sprites we have
-        }
     }
 }

@@ -3,11 +3,11 @@ using TheShacklingOfSimon.Entities.Players;
 
 namespace TheShacklingOfSimon.Commands;
 
-public class AttackUpCommand : ICommand
+public class PrimaryAttackUpCommand : ICommand
 {
     private readonly IPlayer _player;
 
-    public AttackUpCommand(IPlayer player)
+    public PrimaryAttackUpCommand(IPlayer player)
     {
         _player = player;
     }

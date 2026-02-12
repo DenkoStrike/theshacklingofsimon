@@ -1,19 +1,19 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players;
 
 namespace TheShacklingOfSimon.Commands;
 
-public class MoveDownCommand : ICommand
+public class PrimaryAttackDownCommand : ICommand
 {
     private readonly IPlayer _player;
 
-    public MoveDownCommand(IPlayer player)
+    public PrimaryAttackDownCommand(IPlayer player)
     {
         _player = player;
     }
 
     public void Execute()
     {
-        _player.RegisterMoveInput(new Vector2(0, 1));
+        _player.RegisterPrimaryAttackInput(new Vector2(0, 1));
     }
 }

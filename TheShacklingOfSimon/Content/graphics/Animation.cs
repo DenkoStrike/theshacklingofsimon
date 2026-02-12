@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MonoGameLibrary.Graphics;
+namespace TheShacklingOfSimon.Content.graphics;
 
 public class Animation 
 {

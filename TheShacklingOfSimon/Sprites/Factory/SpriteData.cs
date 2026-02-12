@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TheShacklingOfSimon.Sprites;
+namespace TheShacklingOfSimon.Sprites.Factory;
 
 // The root of the JSON structure.
 public class SpriteDataRoot

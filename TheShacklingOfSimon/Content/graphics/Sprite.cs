@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGameLibrary.Graphics;
+namespace TheShacklingOfSimon.Content.graphics;
 
 public class Sprite
 {

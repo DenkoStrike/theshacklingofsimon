@@ -3,17 +3,17 @@ using TheShacklingOfSimon.Entities.Players;
 
 namespace TheShacklingOfSimon.Commands;
 
-public class AttackRightCommand : ICommand
+public class PrimaryAttackLeftCommand : ICommand
 {
     private IPlayer _player;
 
-    public AttackRightCommand(IPlayer player)
+    public PrimaryAttackLeftCommand(IPlayer player)
     {
         _player = player;
     }
 
     public void Execute()
     {
-        _player.RegisterPrimaryAttackInput(new Vector2(1, 0));
+        _player.RegisterPrimaryAttackInput(new Vector2(-1, 0));
     }
 }

@@ -150,7 +150,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public override void Update(GameTime delta)
     {
-        if (_movementInput.LengthSquared() > 0)
+        if (_movementInput.LengthSquared() > 0.0001f)
         {
             _movementInput.Normalize();
         }
