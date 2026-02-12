@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players.States;
 using TheShacklingOfSimon.Entities.Players.States.Body;
@@ -190,13 +191,30 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         }
     }
 
-    public void ChangeState(IPlayerBodyState newBodyState)
+    public void ChangeBodyState(IPlayerBodyState newBodyState)
     {
         if (CurrentBodyState != newBodyState)
         {
             CurrentBodyState.Exit();
             CurrentBodyState = newBodyState;
             CurrentBodyState.Enter();
+        }
+    }
+
+    // More explicit interface implementation
+    void IPlayer.ChangeState(IPlayerState newState)
+    {
+        if (newState is IPlayerHeadState)
+        {
+            ChangeHeadState((IPlayerHeadState)newState);
+        }
+        else if (newState is IPlayerBodyState)
+        {
+            ChangeBodyState((IPlayerBodyState)newState);
+        }
+        else
+        {
+            throw new ArgumentException("newState must be of type IPlayerHeadState, IPlayerBodyState.");
         }
     }
 }
