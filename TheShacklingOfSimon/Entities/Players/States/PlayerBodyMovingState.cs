@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameLibrary.Graphics;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
 
@@ -8,33 +9,46 @@ namespace TheShacklingOfSimon.Entities.Players.States;
 public class PlayerBodyMovingState : IPlayerBodyState
 {
     private string _currentAnimation;
-    
-    public void Update(IPlayer player, GameTime delta)
-    {
-        
-    }
+    private IPlayer _player;
 
-    public void Draw(SpriteBatch spriteBatch, Vector2 position)
+    public PlayerBodyMovingState(IPlayer player)
     {
-        
+        _player = player;
     }
     
-    public void Enter(IPlayer player)
+    public void Update(GameTime delta)
     {
-        
+        _player.Sprite.Update(delta);
+    }
+    
+    public void Enter()
+    {
+        UpdateSprite();
     }
 
-    public void Exit(IPlayer player)
+    public void Exit()
     {
-        player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite("PlayerBodyIdle");
+        /*
+         * No-op for now
+         * Could use this later for stopping any sounds related to moving (e.g., walking)
+         */
     }
 
-    public void HandleMovement(IPlayer player, Vector2 direction)
+    public void HandleMovement(Vector2 direction)
     {
-        player.Velocity = direction;
+        if (direction == Vector2.Zero)
+        {
+            _player.Velocity = Vector2.Zero;
+            _player.ChangeBodyState(new PlayerBodyIdleState(_player));
+        }
+        else
+        {
+            _player.Velocity = direction * _player.MoveSpeedStat;
+            UpdateSprite();
+        }
     }
 
-    private void UpdateSprite(IPlayer player)
+    private void UpdateSprite()
     {
         string newAnimationName = "PlayerWalkVertical";
         
@@ -43,18 +57,18 @@ public class PlayerBodyMovingState : IPlayerBodyState
          * e.g., If walking northeast (both up and right),
          * the horizontal walk animation is played.
          */
-        if (player.Velocity.X != 0)
+        if (_player.Velocity.X != 0)
         {
-            player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite("PlayerWalkHorizontal");
+            newAnimationName = "PlayerWalkHorizontal";
         }
-        else if (player.Velocity.Y != 0)
+        else if (_player.Velocity.Y != 0)
         {
-            player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite("PlayerWalkVertical");
+            newAnimationName = "PlayerWalkVertical";
         }
 
         if (newAnimationName != _currentAnimation)
         {
-            player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName);
+            _player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName);
             _currentAnimation = newAnimationName;
         }
     }

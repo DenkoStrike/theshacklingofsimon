@@ -131,14 +131,20 @@ public class Player : DamageableEntity, IPlayer
         Position += Velocity * dt;
         Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 20, 20);
         
-        CurrentHeadState.Update(this, delta);
-        CurrentBodyState.Update(this, delta);
+        CurrentHeadState.Update(delta);
+        CurrentBodyState.Update(delta);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        Sprite.Draw(spriteBatch, Position);
-        HeadSprite.Draw(spriteBatch, Position + _headOffset);
+        SpriteEffects flip = SpriteEffects.None;
+        if (Velocity.X < 0)
+        {
+            flip = SpriteEffects.FlipHorizontally;
+        }
+        
+        Sprite.Draw(spriteBatch, Position, Color.White, 0.0f,
+            new Vector2(0, 0), 1.0f, flip, 0.0f);
     }
 
     public void ChangeHeadState(IPlayerHeadState newHeadState)
@@ -155,9 +161,9 @@ public class Player : DamageableEntity, IPlayer
     {
         if (CurrentBodyState != newBodyState)
         {
-            CurrentBodyState.Exit(this);
+            CurrentBodyState.Exit();
             CurrentBodyState = newBodyState;
-            CurrentBodyState.Enter(this);
+            CurrentBodyState.Enter();
         }
     }
 }

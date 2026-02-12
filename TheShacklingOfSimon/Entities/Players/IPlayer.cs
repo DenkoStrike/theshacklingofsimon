@@ -36,9 +36,12 @@ public interface IPlayer : IDamageable
     IWeapon CurrentWeapon { get; }
     IItem CurrentItem { get; }
     
-    
     // IPlayer-implementing classes will act as the context for the State pattern
     IPlayerHeadState CurrentHeadState { get; }
+    IPlayerBodyState CurrentBodyState { get; }
+    
+    float MoveSpeedStat { get; }
+    float DamageMultiplierStat { get; }
     
     void AddWeaponToInventory(IWeapon weapon);
 
