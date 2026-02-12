@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Entities.Players.SeparateStates.Head;
+namespace TheShacklingOfSimon.Entities.Players.States.Head;
 
 public class PlayerHeadIdleState : IPlayerHeadState
 {

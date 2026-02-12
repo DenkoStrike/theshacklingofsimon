@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
-using TheShacklingOfSimon.Entities.Players.SeparateStates.Head;
-using TheShacklingOfSimon.Projectiles;
+using TheShacklingOfSimon.Entities.Players.States;
+using TheShacklingOfSimon.Entities.Players.States.Body;
+using TheShacklingOfSimon.Entities.Players.States.Head;
 using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.Weapons;
 
@@ -17,6 +17,9 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
     
     public IPlayerHeadState CurrentHeadState { get; private set; }
     public IPlayerBodyState CurrentBodyState { get; private set; }
+    
+    // Use explicit interface implementation 
+    IPlayerState IPlayer.CurrentBodyState => CurrentBodyState;
     
     /*
      * Additional sprite to handle the head.
@@ -69,7 +72,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         this.SecondaryAttackCooldown = 0.5f;
         
         this.CurrentHeadState = new PlayerHeadIdleState(this, Velocity);
-        this.CurrentBodyState = new PlayerBodyIdleState(this);
+        this.CurrentState = new PlayerBodyIdleState(this);
         this._movementInput = Vector2.Zero;
     }
 
@@ -187,7 +190,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         }
     }
 
-    public void ChangeBodyState(IPlayerBodyState newBodyState)
+    public void ChangeState(IPlayerBodyState newBodyState)
     {
         if (CurrentBodyState != newBodyState)
         {

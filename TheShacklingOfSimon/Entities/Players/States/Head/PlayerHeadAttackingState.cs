@@ -3,7 +3,7 @@ using TheShacklingOfSimon.Projectiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 
-namespace TheShacklingOfSimon.Entities.Players.SeparateStates.Head;
+namespace TheShacklingOfSimon.Entities.Players.States.Head;
 
 public class PlayerHeadAttackingState : IPlayerHeadState
 {

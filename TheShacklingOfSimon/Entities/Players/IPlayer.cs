@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
-using TheShacklingOfSimon.Entities.Players.SeparateStates.Head;
-using TheShacklingOfSimon.Sprites.Products;
+using TheShacklingOfSimon.Entities.Players.States;
 using TheShacklingOfSimon.Weapons;
 
 namespace TheShacklingOfSimon.Entities.Players;
@@ -40,8 +38,7 @@ public interface IPlayer : IDamageable
     IItem CurrentItem { get; }
     
     // IPlayer-implementing classes will act as the context for the State pattern
-    IPlayerHeadState CurrentHeadState { get; }
-    IPlayerBodyState CurrentBodyState { get; }
+    IPlayerState CurrentBodyState { get; }
     
     float MoveSpeedStat { get; set; }
     float DamageMultiplierStat { get; set; }
@@ -65,7 +62,6 @@ public interface IPlayer : IDamageable
     void RegisterMoveInput(Vector2 direction);
     void RegisterPrimaryAttackInput(Vector2 direction);
     void RegisterSecondaryAttackInput(Vector2 direction);
-    
-    void ChangeHeadState(IPlayerHeadState newHeadState);
-    void ChangeBodyState(IPlayerBodyState newBodyState);
+
+    void ChangeState(IPlayerState newState);
 }

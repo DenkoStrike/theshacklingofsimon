@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Entities.Players.SeparateStates.Body;
+namespace TheShacklingOfSimon.Entities.Players.States.Body;
 
 public class PlayerBodyMovingState : IPlayerBodyState
 {
@@ -36,7 +36,7 @@ public class PlayerBodyMovingState : IPlayerBodyState
         if (direction == Vector2.Zero)
         {
             _player.Velocity = Vector2.Zero;
-            _player.ChangeBodyState(new PlayerBodyIdleState(_player));
+            _player.ChangeState(new PlayerBodyIdleState(_player));
         }
         else
         {
