@@ -36,7 +36,7 @@ public class PlayerHeadIdleState : IPlayerHeadState
         _player.Sprite.Update(delta);
     }
 
-    public void HandleAttack(Vector2 direction, float stateDuration)
+    public void HandlePrimaryAttack(Vector2 direction, float stateDuration)
     {
         Vector2 cardinal = GetCardinalDirection(direction);
         if (cardinal != Vector2.Zero)
@@ -45,7 +45,7 @@ public class PlayerHeadIdleState : IPlayerHeadState
         }
     }
 
-    public void HandleAttackSecondary(Vector2 direction, float stateDuration)
+    public void HandleSecondaryAttack(Vector2 direction, float stateDuration)
     {
         Vector2 cardinal = GetCardinalDirection(direction);
         if (cardinal != Vector2.Zero)

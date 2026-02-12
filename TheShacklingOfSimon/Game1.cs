@@ -76,8 +76,6 @@ public class Game1 : Game
             new PrimaryAttackDynamicMouseCommand(player)
             );
         
-        
-        // Link commands and controls
         base.Initialize();
     }
 
