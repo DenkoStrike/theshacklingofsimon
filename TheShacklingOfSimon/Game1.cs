@@ -39,17 +39,72 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
+        _keyboardController = new KeyboardController(new MonoGameKeyboardService());
+        _mouseController = new MouseController(new MonoGameMouseService());
+        base.Initialize();
+    }
+
+    protected override void LoadContent()
+    {
         Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
         
-        _entities = new List<IEntity>(); 
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        
+        // Content pipeline first
+        _texture = Content.Load<Texture2D>("player");
+        _font = Content.Load<SpriteFont>("File");
+        
+        // Load stuff into factory after
+        SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
+        
+        // Create entities now that the sprite factory has textures
+        _entities = new List<IEntity>();
         _player =
             new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
         _entities.Add(_player);
-        _keyboardController = new KeyboardController(new MonoGameKeyboardService());
-        _mouseController = new MouseController(new MonoGameMouseService());
+        
+        // Register controls now that the player exists
+        RegisterControls(screenDimensions);
+    }
 
-		
-		/*
+    protected override void Update(GameTime delta)
+    {
+        _keyboardController.Update();
+        _mouseController.Update();
+        
+        /*
+         * Add various other things that need to be updated.
+         */
+        
+        foreach (IEntity e in _entities)
+        {
+            e.Update(delta);
+        }
+        base.Update(delta);
+
+    }
+    
+    protected override void Draw(GameTime delta)
+    {
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+        _spriteBatch.Begin();
+
+        /*
+         * Add various other things that need to be drawn
+         *      e.g., ITile objects, GUI, etc.
+         */
+        foreach (IEntity e in _entities)
+        {
+            e.Draw(_spriteBatch);
+        }
+        
+        _spriteBatch.End();
+        base.Draw(delta);
+    }
+
+    private void RegisterControls(Rectangle screenDimensions)
+    {
+        /*
          * Controls are initialized here using RegisterCommand()
          * Use a KeyboardInput or MouseInput struct to register an input for mouse/keyboard
          * Then use some ICommand concrete class to register *what* that input does.
@@ -64,7 +119,7 @@ public class Game1 : Game
 		_keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.W), new MoveUpCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.A), new MoveLeftCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.S), new MoveDownCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.D), new MoveUpCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.D), new MoveRightCommand(_player));
         
         // Attacking controls
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.E), new SecondaryAttackNeutralCommand(_player));
