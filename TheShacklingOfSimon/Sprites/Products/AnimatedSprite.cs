@@ -6,14 +6,13 @@ namespace TheShacklingOfSimon.Sprites.Products;
 public class AnimatedSprite : ISprite
 {
     private readonly Texture2D _texture;
-    private readonly Vector2 _pos;
     // The part of the sprite sheet to draw
     private readonly Rectangle[] _sourceRectangle;
     private int _currentFrame;
 
     // Animation variables
-    private double _timer;
-    private readonly double _speed;
+    private float _timer;
+    private readonly float _speed;
     
     public AnimatedSprite(Texture2D texture, Rectangle[] sourceRectangle)
     {
@@ -21,7 +20,7 @@ public class AnimatedSprite : ISprite
         this._sourceRectangle = sourceRectangle;
         this._currentFrame = 0;
         this._timer = 0;
-        this._speed = 0.25;
+        this._speed = 0.05f;
     }
 
     public void Draw(SpriteBatch spriteBatch, Vector2 pos, Color color)
@@ -35,7 +34,7 @@ public class AnimatedSprite : ISprite
 
     public void Update(GameTime delta)
     {
-        _timer += delta.ElapsedGameTime.TotalSeconds;
+        _timer += (float)delta.ElapsedGameTime.TotalSeconds;
         if (_timer >= _speed)
         {
             _timer -= _speed;

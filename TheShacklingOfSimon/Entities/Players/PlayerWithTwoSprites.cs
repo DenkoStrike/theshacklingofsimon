@@ -43,7 +43,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
     public float PrimaryAttackCooldown { get; set; }
     public float SecondaryAttackCooldown { get; set; }
     
-    private readonly Vector2 _headOffset = new Vector2(-5, -15);
+    private readonly Vector2 _headOffset = new Vector2(-4.75f, -16);
     private Vector2 _movementInput;
     private Vector2 _primaryAttackInput;
     private Vector2 _secondaryAttackInput;
@@ -56,7 +56,6 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         IsActive = true;
         // Arbitrarily sized hitbox of 20x20
         Hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, 20, 20);
-        
         
         // IDamageable properties
         this.Health = 3;
@@ -82,6 +81,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         this.CurrentHeadState.Enter();
         this.CurrentBodyState.Enter();
         this._movementInput = Vector2.Zero;
+        this._primaryAttackInput = Vector2.Zero;
+        this._secondaryAttackInput = Vector2.Zero;
     }
 
     public void AddWeaponToInventory(IWeapon weapon)
@@ -91,7 +92,22 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public IWeapon RemoveWeaponFromInventory(int pos)
     {
-        return Inventory.RemoveWeapon(pos);
+        IWeapon weapon = new NoneWeapon();
+        if (pos < Inventory.Weapons.Count)
+        {
+            if (Inventory.Weapons[pos] == CurrentPrimaryWeapon)
+            {
+                CurrentPrimaryWeapon = new NoneWeapon();
+            }
+            else if (Inventory.Weapons[pos] == CurrentSecondaryWeapon)
+            {
+                CurrentSecondaryWeapon = new NoneWeapon();
+            }
+
+            weapon = Inventory.RemoveWeapon(pos);
+        }
+
+        return weapon;
     }
     
     public void AddItemToInventory(IItem item)
@@ -101,7 +117,18 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public IItem RemoveItemFromInventory(int pos)
     {
-        return Inventory.RemoveItem(pos);
+        IItem item = new NoneItem();
+        if (pos < Inventory.Items.Count)
+        {
+            if (Inventory.Items[pos] == CurrentItem)
+            {
+                CurrentPrimaryWeapon = new NoneWeapon();
+            }
+
+            item = Inventory.RemoveItem(pos);
+        }
+
+        return item;
     }
 
     public void EquipPrimaryWeapon(int pos)
@@ -141,12 +168,18 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public void RegisterPrimaryAttackInput(Vector2 direction)
     {
-        _primaryAttackInput += direction;
+        if (CurrentPrimaryWeapon != null)
+        {
+            _primaryAttackInput += direction;
+        }
     }
 
     public void RegisterSecondaryAttackInput(Vector2 direction)
     {
-        _secondaryAttackInput += direction;
+        if (CurrentSecondaryWeapon != null)
+        {
+            _secondaryAttackInput += direction;
+        }
     }
 
     public override void Update(GameTime delta)
@@ -155,8 +188,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         if (_movementInput.Length() > 0.0001f)
         {
             _movementInput.Normalize();
-            CurrentBodyState.HandleMovement(_movementInput);
         }
+        CurrentBodyState.HandleMovement(_movementInput);
         _movementInput = Vector2.Zero;
         
         // Attack logic

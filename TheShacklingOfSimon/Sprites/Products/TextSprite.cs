@@ -7,7 +7,6 @@ public class TextSprite : ISprite
 {
     private readonly SpriteFont _font;
     private readonly string _text;
-
     
     public TextSprite(SpriteFont font, string text)
     {
