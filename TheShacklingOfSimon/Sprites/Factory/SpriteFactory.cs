@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Sprites.Factory.Data;
 using TheShacklingOfSimon.Sprites.Products;
 
+
 namespace TheShacklingOfSimon.Sprites.Factory;
 
 public class SpriteFactory

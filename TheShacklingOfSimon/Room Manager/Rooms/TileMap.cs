@@ -31,13 +31,13 @@ namespace TheShacklingOfSimon.Tiles
 
 					if ((x + y) % 2 == 0)
 					{
-						var sprite = spriteFactory.CreateStaticSprite("rock");
+						var sprite = spriteFactory.CreateStaticSprite("images/Rocks");
 						tiles[x, y] = new RockTile(sprite, position);
 					}
 					else
 					{
-						var sprite = spriteFactory.CreateStaticSprite("hole");
-						tiles[x, y] = new HoleTile(sprite, position);
+						var sprite = spriteFactory.CreateStaticSprite("images/Rocks");
+						tiles[x, y] = new RockTile(sprite, position);
 					}
 				}
 			}
