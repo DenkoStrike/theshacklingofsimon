@@ -1,0 +1,15 @@
+{
+	"Sprites": [
+		{
+			"Name": "images/Rocks",
+			"Frames": [
+				{
+					"X": 3,
+					"Y": 3,
+					"W": 25,
+					"H": 27
+				}
+			]
+		}
+	]
+}

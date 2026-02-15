@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using TheShacklingOfSimon.Weapons;
+using TheShacklingOfSimon.Items;
+
 
 namespace TheShacklingOfSimon;
 

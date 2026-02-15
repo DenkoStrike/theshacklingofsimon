@@ -35,6 +35,9 @@
 /processorParam:TextureFormat=Color
 /build:images/characters.gif
 
+#begin images/Rocks.json
+/copy:images/Rocks.json
+
 #begin images/Rocks.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -46,6 +49,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/Rocks.png
+
+#begin images/Spikes.json
+/copy:images/Spikes.json
 
 #begin images/Spikes.png
 /importer:TextureImporter

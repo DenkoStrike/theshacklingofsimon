@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Commands;
@@ -10,6 +11,8 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Mouse;
+using TheShacklingOfSimon.Room_Manager;
+using TheShacklingOfSimon.Sprites.Factory;
 using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
 
 namespace TheShacklingOfSimon;
@@ -23,7 +26,8 @@ public class Game1 : Game
 
     private IController<KeyboardInput> _keyboardController;
     private IController<MouseInput> _mouseController;
-    private IPlayer _player;
+	private TileManager tileManager; //Temporary tile switching for sprint 2
+	private IPlayer _player;
     private List<IEntity> _entities;
 
     public Game1()
@@ -37,14 +41,15 @@ public class Game1 : Game
     {
         Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
         
-        _entities = new List<IEntity>();
+        _entities = new List<IEntity>(); 
         _player =
             new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
         _entities.Add(_player);
         _keyboardController = new KeyboardController(new MonoGameKeyboardService());
         _mouseController = new MouseController(new MonoGameMouseService());
-        
-        /*
+
+		
+		/*
          * Controls are initialized here using RegisterCommand()
          * Use a KeyboardInput or MouseInput struct to register an input for mouse/keyboard
          * Then use some ICommand concrete class to register *what* that input does.
@@ -55,8 +60,8 @@ public class Game1 : Game
          *      new ExitCommand(this));
          * to register the D0 key and right click to exit the game.
          */
-        // Movement controls
-        _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.W), new MoveUpCommand(_player));
+		// Movement controls
+		_keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.W), new MoveUpCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.A), new MoveLeftCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.S), new MoveDownCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.D), new MoveUpCommand(_player));
@@ -69,12 +74,15 @@ public class Game1 : Game
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Left), new PrimaryAttackLeftCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Down), new PrimaryAttackDownCommand(_player));
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Right), new PrimaryAttackRightCommand(_player));
-        
+
+
+
+        //Mouse controls
         _mouseController.RegisterCommand(
             new MouseInput(
                 new InputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-                BinaryInputState.Pressed, 
-                MouseButton.Right), 
+                BinaryInputState.Pressed,
+                MouseButton.Right),
             new SecondaryAttackNeutralCommand(_player));
         _mouseController.RegisterCommand(
             new MouseInput(
@@ -83,7 +91,7 @@ public class Game1 : Game
                 MouseButton.Left),
             new PrimaryAttackDynamicMouseCommand(_player)
             );
-        
+
         _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Escape), new ExitCommand(this));
         base.Initialize();
     }
@@ -93,18 +101,39 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _texture = Content.Load<Texture2D>("misc");
         _font = Content.Load<SpriteFont>("File");
-    }
 
-    protected override void Update(GameTime delta)
+        //load Tile Sprites
+        SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
+		SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
+
+
+		//Tile Manager initialization and Controls
+		tileManager = new TileManager(SpriteFactory.Instance);
+
+		_keyboardController.RegisterCommand(
+			new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Y),
+			new NextTileCommand(tileManager));
+
+		_keyboardController.RegisterCommand(
+			new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.T),
+			new PreviousTileCommand(tileManager));
+
+
+	}
+
+	protected override void Update(GameTime delta)
     {
         _keyboardController.Update();
         _mouseController.Update();
-        
-        /*
+
+		/*
          * Add various other things that need to be updated.
          */
-        
-        foreach (IEntity e in _entities)
+
+		tileManager.Update(delta);
+
+
+		foreach (IEntity e in _entities)
         {
             e.Update(delta);
         }
@@ -117,11 +146,15 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin();
 
-        /*
+		/*
          * Add various other things that need to be drawn
          *      e.g., ITile objects, GUI, etc.
          */
-        foreach (IEntity e in _entities)
+
+		tileManager.Draw(_spriteBatch);
+
+
+		foreach (IEntity e in _entities)
         {
             e.Draw(_spriteBatch);
         }

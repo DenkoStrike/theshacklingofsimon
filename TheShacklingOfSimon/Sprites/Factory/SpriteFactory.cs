@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Sprites.Products;
+using TheShacklingOfSimon.Sprites.Factory.Data;
+
 
 namespace TheShacklingOfSimon.Sprites.Factory;
 
@@ -51,10 +53,11 @@ public class SpriteFactory
             throw new FileNotFoundException("Could not find PlayerDefaultSprite.json at " + jsonPath + ".");
         }
 
-        SpriteDataRoot data = JsonSerializer.Deserialize<SpriteDataRoot>(jsonPath);
-        
-        // Turn all the sprite data from the JSON file into Rectangle data
-        foreach ( SpriteData sprite in data.Sprites )
+		string jsonText = File.ReadAllText(jsonPath);
+		SpriteDataRoot data = JsonSerializer.Deserialize<SpriteDataRoot>(jsonText);
+
+		// Turn all the sprite data from the JSON file into Rectangle data
+		foreach ( SpriteData sprite in data.Sprites )
         {
             Rectangle[] frames = new Rectangle[sprite.Frames.Count];
             for (int i = 0; i < sprite.Frames.Count; i++)

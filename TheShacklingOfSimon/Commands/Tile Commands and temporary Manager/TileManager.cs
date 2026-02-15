@@ -1,44 +1,49 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Room_Manager;
+using TheShacklingOfSimon.Sprites.Factory;
+using System.Collections.Generic;
 
-namespace TheShacklingOfSimon.Tiles
+namespace TheShacklingOfSimon.Room_Manager;
+
+public class TileManager
 {
-	public class TileManager
+	private readonly List<ITile> tiles;
+	private int currentIndex;
+
+	public TileManager(SpriteFactory spriteFactory)
 	{
-		private List<ITile> tiles;
-		private int currentIndex;
+		tiles = new List<ITile>();
 
-		public ITile CurrentTile => tiles[currentIndex];
+		var rockSprite = spriteFactory.CreateStaticSprite("images/Rocks");
+		var spikeSprite = spriteFactory.CreateStaticSprite("images/Spikes");
 
-		public TileManager(List<ITile> tiles)
-		{
-			this.tiles = tiles;
-			currentIndex = 0;
-		}
+		Vector2 center = new Vector2(400, 300);
 
-		public void NextTile()
-		{
-			currentIndex = (currentIndex + 1) % tiles.Count;
-		}
+		tiles.Add(new RockTile(rockSprite, center));
+		tiles.Add(new RockTile(spikeSprite, center));
 
-		public void PreviousTile()
-		{
-			currentIndex--;
+		currentIndex = 0;
+	}
 
-			if (currentIndex < 0)
-				currentIndex = tiles.Count - 1;
-		}
+	public void NextTile()
+	{
+		currentIndex = (currentIndex + 1) % tiles.Count;
+	}
 
-		public void Update(GameTime gameTime)
-		{
-			CurrentTile.Update(gameTime);
-		}
+	public void PreviousTile()
+	{
+		currentIndex--;
+		if (currentIndex < 0)
+			currentIndex = tiles.Count - 1;
+	}
 
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			CurrentTile.Draw(spriteBatch);
-		}
+	public void Update(GameTime gameTime)
+	{
+		tiles[currentIndex].Update(gameTime);
+	}
+
+	public void Draw(SpriteBatch spriteBatch)
+	{
+		tiles[currentIndex].Draw(spriteBatch);
 	}
 }
