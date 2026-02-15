@@ -12,6 +12,7 @@ using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Mouse;
 using TheShacklingOfSimon.Room_Manager;
+using TheShacklingOfSimon.Item_Manager;
 using TheShacklingOfSimon.Sprites.Factory;
 using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
 
@@ -27,6 +28,7 @@ public class Game1 : Game
     private IController<KeyboardInput> _keyboardController;
     private IController<MouseInput> _mouseController;
 	private TileManager tileManager; //Temporary tile switching for sprint 2
+	private ItemManager itemManager; //Temporary item switching for sprint 2
 	private IPlayer _player;
     private List<IEntity> _entities;
 
@@ -62,6 +64,12 @@ public class Game1 : Game
 
         tileManager = new TileManager(SpriteFactory.Instance);
 
+        //load Item Sprites
+        SpriteFactory.Instance.LoadTexture(Content, "images/8Ball.json", "images/8Ball");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Red_Heart.json", "images/Red_Heart");
+
+        itemManager = new ItemManager(SpriteFactory.Instance);
+
 		// Create entities now that the sprite factory has textures
 		_entities = new List<IEntity>();
         _player =
@@ -84,6 +92,7 @@ public class Game1 : Game
          */
 
 		tileManager.Update(delta);
+		itemManager.Update(delta);
 
 		foreach (IEntity e in _entities)
         {
@@ -104,6 +113,7 @@ public class Game1 : Game
          */
 
 		tileManager.Draw(_spriteBatch);
+		itemManager.Draw(_spriteBatch);
 
 		foreach (IEntity e in _entities)
         {
@@ -144,12 +154,21 @@ public class Game1 : Game
 
         //Tile Manager Controls
         _keyboardController.RegisterCommand(
-	        new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Y),
+	        new KeyboardInput(BinaryInputState.JustPressed, KeyboardButton.Y),
 	        new NextTileCommand(tileManager));
 
         _keyboardController.RegisterCommand(
-	        new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.T),
+	        new KeyboardInput(BinaryInputState.JustPressed, KeyboardButton.T),
 	        new PreviousTileCommand(tileManager));
+
+        //Item Manager Controls
+        _keyboardController.RegisterCommand(
+	        new KeyboardInput(BinaryInputState.JustPressed, KeyboardButton.I),
+	        new NextItemCommand(itemManager));
+
+        _keyboardController.RegisterCommand(
+	        new KeyboardInput(BinaryInputState.JustPressed, KeyboardButton.U),
+	        new PreviousItemCommand(itemManager));
 
 		//Mouse controls
 		_mouseController.RegisterCommand(
