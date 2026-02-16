@@ -1,6 +1,4 @@
-﻿using TheShacklingOfSimon.Item_Manager;
-
-namespace TheShacklingOfSimon.Commands
+﻿namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager
 {
 	public class NextItemCommand : ICommand
 	{

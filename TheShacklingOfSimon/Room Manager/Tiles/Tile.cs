@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Room_Manager.Rooms;
 using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.Room_Manager;
+namespace TheShacklingOfSimon.Room_Manager.Tiles;
 
 public abstract class Tile : ITile
 {

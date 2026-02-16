@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.Sprites.Products;
-using TheShacklingOfSimon.Sprites.Products;
+﻿using TheShacklingOfSimon.Entities;
 
-namespace TheShacklingOfSimon.Room_Manager
+namespace TheShacklingOfSimon.Room_Manager.Tiles
 {
     public interface ITile: IEntity
     {

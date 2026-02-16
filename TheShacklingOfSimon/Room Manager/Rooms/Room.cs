@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Room_Manager
+namespace TheShacklingOfSimon.Room_Manager.Rooms
 {
 	public class Room
 	{

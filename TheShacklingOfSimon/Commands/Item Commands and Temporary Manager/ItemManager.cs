@@ -1,11 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Room_Manager.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
-using System.Collections.Generic;
-using TheShacklingOfSimon.Room_Manager;
 
-
-namespace TheShacklingOfSimon.Item_Manager;
+namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager;
 
 public class ItemManager
 {

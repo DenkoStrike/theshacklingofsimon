@@ -1,13 +1,10 @@
-using System;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies.States;
-using TheShacklingOfSimon.Sprites.Products;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 
-namespace TheShacklingOfSimon.Entities.Enemies;
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 
 public class Enemy : DamageableEntity, IEnemy
 {    

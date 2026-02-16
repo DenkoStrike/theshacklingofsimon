@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Weapons;
-using TheShacklingOfSimon.Items;
 
-
-namespace TheShacklingOfSimon;
+namespace TheShacklingOfSimon.Entities;
 
 public class Inventory
 {
