@@ -7,10 +7,12 @@ public class PlayerBodyMovingState : IPlayerBodyState
 {
     private string _currentAnimation;
     private PlayerWithTwoSprites _player;
+    private float _animationSpeed;
 
-    public PlayerBodyMovingState(PlayerWithTwoSprites player)
+    public PlayerBodyMovingState(PlayerWithTwoSprites player, float animationSpeed)
     {
         _player = player;
+        _animationSpeed = animationSpeed;
     }
     
     public void Enter()
@@ -31,7 +33,7 @@ public class PlayerBodyMovingState : IPlayerBodyState
         _player.Sprite.Update(delta);
     }
 
-    public void HandleMovement(Vector2 direction)
+    public void HandleMovement(Vector2 direction, float frameDuration)
     {
         if (direction.Length() < 0.0001f)
         {
@@ -65,7 +67,7 @@ public class PlayerBodyMovingState : IPlayerBodyState
 
         if (newAnimationName != _currentAnimation)
         {
-            _player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName);
+            _player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName, _animationSpeed);
             _currentAnimation = newAnimationName;
         }
     }

@@ -77,7 +77,7 @@ public class PlayerHeadIdleState : IPlayerHeadState
 
         if (newAnimationName != _currentAnimation)
         {
-            _player.HeadSprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName);
+            _player.HeadSprite = SpriteFactory.Instance.CreateStaticSprite(newAnimationName);
             _currentAnimation = newAnimationName;
         }
     }

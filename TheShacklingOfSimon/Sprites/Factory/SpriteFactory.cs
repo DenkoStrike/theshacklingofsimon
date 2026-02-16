@@ -91,7 +91,7 @@ public class SpriteFactory
         _fontStorage.Add(fontFileName, content.Load<SpriteFont>(fontFileName));
     }
 
-    public ISprite CreateAnimatedSprite(string spriteName)
+    public ISprite CreateAnimatedSprite(string spriteName, float animationSpeed)
     {
         ISprite sprite = null;
         bool textureExists = _textureStorage.TryGetValue(spriteName, out var texture);
@@ -99,7 +99,7 @@ public class SpriteFactory
 
         if (textureExists && sourceRectanglesExist)
         {
-            sprite = new AnimatedSprite(texture, frames);
+            sprite = new AnimatedSprite(texture, frames, animationSpeed);
         }
         return sprite;
     }

@@ -12,5 +12,5 @@ public interface IPlayerBodyState : IPlayerState
      * from IPlayerState
      */
     
-    void HandleMovement(Vector2 direction);
+    void HandleMovement(Vector2 direction, float frameDuration);
 }
