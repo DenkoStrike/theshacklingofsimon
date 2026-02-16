@@ -73,8 +73,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         // These can all be overriden with public set method
         this.DamageMultiplierStat = 1.0f;
         this.MoveSpeedStat = 20.0f;
-        this.PrimaryAttackCooldown = 0.2f;
-        this.SecondaryAttackCooldown = 0.5f;
+        this.PrimaryAttackCooldown = 0.5f;
+        this.SecondaryAttackCooldown = 1.5f;
         
         this.CurrentHeadState = new PlayerHeadIdleState(this, Velocity);
         this.CurrentBodyState = new PlayerBodyIdleState(this);
