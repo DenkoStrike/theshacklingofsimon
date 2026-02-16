@@ -1,20 +1,14 @@
-using System;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies.States;
-using TheShacklingOfSimon.Sprites.Products;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 
-namespace TheShacklingOfSimon.Entities.Enemies;
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 
 public class Enemy : DamageableEntity, IEnemy
 {    
     public IEnemyState CurrentState { get; private set; }
-    
-    // Use explicit interface implementation 
-    IEnemyState IEnemy.CurrentState => CurrentState;
 
     public float MoveSpeedStat { get; set; }
     public float AttackDamage{ get; set; }
@@ -116,11 +110,5 @@ public class Enemy : DamageableEntity, IEnemy
             CurrentState = newState;
             CurrentState.Enter();
         }
-    }
-
-    // More explicit interface implementation
-    void IEnemy.ChangeState(IEnemyState newState)
-    {
-        ChangeState(newState);
     }
 }

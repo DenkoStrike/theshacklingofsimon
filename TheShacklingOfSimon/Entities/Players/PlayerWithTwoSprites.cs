@@ -42,6 +42,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
     public float DamageMultiplierStat { get; set; }
     public float PrimaryAttackCooldown { get; set; }
     public float SecondaryAttackCooldown { get; set; }
+    public float MovementFrameDuration { get; set; }
     
     private readonly Vector2 _headOffset = new Vector2(-4.75f, -16);
     private Vector2 _movementInput;
@@ -73,8 +74,9 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         // These can all be overriden with public set method
         this.DamageMultiplierStat = 1.0f;
         this.MoveSpeedStat = 20.0f;
-        this.PrimaryAttackCooldown = 0.2f;
-        this.SecondaryAttackCooldown = 0.5f;
+        this.PrimaryAttackCooldown = 0.5f;
+        this.SecondaryAttackCooldown = 1.5f;
+        this.MovementFrameDuration = 0.12f;
         
         this.CurrentHeadState = new PlayerHeadIdleState(this, Velocity);
         this.CurrentBodyState = new PlayerBodyIdleState(this);
@@ -189,7 +191,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         {
             _movementInput.Normalize();
         }
-        CurrentBodyState.HandleMovement(_movementInput);
+        CurrentBodyState.HandleMovement(_movementInput, MovementFrameDuration);
         _movementInput = Vector2.Zero;
         
         // Attack logic

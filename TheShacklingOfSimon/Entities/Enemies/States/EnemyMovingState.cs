@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Sprites.Factory;
 
 namespace TheShacklingOfSimon.Entities.Enemies.States;

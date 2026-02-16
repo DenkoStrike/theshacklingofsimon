@@ -15,7 +15,7 @@ public class PlayerBodyIdleState : IPlayerBodyState
     public void Enter()
     {
         _player.Velocity = Vector2.Zero;
-        _player.Sprite = SpriteFactory.Instance.CreateAnimatedSprite("PlayerBodyIdle");
+        _player.Sprite = SpriteFactory.Instance.CreateStaticSprite("PlayerBodyIdle");
     }
 
     public void Exit()
@@ -31,11 +31,11 @@ public class PlayerBodyIdleState : IPlayerBodyState
         _player.Sprite.Update(delta);
     }
 
-    public void HandleMovement(Vector2 direction)
+    public void HandleMovement(Vector2 direction, float frameDuration)
     {
         if (direction != Vector2.Zero)
         {
-            _player.ChangeBodyState(new PlayerBodyMovingState(_player));
+            _player.ChangeBodyState(new PlayerBodyMovingState(_player, frameDuration));
         }
     }
 }

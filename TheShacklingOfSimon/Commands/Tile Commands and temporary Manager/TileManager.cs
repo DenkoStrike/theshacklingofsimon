@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Room_Manager.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
-using System.Collections.Generic;
 
-namespace TheShacklingOfSimon.Room_Manager;
+namespace TheShacklingOfSimon.Commands.Tile_Commands_and_temporary_Manager;
 
 public class TileManager
 {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Room_Manager;
+using TheShacklingOfSimon.Room_Manager.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Tiles
+namespace TheShacklingOfSimon.Room_Manager.Rooms
 {
 	public class TileMap
 	{

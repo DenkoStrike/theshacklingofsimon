@@ -1,6 +1,4 @@
-﻿using TheShacklingOfSimon.Room_Manager;
-
-namespace TheShacklingOfSimon.Commands
+﻿namespace TheShacklingOfSimon.Commands.Tile_Commands_and_temporary_Manager
 {
 	public class PreviousTileCommand : ICommand
 	{

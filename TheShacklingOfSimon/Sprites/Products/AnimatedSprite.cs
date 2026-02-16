@@ -14,7 +14,7 @@ public class AnimatedSprite : ISprite
     private float _timer;
     private readonly float _speed;
     
-    public AnimatedSprite(Texture2D texture, Rectangle[] sourceRectangle)
+    public AnimatedSprite(Texture2D texture, Rectangle[] sourceRectangle, float animationSpeed)
     {
         this._texture = texture;
         this._sourceRectangle = sourceRectangle;
