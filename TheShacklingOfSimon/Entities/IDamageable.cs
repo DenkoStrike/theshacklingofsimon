@@ -21,7 +21,7 @@ public interface IDamageable : IEntity
      */
     
     int Health { get; }
-    int MaxHealth { get; }
+    int MaxHealth { get; set; }
 
     void TakeDamage(int amt);
     void Heal(int amt);

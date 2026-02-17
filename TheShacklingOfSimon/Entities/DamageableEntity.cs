@@ -17,7 +17,7 @@ public abstract class DamageableEntity : IDamageable
     
     // Properties from IDamageable
     public int Health { get; protected set; }
-    public int MaxHealth { get; protected set; }
+    public int MaxHealth { get; set; }
 
     // Methods from IEntity
     public abstract void Update(GameTime delta);

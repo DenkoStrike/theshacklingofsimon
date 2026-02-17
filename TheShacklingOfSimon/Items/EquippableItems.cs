@@ -7,7 +7,7 @@ using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.Items;
-public class EquipItems : IItem
+public class EquippableItems : IItem
 {
     public string Name { get; set; }
     public string Description { get; set; }
@@ -16,8 +16,12 @@ public class EquipItems : IItem
     public int MaxHealthBoost { get; }
     public int MoveSpeedBoost { get; }
     
-
-    public void ItemEffect(IItem item)
+    public EquippableItems(IPlayer player)
+    {
+        Player = player;
+    }
+    
+    public void ItemEffect()
     {
         Player.MoveSpeedStat += MoveSpeedBoost;
         Player.DamageMultiplierStat += AttackBoost;

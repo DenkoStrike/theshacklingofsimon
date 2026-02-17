@@ -1,12 +1,20 @@
-﻿namespace TheShacklingOfSimon.Items;
+﻿using TheShacklingOfSimon.Entities.Players;
+
+namespace TheShacklingOfSimon.Items;
 
 public class NoneItem : IItem
 {
     public string Name { get; set; }
     public string Description { get; set; }
+    public IPlayer Player { get; }
 
-    public void Effect()
+    public NoneItem(IPlayer player)
     {
-        // TODO
+        Player = player;
+    }
+
+    public void ItemEffect()
+    {
+        // No-op
     }
 }
