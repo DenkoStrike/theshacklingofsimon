@@ -24,7 +24,7 @@ public class BasicProjectile : IProjectile
 		direction.Normalize();
 		Velocity = direction * stats.Speed;
 
-		Sprite = SpriteFactory.Instance.CreateAnimatedSprite("BasicProjectile");
+		Sprite = SpriteFactory.Instance.CreateAnimatedSprite("BasicProjectile", 0.2f);
 
 		Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 8, 8);
 	}

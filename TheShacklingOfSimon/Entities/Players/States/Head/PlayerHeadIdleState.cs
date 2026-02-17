@@ -10,12 +10,10 @@ public class PlayerHeadIdleState : IPlayerHeadState
     private string _currentAnimation;
     private Vector2 _lookingDirection;
 
-    public PlayerHeadIdleState(PlayerWithTwoSprites player, Vector2 lastDirection)
+    public PlayerHeadIdleState(PlayerWithTwoSprites player, Vector2 lookingDirection)
     {
-        _player = player;
-        
-        // Default to looking down
-        _lookingDirection = (lastDirection.Length() < 0.0001f) ? new Vector2(0, 1) : lastDirection;
+        this._player = player;
+        this._lookingDirection = lookingDirection;
     }
 
     public void Enter()

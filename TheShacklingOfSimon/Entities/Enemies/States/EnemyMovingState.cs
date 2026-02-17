@@ -77,7 +77,7 @@ public class EnemyMovingState : IEnemyState
 
         if (newAnimationName != _currentAnimation)
         {
-            _enemy.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName);
+            _enemy.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName, 0.2f);
             _currentAnimation = newAnimationName;
         }
     }

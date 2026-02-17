@@ -25,7 +25,7 @@ public class EnemyAttackingState : IEnemyState
 
         string spriteAnimationName = "EnemyAttack";
 
-        _enemy.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(spriteAnimationName);
+        _enemy.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(spriteAnimationName, 0.2f);
     }
     
     public void Exit()

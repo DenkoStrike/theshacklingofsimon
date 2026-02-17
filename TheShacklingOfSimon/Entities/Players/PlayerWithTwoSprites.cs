@@ -119,7 +119,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public IItem RemoveItemFromInventory(int pos)
     {
-        IItem item = new NoneItem();
+        IItem item = new NoneItem(this);
         if (pos < Inventory.Items.Count)
         {
             if (Inventory.Items[pos] == CurrentItem)
