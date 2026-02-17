@@ -20,7 +20,7 @@ public class AnimatedSprite : ISprite
         this._sourceRectangle = sourceRectangle;
         this._currentFrame = 0;
         this._timer = 0;
-        this._speed = 0.05f;
+        this._speed = animationSpeed;
     }
 
     public void Draw(SpriteBatch spriteBatch, Vector2 pos, Color color)

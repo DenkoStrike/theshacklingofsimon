@@ -52,11 +52,11 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
     public PlayerWithTwoSprites(Vector2 startPosition)
     {
         // IEntity properties
-        Position = startPosition;
-        Velocity = Vector2.Zero;
-        IsActive = true;
+        this.Position = startPosition;
+        this.Velocity = Vector2.Zero;
+        this.IsActive = true;
         // Arbitrarily sized hitbox of 30x30
-        Hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, 30, 30);
+        this.Hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, 30, 30);
         
         // IDamageable properties
         this.Health = 6;
@@ -66,7 +66,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         // These can all be overriden with public set method
         this.DamageMultiplierStat = 1.0f;
         this.MoveSpeedStat = 100.0f;
-        this.PrimaryAttackCooldown = 0.4f;
+        this.PrimaryAttackCooldown = 0.5f;
         this.SecondaryAttackCooldown = 1.5f;
         this.MovementFrameDuration = 0.1f;
         this.Inventory = new Inventory();
@@ -230,7 +230,6 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         {
             HeadSprite.Draw(spriteBatch, Position + _headOffset, Color.White);
         }
-        
     }
 
     public void ChangeHeadState(IPlayerHeadState newHeadState)

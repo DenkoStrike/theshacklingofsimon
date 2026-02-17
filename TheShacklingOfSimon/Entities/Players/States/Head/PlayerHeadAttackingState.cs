@@ -40,7 +40,7 @@ public class PlayerHeadAttackingState : IPlayerHeadState
             spriteAnimationName = "PlayerHeadShootingUp";
         }
 
-        _player.HeadSprite = SpriteFactory.Instance.CreateAnimatedSprite(spriteAnimationName, _stateDuration);
+        _player.HeadSprite = SpriteFactory.Instance.CreateAnimatedSprite(spriteAnimationName, _stateDuration * 0.51f);
     }
 
     public void Exit()
