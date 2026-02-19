@@ -1,0 +1,29 @@
+Author: Cameron Collins
+Date: 2/19/2026
+Sprint 2
+File(s) being reviewed: IProjectile.cs, IProjectile-implementing classes, ProjectileStats.cs, ProjectileManager.cs, IWeapon.cs, IWeapon-implementing classes
+Author of files: Rishi Mungara
+
+Comments:
+   1. The existence of ProjectileStats.cs bewilders me. Wouldn't it be better to
+      instantiate stats in IProjectile.cs and define the values in ProjectileManager.cs?
+      Maybe the intention is to futureproof IProjectile if we wanted to add more types
+      of stats, but... I'm not seeing how that would be a problem.
+
+   2. As mentioned before, fired projectiles need to be despawned after an amount of
+      time, at the very least after leaving the active game area.
+    
+   3. BasicWeapon.cs seems to be acting as both a placeholder weapon and a WeaponManager 
+      class. We're implementing four different weapon types, so a WeaponManager will be
+      mandatory.
+
+Suggested changes:
+   1. Implement the functionality of ProjectileStats.cs into IProjectile.cs and
+      ProjectileManager.cs
+
+   2. Implement a check to see if a projectile is outside the active game area, and call
+      Discontinue() if so.
+         (Optional) Implement a stat that calls Discontinue() if the projectile is active for 
+         a given amount of time.
+   
+   3. Create a WeaponManager
