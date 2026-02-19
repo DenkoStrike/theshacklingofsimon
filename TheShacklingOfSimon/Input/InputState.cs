@@ -1,6 +1,6 @@
 ﻿namespace TheShacklingOfSimon.Input;
 
-public enum BinaryInputState
+public enum InputState
 {
     Pressed, //key is held down
     Released, // key is up

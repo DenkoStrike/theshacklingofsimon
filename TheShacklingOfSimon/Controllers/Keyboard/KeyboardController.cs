@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Keyboard;
-using TheShacklingOfSimon.Input.Mouse;
 
 namespace TheShacklingOfSimon.Controllers.Keyboard;
 
@@ -9,13 +8,13 @@ public class KeyboardController : IController<KeyboardInput>
 {
     private IKeyboardService _keyboardService;
     private Dictionary<KeyboardInput, Commands.ICommand> _map;
-    private Dictionary<KeyboardButton, BinaryInputState> _previousStates;
+    private Dictionary<KeyboardButton, InputState> _previousStates;
 
 	public KeyboardController(IKeyboardService service)
     {
         _keyboardService = service;
         _map = new Dictionary<KeyboardInput, Commands.ICommand>();
-        _previousStates = new Dictionary<KeyboardButton, BinaryInputState>();
+        _previousStates = new Dictionary<KeyboardButton, InputState>();
 	}
 
 	public void RegisterCommand(KeyboardInput k, Commands.ICommand cmd)
@@ -24,7 +23,7 @@ public class KeyboardController : IController<KeyboardInput>
 
 		if (!_previousStates.ContainsKey(k.Button))
 		{
-			_previousStates[k.Button] = BinaryInputState.Released;
+			_previousStates[k.Button] = InputState.Released;
 		}
 	}
 
@@ -33,17 +32,17 @@ public class KeyboardController : IController<KeyboardInput>
 	{
 		foreach (KeyboardInput k in _map.Keys)
 		{
-			BinaryInputState currentState = _keyboardService.GetKeyState(k.Button);
-			BinaryInputState previousState = _previousStates[k.Button];
+			InputState currentState = _keyboardService.GetKeyState(k.Button);
+			InputState previousState = _previousStates[k.Button];
 
 			bool isJustPressed =
-				currentState == BinaryInputState.Pressed &&
-				previousState == BinaryInputState.Released;
+				currentState == InputState.Pressed &&
+				previousState == InputState.Released;
 
 			if (
-				(k.State == BinaryInputState.Pressed && currentState == BinaryInputState.Pressed) ||
-				(k.State == BinaryInputState.Released && currentState == BinaryInputState.Released) ||
-				(k.State == BinaryInputState.JustPressed && isJustPressed)
+				(k.State == InputState.Pressed && currentState == InputState.Pressed) ||
+				(k.State == InputState.Released && currentState == InputState.Released) ||
+				(k.State == InputState.JustPressed && isJustPressed)
 			)
 			{
 				_map[k].Execute();

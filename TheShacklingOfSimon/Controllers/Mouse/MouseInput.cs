@@ -6,10 +6,10 @@ namespace TheShacklingOfSimon.Controllers.Mouse;
 public record struct MouseInput
 {
     public InputRegion Region;
-    public BinaryInputState State;
+    public InputState State;
     public MouseButton Button;
 
-    public MouseInput(InputRegion region, BinaryInputState state, MouseButton button)
+    public MouseInput(InputRegion region, InputState state, MouseButton button)
     {
         Region = region;
         State = state;

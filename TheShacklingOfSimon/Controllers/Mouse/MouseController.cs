@@ -12,16 +12,16 @@ public class MouseController : IController<MouseInput>
      * Any dependencies are in a custom service class.
      */
     private IMouseService _mouseService;
-    private Dictionary<MouseButton, BinaryInputState> _prevStates;
+    private Dictionary<MouseButton, InputState> _prevStates;
     
     private Dictionary<MouseInput, Commands.ICommand> _map;
     public MouseController(IMouseService service)
     {
         _mouseService = service;
-        _prevStates = new Dictionary<MouseButton, BinaryInputState>();
+        _prevStates = new Dictionary<MouseButton, InputState>();
         foreach (MouseButton btn in System.Enum.GetValues(typeof(MouseButton)))
         {
-            _prevStates.Add(btn, BinaryInputState.Released);
+            _prevStates.Add(btn, InputState.Released);
         }
         
         _map = new Dictionary<MouseInput, Commands.ICommand>();
@@ -41,17 +41,20 @@ public class MouseController : IController<MouseInput>
             MouseInput inputDefinition = entry.Key;
             if (inputDefinition.Region.ContainsPoint(pos.X, pos.Y))
             {
-                BinaryInputState currentState = _mouseService.GetButtonState(inputDefinition.Button);
-                BinaryInputState previousState = _prevStates[inputDefinition.Button];
+                InputState currentState = _mouseService.GetButtonState(inputDefinition.Button);
+                InputState previousState = _prevStates[inputDefinition.Button];
                 
-                /*
-                 * Execute only if it's a "fresh" press
-                 * AND if it is the correct, required state.
-                 */
-                if (currentState == entry.Key.State &&
-                    previousState != currentState)
+                bool isJustPressed =
+                    currentState == InputState.Pressed &&
+                    previousState == InputState.Released;
+                
+                if(
+                    inputDefinition.State == InputState.Pressed && currentState == InputState.Pressed ||
+                    inputDefinition.State == InputState.Released && currentState == InputState.Released ||
+                    inputDefinition.State == InputState.JustPressed && isJustPressed
+                    )
                 {
-                    entry.Value.Execute();
+                        entry.Value.Execute();
                 }
             }
         }

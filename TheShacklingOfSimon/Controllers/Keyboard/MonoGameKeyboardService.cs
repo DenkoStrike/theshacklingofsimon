@@ -151,14 +151,14 @@ public class MonoGameKeyboardService : IKeyboardService
         // No-op
     }
     
-    public BinaryInputState GetKeyState(KeyboardButton button)
+    public InputState GetKeyState(KeyboardButton button)
     {
-        BinaryInputState state = BinaryInputState.Released;
+        InputState state = InputState.Released;
         if (_keyMap.TryGetValue(button, out Keys xnaKey))
         {
             state = Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(xnaKey)
-                ? BinaryInputState.Pressed
-                : BinaryInputState.Released;
+                ? InputState.Pressed
+                : InputState.Released;
         }
         return state;
     }

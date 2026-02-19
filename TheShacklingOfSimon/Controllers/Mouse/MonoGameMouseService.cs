@@ -13,7 +13,7 @@ public class MonoGameMouseService : IMouseService
         return new XYPoint(state.X, state.Y);
     }
 
-    public BinaryInputState GetButtonState(MouseButton button)
+    public InputState GetButtonState(MouseButton button)
     {
         MouseState state = Microsoft.Xna.Framework.Input.Mouse.GetState();
         ButtonState xnaState = ButtonState.Released;
@@ -45,6 +45,6 @@ public class MonoGameMouseService : IMouseService
                 break;
             }
         }
-        return (xnaState == ButtonState.Pressed) ? BinaryInputState.Pressed : BinaryInputState.Released;
+        return (xnaState == ButtonState.Pressed) ? InputState.Pressed : InputState.Released;
     }
 }

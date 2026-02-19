@@ -6,5 +6,5 @@ namespace TheShacklingOfSimon.Controllers.Keyboard;
 
 public interface IKeyboardService
 {
-    BinaryInputState GetKeyState(KeyboardButton button);
+    InputState GetKeyState(KeyboardButton button);
 }

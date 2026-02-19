@@ -7,12 +7,12 @@ using TheShacklingOfSimon.Input;
 
 namespace TheShacklingOfSimon.Commands.Attack;
 
-public class PrimaryAttackDynamicMouseCommand : ICommand
+public class SecondaryAttackDynamicMouseCommand : ICommand
 {
     private IPlayer _player;
     private IMouseService _mouseService;
 
-    public PrimaryAttackDynamicMouseCommand(IPlayer player, IMouseService mouseService)
+    public SecondaryAttackDynamicMouseCommand(IPlayer player, IMouseService mouseService)
     {
         _player = player;
         _mouseService = mouseService;
@@ -28,7 +28,7 @@ public class PrimaryAttackDynamicMouseCommand : ICommand
         if (mouseDelta.LengthSquared() > 0.0001f)
         {
             mouseDelta.Normalize();
-            _player.RegisterPrimaryAttackInput(mouseDelta);
+            _player.RegisterSecondaryAttackInput(mouseDelta);
         }
     }
 }
