@@ -8,5 +8,6 @@ public interface IItem
     string Name { get; }
     string Description { get; }
     IPlayer Player { get; }
-    void ItemEffect();
+    ItemEffects Effects { get; }
+    void Effect();
 }
