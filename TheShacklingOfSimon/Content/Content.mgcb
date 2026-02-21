@@ -47,6 +47,21 @@
 /processorParam:TextureFormat=Color
 /build:images/bomb.png
 
+#begin images/Fire.json
+/copy:images/Fire.json
+
+#begin images/Fire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/Fire.png
+
 #begin images/Red_Heart.json
 /copy:images/Red_Heart.json
 

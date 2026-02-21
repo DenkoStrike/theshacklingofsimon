@@ -82,8 +82,10 @@ public class Game1 : Game
 		//load Tile Sprites and Manager
 		SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
 		SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Fire.json", "images/Fire");
 
-		_tileManager = new TileManager(SpriteFactory.Instance);
+
+        _tileManager = new TileManager(SpriteFactory.Instance);
 
 		// Create entities now that the sprite factory has textures
 		_entities = new List<IEntity>();

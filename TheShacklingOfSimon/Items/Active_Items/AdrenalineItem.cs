@@ -39,7 +39,7 @@ public class AdrenalineItem : IItem
         _projSpeedMultiplier = projSpeedMultiplier;
 
         Name = "Adrenaline";
-        Description = "Massive speed + fire-rate boost for a short time.";
+        Description = "Massive speed, fire-rate, and projectile speed boost for a short time.";
         Effects = new ItemEffects(0, 0, 0, 0, false);
     }
 
