@@ -14,7 +14,7 @@ T to show the previous tile<br>
 
 I to select the next item<br>
 U to select the previous item<br><br>
-SPACE to use the currently selected item<br>
+SPACE to use the currently selected item
 
 Known bugs:<br>
 Memory usage is extremely high for projectiles. Caused by: not using a object pool or simply dereferencing the projectiles when they are unused
