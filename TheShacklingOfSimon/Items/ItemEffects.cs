@@ -1,3 +1,5 @@
+using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.Items;
 public record struct ItemEffects
 {
     public int Attack;
