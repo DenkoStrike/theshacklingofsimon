@@ -93,13 +93,11 @@ public class Game1 : Game
 			new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
 		_entities.Add(_player);
 
-		_player.AddWeaponToInventory(new BombWeapon(_projectileManager));
-	
+		_player.AddWeaponToInventory(new BasicWeapon(_projectileManager));
 		_player.EquipPrimaryWeapon(0);
 		
-		// temporary until bomb weapon is added
-		_player.EquipSecondaryWeapon(0);
-		_player.SecondaryAttackCooldown = 0.5f;
+		_player.AddWeaponToInventory(new BombWeapon(_projectileManager));
+		_player.EquipSecondaryWeapon(1);
 
         // temporary items for demo
         _player.AddItemToInventory(new TeleportItem(_player, pos => true));
@@ -215,7 +213,7 @@ public class Game1 : Game
 				new InputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
 				InputState.Pressed,
 				MouseButton.Right),
-			new PrimaryAttackDynamicMouseCommand(_player, _mouseService)
+			new SecondaryAttackDynamicMouseCommand(_player, _mouseService)
 			);
 		_mouseController.RegisterCommand(
 			new MouseInput(
