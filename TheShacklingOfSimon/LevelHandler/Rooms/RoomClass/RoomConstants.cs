@@ -7,7 +7,7 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
     public static class RoomConstants
     {
         // Tile size in pixels.
-        public const int TileSize = 64;
+        public const int TileSize = 32;
 
         // Playable interior dimensions (from JSON coordinates).
         public const int InteriorWidth = 13;
