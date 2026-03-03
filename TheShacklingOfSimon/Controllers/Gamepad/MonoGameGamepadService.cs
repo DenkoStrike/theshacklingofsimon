@@ -35,7 +35,7 @@ public class MonoGameGamepadService : IGamepadService
         { GamepadButton.RightTrigger, Buttons.RightTrigger }
     };
     
-    private PlayerIndex _playerIndex;
+    private readonly PlayerIndex _playerIndex;
     
     public MonoGameGamepadService(PlayerIndex playerIndex)
     {

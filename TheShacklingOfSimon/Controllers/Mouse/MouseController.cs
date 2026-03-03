@@ -11,7 +11,7 @@ public class MouseController : IController<MouseInput>
     /*
      * Any dependencies are in a custom service class.
      */
-    private IMouseService _mouseService;
+    private readonly IMouseService _mouseService;
     private Dictionary<MouseButton, InputState> _prevStates;
     
     private Dictionary<MouseInput, Commands.ICommand> _map;

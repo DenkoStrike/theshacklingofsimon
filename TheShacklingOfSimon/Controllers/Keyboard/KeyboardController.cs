@@ -6,7 +6,7 @@ namespace TheShacklingOfSimon.Controllers.Keyboard;
 
 public class KeyboardController : IController<KeyboardInput>
 {
-    private IKeyboardService _keyboardService;
+    private readonly IKeyboardService _keyboardService;
     private Dictionary<KeyboardInput, Commands.ICommand> _map;
     private Dictionary<KeyboardButton, InputState> _previousStates;
 

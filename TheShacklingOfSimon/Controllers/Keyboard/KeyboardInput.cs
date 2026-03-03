@@ -6,8 +6,8 @@ namespace TheShacklingOfSimon.Controllers.Keyboard;
 
 public record struct KeyboardInput
 {
-    public InputState State;
-    public KeyboardButton Button;
+    public readonly InputState State;
+    public readonly KeyboardButton Button;
 
     public KeyboardInput(InputState state, KeyboardButton button)
     {

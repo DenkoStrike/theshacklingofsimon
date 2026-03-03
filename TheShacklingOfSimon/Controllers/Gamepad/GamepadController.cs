@@ -6,7 +6,7 @@ namespace TheShacklingOfSimon.Controllers.Gamepad;
 
 public class GamepadController : IController<GamepadButtonInput>, IController<GamepadJoystickInput>
 {
-    private IGamepadService _gamepadService;
+    private readonly IGamepadService _gamepadService;
     private Dictionary<GamepadButtonInput, Commands.ICommand> _buttonMap;
     private Dictionary<GamepadJoystickInput, Commands.ICommand> _joystickMap;
 

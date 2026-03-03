@@ -4,8 +4,8 @@ namespace TheShacklingOfSimon.Controllers.Gamepad;
 
 public record struct GamepadButtonInput
 {
-    public InputState State;
-    public GamepadButton Button;
+    public readonly InputState State;
+    public readonly GamepadButton Button;
 
     public GamepadButtonInput(InputState state, GamepadButton button)
     {
