@@ -34,33 +34,26 @@ public static class CollisionDetector
     
     public static CollisionSide GetCollisionSideFromRectangles(Rectangle r1, Rectangle r2)
     {
-        CollisionSide side = CollisionSide.None;
-
         Vector2 mtv = CalculateMinimumTranslationVector(r1, r2);
-        if (mtv.X < -float.Epsilon)
-        {
-            side = CollisionSide.Right;
-        }
-        else if (mtv.X > float.Epsilon)
-        {
-            side = CollisionSide.Left;
-        }
-        else if (mtv.Y < -float.Epsilon)
-        {
-            side = CollisionSide.Bottom;
-        }
-        else if (mtv.Y > float.Epsilon)
-        {
-            side = CollisionSide.Top;
-        }
-
-        return side;
+        return GetCollisionSide(mtv);
     }
     
     public static CollisionSide GetCollisionSideFromMtv(Vector2 mtv)
     {
-        CollisionSide side = CollisionSide.None;
+        return GetCollisionSide(mtv);
+    }
 
+    private static CollisionSide GetCollisionSide(Vector2 mtv)
+    {
+        CollisionSide side = CollisionSide.None;
+        
+        
+        /*
+         * mtv.X negative => collision on right side
+         * mtv.X positive => collision on left side
+         * mtv.Y negative => collision on bottom side
+         * mtv.Y positive => collision on top side
+         */
         if (mtv.X < -float.Epsilon)
         {
             side = CollisionSide.Right;
