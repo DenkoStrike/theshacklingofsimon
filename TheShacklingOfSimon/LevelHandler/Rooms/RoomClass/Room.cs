@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
 {
@@ -14,16 +15,25 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
         private readonly List<IEntity> entities;
         public IReadOnlyList<IEntity> Entities => entities;
 
-        // Door definitions loaded from the room file (grid-space).
         public IReadOnlyList<DoorData> Doors { get; }
 
-        public Room(string id, TileMap tileMap, IEnumerable<IEntity> initialEntities, IEnumerable<DoorData> doors)
+        // Playable-area background sprite (single frame)
+        private readonly ISprite backgroundPlayable;
+
+        public Room(
+            string id,
+            TileMap tileMap,
+            IEnumerable<IEntity> initialEntities,
+            IEnumerable<DoorData> doors,
+            ISprite backgroundPlayable)
         {
             Id = id;
             TileMap = tileMap;
 
             entities = new List<IEntity>(initialEntities ?? Enumerable.Empty<IEntity>());
             Doors = (doors ?? Enumerable.Empty<DoorData>()).ToList();
+
+            this.backgroundPlayable = backgroundPlayable;
         }
 
         public void Update(GameTime gameTime)
@@ -46,6 +56,24 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            // Draw the playable background scaled to exactly the interior (inside 1-tile wall border).
+            if (backgroundPlayable != null)
+            {
+                int roomW = RoomConstants.GridWidth * RoomConstants.TileSize;
+                int roomH = RoomConstants.GridHeight * RoomConstants.TileSize;
+
+                int pad = RoomConstants.TileSize / 2; // 1 tile outward on each side
+
+                var dest = new Rectangle(
+                    (int)TileMap.Origin.X - pad,
+                    (int)TileMap.Origin.Y - pad,
+                    roomW + pad * 2,
+                    roomH + pad * 2 
+                );
+
+                backgroundPlayable.Draw(spriteBatch, dest, Color.White);
+            }
+
             TileMap.Draw(spriteBatch);
 
             foreach (var e in entities)

@@ -19,7 +19,12 @@ public class StaticSprite : ISprite
     {
         spriteBatch.Draw(_texture, pos, _sourceRectangle, color);
     }
-    
+
+    public void Draw(SpriteBatch spriteBatch, Rectangle destination, Color color)
+    {
+        spriteBatch.Draw(_texture, destination, _sourceRectangle, color);
+    }
+
     public void Draw(SpriteBatch spriteBatch, Vector2 pos, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
     {
         spriteBatch.Draw(_texture, pos, _sourceRectangle, color, rotation, origin, scale, effects, layerDepth);

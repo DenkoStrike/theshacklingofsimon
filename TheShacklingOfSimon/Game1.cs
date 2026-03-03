@@ -98,11 +98,12 @@ public class Game1 : Game
 		SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
 		SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
         SpriteFactory.Instance.LoadTexture(Content, "images/Fire.json", "images/Fire");
+        SpriteFactory.Instance.LoadTexture(Content, "images/RoomBackground.json", "images/RoomBackground");
 
         var roomReader = new JsonRoomReader(Content);
         var indexReader = new RoomIndexReader(Content);
         var roomFactory = new RoomFactory();
-        _roomManager = new RoomManager(roomReader, indexReader, roomFactory, preserveRoomState: true);
+        _roomManager = new RoomManager(roomReader, indexReader, roomFactory, GraphicsDevice, preserveRoomState: true);
 
         // Create entities now that the sprite factory has textures
         _entities = new List<IEntity>();
@@ -169,18 +170,19 @@ public class Game1 : Game
 	protected override void Draw(GameTime delta)
 	{
 		GraphicsDevice.Clear(Color.CornflowerBlue);
-		_spriteBatch.Begin();
-
-		/*
+		_spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend , SamplerState.PointClamp);
+        GraphicsDevice.Clear(Color.Black);
+        /*
          * Add various other things that need to be drawn
          *      e.g., ITile objects, GUI, etc.
          */
-		_projectileManager.Draw(_spriteBatch);
+        
 		_roomManager.Draw(_spriteBatch);
 		_itemManager.Draw(_spriteBatch);
 		_enemyManager.Draw(_spriteBatch);
+        _projectileManager.Draw(_spriteBatch);
 
-		foreach (IEntity e in _entities)
+        foreach (IEntity e in _entities)
 		{
 			e.Draw(_spriteBatch);
 		}

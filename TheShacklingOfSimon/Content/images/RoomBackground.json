@@ -1,0 +1,16 @@
+{
+  "Sprites": [
+    {
+      "Name": "images/RoomBackground",
+      "Frames": [
+        { "X": 8, "Y": 9, "W": 446, "H": 292 }
+      ]
+    },
+    {
+      "Name": "images/RoomBackground_Playable",
+      "Frames": [
+        { "X": 58, "Y": 61, "W": 360, "H": 205 }
+      ]
+    }
+  ]
+}

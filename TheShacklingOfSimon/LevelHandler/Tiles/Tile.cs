@@ -45,7 +45,8 @@ namespace TheShacklingOfSimon.Level_Handler.Tiles
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Sprite.Draw(spriteBatch, Position, Color.White);
+            // Draw scaled to exactly fill this tile's hitbox to avoid texture gaps.
+            Sprite.Draw(spriteBatch, Hitbox, Color.White);
         }
 
         // Marks tile for removal (TileMap removes inactive tiles)

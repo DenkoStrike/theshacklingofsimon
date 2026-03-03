@@ -9,12 +9,28 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
     // Sparse tilemap: only stores non-floor tiles (walls, hazards, obstacles, doors, etc.)
     public sealed class TileMap
     {
-        // Key = (gridX, gridY). Value = the tile at that grid cell.
-        // If a cell is NOT in this dictionary, that cell is normal floor.
         private readonly Dictionary<Point, ITile> tiles = new();
 
         public int Width { get; }
         public int Height { get; }
+
+        // Where the room's grid (0,0) is drawn in world/screen space.
+        public Vector2 Origin { get; set; } = Vector2.Zero;
+
+        // Full room bounds in world/screen space INCLUDING the border ring.
+        public Rectangle RoomBoundsWorld => new Rectangle(
+            (int)MathF.Round(Origin.X),
+            (int)MathF.Round(Origin.Y),
+            Width * RoomConstants.TileSize,
+            Height * RoomConstants.TileSize
+        );
+
+        // Full room bounds in local (room) space.
+        public Rectangle RoomBoundsLocal => new Rectangle(
+            0, 0,
+            Width * RoomConstants.TileSize,
+            Height * RoomConstants.TileSize
+        );
 
         public TileMap()
         {
@@ -26,17 +42,23 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
             gridPos.X >= 0 && gridPos.X < Width &&
             gridPos.Y >= 0 && gridPos.Y < Height;
 
-        public Point WorldToGrid(Vector2 worldPos) =>
-            new Point(
-                (int)(worldPos.X / RoomConstants.TileSize),
-                (int)(worldPos.Y / RoomConstants.TileSize)
-            );
+        public Point WorldToGrid(Vector2 worldPos)
+        {
+            Vector2 local = worldPos - Origin;
 
-        public Vector2 GridToWorld(Point gridPos) =>
-            new Vector2(
+            return new Point(
+                (int)(local.X / RoomConstants.TileSize),
+                (int)(local.Y / RoomConstants.TileSize)
+            );
+        }
+
+        public Vector2 GridToWorld(Point gridPos)
+        {
+            return Origin + new Vector2(
                 gridPos.X * RoomConstants.TileSize,
                 gridPos.Y * RoomConstants.TileSize
             );
+        }
 
         public bool TryGetTile(Point gridPos, out ITile tile) =>
             tiles.TryGetValue(gridPos, out tile);
@@ -82,20 +104,24 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
                 tile.Draw(spriteBatch);
         }
 
-        // Collision helper:
-        // Given a world-space rectangle, return tiles in grid cells that overlap it.
-        // Note: Rectangle.Right/Bottom are exclusive, so we use (Right-1)/(Bottom-1)
-        // to avoid off-by-one inclusion of adjacent cells.
         public IEnumerable<ITile> GetTilesIntersecting(Rectangle rect)
         {
-            int minX = Math.Max(0, rect.Left / RoomConstants.TileSize);
+            // Convert query rect into room-local by subtracting Origin
+            Rectangle local = new Rectangle(
+                (int)(rect.X - Origin.X),
+                (int)(rect.Y - Origin.Y),
+                rect.Width,
+                rect.Height
+            );
 
-            int rightInclusive = Math.Max(rect.Left, rect.Right - 1);
+            int minX = Math.Max(0, local.Left / RoomConstants.TileSize);
+
+            int rightInclusive = Math.Max(local.Left, local.Right - 1);
             int maxX = Math.Min(Width - 1, rightInclusive / RoomConstants.TileSize);
 
-            int minY = Math.Max(0, rect.Top / RoomConstants.TileSize);
+            int minY = Math.Max(0, local.Top / RoomConstants.TileSize);
 
-            int bottomInclusive = Math.Max(rect.Top, rect.Bottom - 1);
+            int bottomInclusive = Math.Max(local.Top, local.Bottom - 1);
             int maxY = Math.Min(Height - 1, bottomInclusive / RoomConstants.TileSize);
 
             for (int x = minX; x <= maxX; x++)

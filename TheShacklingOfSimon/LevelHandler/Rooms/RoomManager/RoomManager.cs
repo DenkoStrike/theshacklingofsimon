@@ -14,6 +14,9 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.RoomManager
         private readonly RoomIndexReader indexReader;
         private readonly RoomFactory factory;
 
+        // needed to compute centered origin from the actual viewport size
+        private readonly GraphicsDevice graphicsDevice;
+
         private readonly Dictionary<string, RoomFileData> dataCache = new();
         private readonly Dictionary<string, Room> roomCache = new();
 
@@ -29,11 +32,13 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.RoomManager
             JsonRoomReader roomReader,
             RoomIndexReader indexReader,
             RoomFactory factory,
+            GraphicsDevice graphicsDevice,
             bool preserveRoomState = true)
         {
             this.roomReader = roomReader ?? throw new ArgumentNullException(nameof(roomReader));
             this.indexReader = indexReader ?? throw new ArgumentNullException(nameof(indexReader));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            this.graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
             this.preserveRoomState = preserveRoomState;
 
             InitializeIndex();
@@ -94,7 +99,9 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.RoomManager
                 dataCache[roomId] = data;
             }
 
-            var room = factory.Create(data);
+            //pass viewport size so the factory can compute a centered origin
+            var vp = graphicsDevice.Viewport;
+            var room = factory.Create(data, vp.Width, vp.Height);
 
             if (preserveRoomState)
                 roomCache[roomId] = room;

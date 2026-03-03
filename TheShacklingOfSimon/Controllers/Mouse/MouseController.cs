@@ -32,7 +32,7 @@ public class MouseController : IController<MouseInput>
         bool success = _map.TryAdd(input, cmd);
         if (success)
         {
-            _prevStates.Add(input.Button, InputState.Released);
+           // _prevStates.Add(input.Button, InputState.Released);
         }
     }
     public void Update()

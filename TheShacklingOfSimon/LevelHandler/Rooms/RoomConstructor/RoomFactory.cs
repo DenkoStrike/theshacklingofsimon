@@ -11,8 +11,8 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
 {
     public sealed class RoomFactory
     {
-        // Builds a Room from JSON data (interior coords) + auto border (walls/doors).
-        public Room Create(RoomFileData data)
+        // Builds a Room from JSON data (FULL GRID coords) + border walls/doors on the edges.
+        public Room Create(RoomFileData data, int viewportWidth, int viewportHeight)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
@@ -21,16 +21,31 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
             var spriteFactory = SpriteFactory.Instance;
             var tileFactory = new TileFactory(spriteFactory);
 
+            // Center the room in the viewport by setting TileMap.Origin.
+            int roomW = RoomConstants.GridWidth * RoomConstants.TileSize;
+            int roomH = RoomConstants.GridHeight * RoomConstants.TileSize;
+
+            tileMap.Origin = new Vector2(
+                (viewportWidth - roomW) * 0.5f,
+                (viewportHeight - roomH) * 0.5f
+            );
+
+            // Make the room background image
+            var background = spriteFactory.CreateStaticSprite("images/RoomBackground");
+            
+            // Border is the TRUE edge of the room: (x=0, x=w-1, y=0, y=h-1)
             BuildBorderWalls(tileMap, tileFactory);
-            PlaceInteriorTiles(tileMap, tileFactory, data.Tiles);
+
+            // Tiles are FULL grid coords
+            PlaceTiles(tileMap, tileFactory, data.Tiles);
+
+            // Doors are FULL grid coords on the border
             PlaceDoors(tileMap, spriteFactory, data.Doors);
 
-            // Entities are created elsewhere for now.
             IEnumerable<IEntity> entities = new List<IEntity>();
-            return new Room(data.Id, tileMap, entities, data.Doors);
+            return new Room(data.Id, tileMap, entities, data.Doors, background);
         }
 
-        // Fills the outer ring with wall tiles.
         private static void BuildBorderWalls(TileMap tileMap, TileFactory tileFactory)
         {
             int w = RoomConstants.GridWidth;
@@ -41,8 +56,8 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
                 var top = new Point(x, 0);
                 var bottom = new Point(x, h - 1);
 
-                tileMap.PlaceTile(top, tileFactory.Create(TileType.Rock, top));
-                tileMap.PlaceTile(bottom, tileFactory.Create(TileType.Rock, bottom));
+                tileMap.PlaceTile(top, tileFactory.Create(TileType.Rock, tileMap, top));
+                tileMap.PlaceTile(bottom, tileFactory.Create(TileType.Rock, tileMap, bottom));
             }
 
             for (int y = 1; y < h - 1; y++)
@@ -50,35 +65,32 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
                 var left = new Point(0, y);
                 var right = new Point(w - 1, y);
 
-                tileMap.PlaceTile(left, tileFactory.Create(TileType.Rock, left));
-                tileMap.PlaceTile(right, tileFactory.Create(TileType.Rock, right));
+                tileMap.PlaceTile(left, tileFactory.Create(TileType.Rock, tileMap, left));
+                tileMap.PlaceTile(right, tileFactory.Create(TileType.Rock, tileMap, right));
             }
         }
 
-        // Places JSON tiles into the interior (offset by +1,+1 into the full grid).
-        private static void PlaceInteriorTiles(TileMap tileMap, TileFactory tileFactory, List<TileData> tiles)
+        private static void PlaceTiles(TileMap tileMap, TileFactory tileFactory, List<TileData> tiles)
         {
             if (tiles == null) return;
 
             var used = new HashSet<Point>();
-            Point off = RoomConstants.InteriorOffset;
 
             foreach (var t in tiles)
             {
-                if (t.X < 0 || t.X >= RoomConstants.InteriorWidth ||
-                    t.Y < 0 || t.Y >= RoomConstants.InteriorHeight)
-                    throw new InvalidOperationException($"Tile out of interior bounds: ({t.X},{t.Y}).");
+                if (t.X < 0 || t.X >= RoomConstants.GridWidth ||
+                    t.Y < 0 || t.Y >= RoomConstants.GridHeight)
+                    throw new InvalidOperationException($"Tile out of room bounds: ({t.X},{t.Y}).");
 
-                var fullPos = new Point(t.X + off.X, t.Y + off.Y);
+                var pos = new Point(t.X, t.Y);
 
-                if (!used.Add(fullPos))
-                    throw new InvalidOperationException($"Duplicate tile entry at interior ({t.X},{t.Y}).");
+                if (!used.Add(pos))
+                    throw new InvalidOperationException($"Duplicate tile entry at ({t.X},{t.Y}).");
 
-                tileMap.PlaceTile(fullPos, tileFactory.Create(t.Type, fullPos));
+                tileMap.PlaceTile(pos, tileFactory.Create(t.Type, tileMap, pos));
             }
         }
 
-        // Replaces border wall cells with door tiles based on DoorData.
         private static void PlaceDoors(TileMap tileMap, SpriteFactory spriteFactory, List<DoorData> doors)
         {
             if (doors == null) return;
@@ -87,9 +99,10 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
 
             foreach (var d in doors)
             {
-                if (d.X < 0 || d.X >= RoomConstants.InteriorWidth ||
-                    d.Y < 0 || d.Y >= RoomConstants.InteriorHeight)
-                    throw new InvalidOperationException($"Door out of interior bounds: ({d.X},{d.Y}).");
+                // DoorData coords are FULL grid coords now
+                if (d.X < 0 || d.X >= RoomConstants.GridWidth ||
+                    d.Y < 0 || d.Y >= RoomConstants.GridHeight)
+                    throw new InvalidOperationException($"Door out of room bounds: ({d.X},{d.Y}).");
 
                 if (d.To == null)
                     throw new InvalidOperationException($"Door destination missing for door at ({d.X},{d.Y}).");
@@ -100,24 +113,25 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
                 if (d.To.Spawn == null)
                     throw new InvalidOperationException($"Door destination spawn missing for door at ({d.X},{d.Y}).");
 
-                if (d.To.Spawn.X < 0 || d.To.Spawn.X >= RoomConstants.InteriorWidth ||
-                    d.To.Spawn.Y < 0 || d.To.Spawn.Y >= RoomConstants.InteriorHeight)
+                // Spawn is FULL grid coords (consistent with door coords)
+                if (d.To.Spawn.X < 0 || d.To.Spawn.X >= RoomConstants.GridWidth ||
+                    d.To.Spawn.Y < 0 || d.To.Spawn.Y >= RoomConstants.GridHeight)
                     throw new InvalidOperationException(
-                        $"Door spawn out of interior bounds: ({d.To.Spawn.X},{d.To.Spawn.Y}) for door at ({d.X},{d.Y}).");
+                        $"Door spawn out of room bounds: ({d.To.Spawn.X},{d.To.Spawn.Y}) for door at ({d.X},{d.Y}).");
 
                 var (borderPos, side) = DoorToBorderCell(d);
 
                 if (!used.Add(borderPos))
-                    throw new InvalidOperationException($"Duplicate door placement on border at ({borderPos.X},{borderPos.Y}).");
+                    throw new InvalidOperationException(
+                        $"Duplicate door placement on border at ({borderPos.X},{borderPos.Y}).");
 
-                // Replace with your real door sprite key when available.
                 var sprite = spriteFactory.CreateStaticSprite("images/Rocks");
 
                 var door = new DoorTile(
                     sprite,
                     tileMap.GridToWorld(borderPos),
                     d.To.Room,
-                    new Point(d.To.Spawn.X, d.To.Spawn.Y),
+                    new Point(d.To.Spawn.X, d.To.Spawn.Y), // now FULL grid coords
                     side
                 );
 
@@ -125,21 +139,21 @@ namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
             }
         }
 
-        // Converts interior-adjacent coords to a border cell + which side it is on.
+        // DoorData must specify a BORDER cell in FULL grid coords.
         private static (Point borderPos, DoorSide side) DoorToBorderCell(DoorData d)
         {
-            int iw = RoomConstants.InteriorWidth;
-            int ih = RoomConstants.InteriorHeight;
+            int maxX = RoomConstants.GridWidth - 1;
+            int maxY = RoomConstants.GridHeight - 1;
 
-            bool onPerimeter = (d.X == 0 || d.X == iw - 1 || d.Y == 0 || d.Y == ih - 1);
-            if (!onPerimeter)
-                throw new InvalidOperationException($"DoorData must be on interior perimeter: ({d.X},{d.Y}).");
+            bool onBorder = (d.X == 0 || d.X == maxX || d.Y == 0 || d.Y == maxY);
+            if (!onBorder)
+                throw new InvalidOperationException($"DoorData must be on room border: ({d.X},{d.Y}).");
 
-            if (d.Y == 0) return (new Point(d.X + 1, 0), DoorSide.North);
-            if (d.Y == ih - 1) return (new Point(d.X + 1, RoomConstants.GridHeight - 1), DoorSide.South);
-            if (d.X == 0) return (new Point(0, d.Y + 1), DoorSide.West);
+            if (d.Y == 0) return (new Point(d.X, 0), DoorSide.North);
+            if (d.Y == maxY) return (new Point(d.X, maxY), DoorSide.South);
+            if (d.X == 0) return (new Point(0, d.Y), DoorSide.West);
 
-            return (new Point(RoomConstants.GridWidth - 1, d.Y + 1), DoorSide.East);
+            return (new Point(maxX, d.Y), DoorSide.East);
         }
     }
 }
