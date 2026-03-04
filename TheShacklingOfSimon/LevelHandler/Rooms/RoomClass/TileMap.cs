@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using TheShacklingOfSimon.Level_Handler.Tiles;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.LevelHandler.Tiles;
 
-namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
+namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
 {
     // Sparse tilemap: only stores non-floor tiles (walls, hazards, obstacles, doors, etc.)
     public sealed class TileMap

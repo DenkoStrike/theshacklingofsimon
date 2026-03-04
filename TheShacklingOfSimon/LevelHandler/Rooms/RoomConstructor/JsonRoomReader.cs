@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework.Content;
-using System;
+﻿using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Class;
+using Microsoft.Xna.Framework.Content;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 
-namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
+namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {
     // Reads room JSON files from Room_Manager/Rooms/Room_Constructor/Room_Jsons
     public sealed class JsonRoomReader

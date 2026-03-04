@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Items.Active_Items;
-using TheShacklingOfSimon.Level_Handler.Tiles;
-using TheShacklingOfSimon.Level_Handler.Tiles.Obstacles;
+using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.LevelHandler.Tiles.Obstacles;
 using TheShacklingOfSimon.Sprites.Factory;
 
 namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager;

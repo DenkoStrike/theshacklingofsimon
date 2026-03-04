@@ -1,8 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.Input;
 
-namespace TheShacklingOfSimon.Controllers.Gamepad;
+namespace TheShacklingOfSimon.Input.Gamepad;
 
 public record struct JoystickInputRegion
 {

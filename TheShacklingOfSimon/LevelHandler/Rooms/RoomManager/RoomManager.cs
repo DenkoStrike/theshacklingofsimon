@@ -1,12 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Class;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
 
-namespace TheShacklingOfSimon.Level_Handler.Rooms.RoomManager
+namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {
     public sealed class RoomManager
     {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.Level_Handler.Tiles;
+using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.Entities.Projectiles;

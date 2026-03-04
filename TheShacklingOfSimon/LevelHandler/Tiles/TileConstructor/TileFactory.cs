@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Class;
-using TheShacklingOfSimon.Level_Handler.Tiles.Obstacles;
+using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+using TheShacklingOfSimon.LevelHandler.Tiles.Obstacles;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Level_Handler.Tiles.Tile_Constructor
+namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
 {
     // Centralizes mapping from TileType -> concrete tile + sprite.
     public sealed class TileFactory

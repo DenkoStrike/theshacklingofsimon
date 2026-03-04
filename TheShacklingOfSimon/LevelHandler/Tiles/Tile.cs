@@ -5,10 +5,10 @@ using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Class;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.Level_Handler.Tiles
+namespace TheShacklingOfSimon.LevelHandler.Tiles
 {
     // Base class for all interactive tiles (rocks, holes, spikes, etc.)
     public abstract class Tile : ITile

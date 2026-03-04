@@ -1,4 +1,4 @@
-namespace TheShacklingOfSimon.Controllers.Gamepad;
+namespace TheShacklingOfSimon.Input.Gamepad;
 
 public enum GamepadButton
 {

@@ -1,10 +1,12 @@
-﻿namespace TheShacklingOfSimon.Commands.Tile_Commands_and_temporary_Manager
+﻿using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+
+namespace TheShacklingOfSimon.Commands.Room_Commands
 {
     public sealed class NextRoomCommand : ICommand
     {
-        private readonly TheShacklingOfSimon.Level_Handler.Rooms.RoomManager.RoomManager roomManager;
+        private readonly RoomManager roomManager;
 
-        public NextRoomCommand(TheShacklingOfSimon.Level_Handler.Rooms.RoomManager.RoomManager roomManager)
+        public NextRoomCommand(RoomManager roomManager)
         {
             this.roomManager = roomManager;
         }

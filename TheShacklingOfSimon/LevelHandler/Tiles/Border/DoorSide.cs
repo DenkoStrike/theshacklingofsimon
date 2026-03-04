@@ -1,4 +1,4 @@
-﻿namespace TheShacklingOfSimon.Level_Handler.Tiles.Border
+﻿namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
 {
     public enum DoorSide
     {

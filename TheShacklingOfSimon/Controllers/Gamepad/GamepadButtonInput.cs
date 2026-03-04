@@ -1,4 +1,5 @@
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Input.Gamepad;
 
 namespace TheShacklingOfSimon.Controllers.Gamepad;
 

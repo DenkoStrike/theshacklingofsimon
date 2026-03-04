@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.Level_Handler.Tiles.Border
+namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
 {
     public sealed class DoorTile : Tile
     {

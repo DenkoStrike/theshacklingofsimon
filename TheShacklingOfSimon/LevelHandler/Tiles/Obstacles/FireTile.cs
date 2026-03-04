@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Class;
-using TheShacklingOfSimon.Level_Handler.Tiles.Tile_Constructor;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.Level_Handler.Tiles.Obstacles
+namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 {
     // Walkable hazard that can be extinguished by projectiles
     public sealed class FireTile : Tile, IProjectileAffectableTile

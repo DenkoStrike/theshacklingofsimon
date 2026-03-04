@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using TheShacklingOfSimon.Level_Handler.Tiles.Tile_Constructor;
+using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 
-namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Class
+namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
 {
     public sealed class RoomFileData
     {

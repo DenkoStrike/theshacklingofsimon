@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.Level_Handler.Rooms.Room_Class;
-using TheShacklingOfSimon.Level_Handler.Tiles.Border;
-using TheShacklingOfSimon.Level_Handler.Tiles.Tile_Constructor;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+using TheShacklingOfSimon.LevelHandler.Tiles.Border;
+using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
 
-namespace TheShacklingOfSimon.Level_Handler.Rooms.Room_Constructor
+namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {
     public sealed class RoomFactory
     {

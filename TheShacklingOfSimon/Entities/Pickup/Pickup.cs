@@ -5,7 +5,7 @@ using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Items;
-using TheShacklingOfSimon.Level_Handler.Tiles;
+using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.Entities.Pickup;

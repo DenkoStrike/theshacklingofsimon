@@ -1,6 +1,6 @@
 ﻿using TheShacklingOfSimon.Entities;
 
-namespace TheShacklingOfSimon.Level_Handler.Tiles.Tile_Constructor
+namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
 {
     // Tile can be affected by an explosion (bomb)
     public interface IBombableTile

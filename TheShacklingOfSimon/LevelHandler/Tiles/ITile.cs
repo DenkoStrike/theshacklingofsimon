@@ -1,6 +1,6 @@
 ﻿using TheShacklingOfSimon.Entities;
 
-namespace TheShacklingOfSimon.Level_Handler.Tiles
+namespace TheShacklingOfSimon.LevelHandler.Tiles
 {
     // Tile-specific collision flags on top of standard IEntity stuff
     public interface ITile : IEntity

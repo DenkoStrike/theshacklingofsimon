@@ -9,7 +9,7 @@ using TheShacklingOfSimon.Entities.Players.States.Body;
 using TheShacklingOfSimon.Entities.Players.States.Head;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Items;
-using TheShacklingOfSimon.Level_Handler.Tiles;
+using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.Weapons;
 
@@ -261,7 +261,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public override void OnCollision(IPlayer otherPlayer)
     {
-        // No-op for now
+        // No-op for now--no other players planned
     }
 
     public override void OnCollision(IEnemy enemy)
@@ -283,22 +283,22 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public override void OnCollision(ITile tile)
     {
-        Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(Hitbox, tile.Hitbox);
-        Position += mtv;
-        Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
-        switch (CollisionDetector.GetCollisionSideFromMtv(mtv))
-        {
-            case CollisionSide.Left or CollisionSide.Right:
-            {
-                Velocity = new Vector2(0.0f, Velocity.Y);
-                break;
-            }
-            case CollisionSide.Top or CollisionSide.Bottom:
-            {
-                Velocity = new Vector2(Velocity.X, 0.0f);
-                break;
-            }
-        }
+        // Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(Hitbox, tile.Hitbox);
+        // Position += mtv;
+        // Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
+        // switch (CollisionDetector.GetCollisionSideFromMtv(mtv))
+        // {
+        //     case CollisionSide.Left or CollisionSide.Right:
+        //     {
+        //         Velocity = new Vector2(0.0f, Velocity.Y);
+        //         break;
+        //     }
+        //     case CollisionSide.Top or CollisionSide.Bottom:
+        //     {
+        //         Velocity = new Vector2(Velocity.X, 0.0f);
+        //         break;
+        //     }
+        // }
     }
 
     public override void OnCollision(IPickup pickup)
