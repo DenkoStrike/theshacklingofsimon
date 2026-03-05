@@ -102,4 +102,10 @@ public class CollisionManager
 
         return result;
     }
+
+    public void ClearEntityLists()
+    {
+        _dynamicEntities.Clear();
+        _staticEntities.Clear();
+    }
 }
