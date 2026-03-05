@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies.States;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
@@ -191,36 +192,72 @@ public class SpiderEnemy : DamageableEntity, IEnemy
 
     public override void OnCollision(IEntity other)
     {
-        /*
-         * Will call the correct OnCollision() method because
-         * *this* is a known type. Avoids conditional "type-of" logic
-         */
-        other.OnCollision(this);
+        if (other == null || !IsActive) return;
+
+        switch (other)
+        {
+            case ITile tile:
+                OnCollision(tile);
+                break;
+            case IPlayer player:
+                OnCollision(player);
+                break;
+            case IEnemy enemy:
+                OnCollision(enemy);
+                break;
+            case IProjectile projectile:
+                OnCollision(projectile);
+                break;
+            case IPickup pickup:
+                OnCollision(pickup);
+                break;
+        }
     }
-    
+
     public override void OnCollision(IPlayer player)
     {
-        throw new NotImplementedException();
+        // Optional: damage player on touch, or delegate to state logic later.
+        // No-op for now.
     }
 
     public override void OnCollision(IEnemy enemy)
     {
-        throw new NotImplementedException();
+        // No-op for now (avoid enemies pushing each other until desired).
     }
 
     public override void OnCollision(IProjectile projectile)
     {
-        throw new NotImplementedException();
+        // No-op for now if projectiles should damage enemies,
+        // implement damage in projectile or here consistently across the codebase.
     }
 
     public override void OnCollision(ITile tile)
     {
-        throw new NotImplementedException();
+        if (tile == null || !tile.BlocksGround) return;
+
+        Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(Hitbox, tile.Hitbox);
+        if (mtv == Vector2.Zero) return;
+
+        Position += mtv;
+        Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
+
+        switch (CollisionDetector.GetCollisionSideFromMtv(mtv))
+        {
+            case CollisionSide.Left:
+            case CollisionSide.Right:
+                Velocity = new Vector2(0.0f, Velocity.Y);
+                break;
+
+            case CollisionSide.Top:
+            case CollisionSide.Bottom:
+                Velocity = new Vector2(Velocity.X, 0.0f);
+                break;
+        }
     }
 
     public override void OnCollision(IPickup pickup)
     {
-        throw new NotImplementedException();
+        // No-op
     }
 
     public void ChangeState(IEnemyState newState)

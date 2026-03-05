@@ -55,34 +55,25 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
             IsActive = false;
         }
 
-        public void OnCollision(IEntity other)
+        public virtual void OnCollision(IEntity other)
         {
-            throw new System.NotImplementedException();
+            if (other == null || !IsActive) return;
+
+            switch (other)
+            {
+                case IPlayer player: OnCollision(player); break;
+                case IEnemy enemy: OnCollision(enemy); break;
+                case IProjectile projectile: OnCollision(projectile); break;
+                case ITile tile: OnCollision(tile); break;
+                case IPickup pickup: OnCollision(pickup); break;
+            }
         }
 
-        public void OnCollision(IPlayer player)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnCollision(IEnemy enemy)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnCollision(IProjectile projectile)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnCollision(ITile tile)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnCollision(IPickup pickup)
-        {
-            throw new System.NotImplementedException();
-        }
+        // Default no-ops (override in specific tiles if needed)
+        public virtual void OnCollision(IPlayer player) { }
+        public virtual void OnCollision(IEnemy enemy) { }
+        public virtual void OnCollision(IProjectile projectile) { }
+        public virtual void OnCollision(ITile tile) { }
+        public virtual void OnCollision(IPickup pickup) { }
     }
 }

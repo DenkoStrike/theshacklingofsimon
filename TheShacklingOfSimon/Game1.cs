@@ -22,8 +22,10 @@ using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Mouse;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Items.Active_Items;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
@@ -32,70 +34,73 @@ namespace TheShacklingOfSimon;
 
 public class Game1 : Game
 {
-	private GraphicsDeviceManager _graphics;
-	private SpriteBatch _spriteBatch;
-	private Texture2D _texture;
-	private SpriteFont _font;
-	
-	private IKeyboardService _keyboardService;
-	private IController<KeyboardInput> _keyboardController;
-	private IMouseService _mouseService;
-	private IController<MouseInput> _mouseController;
+    private GraphicsDeviceManager _graphics;
+    private SpriteBatch _spriteBatch;
+    private Texture2D _texture;
+    private SpriteFont _font;
+
+    private IKeyboardService _keyboardService;
+    private IController<KeyboardInput> _keyboardController;
+    private IMouseService _mouseService;
+    private IController<MouseInput> _mouseController;
 
     private RoomManager _roomManager; //room manager for sprint 3
     private ItemManager _itemManager; //Temporary item switching for sprint 2
 
-	private IPlayer _player;
-	private List<IEntity> _entities;
-	private ProjectileManager _projectileManager; //_projectileManager = new ProjectileManager();
+    private IPlayer _player;
+    private List<IEntity> _entities;
+    private ProjectileManager _projectileManager; //_projectileManager = new ProjectileManager();
 
-	//temp for enemy
-	private EnemyManager _enemyManager;
-	private IEnemy _spiderEnemy1;
-	private IEnemy _spiderEnemy2;
-	private IEnemy _spiderEnemy3;
+    //temp for enemy
+    private EnemyManager _enemyManager;
+    private IEnemy _spiderEnemy1;
+    private IEnemy _spiderEnemy2;
+    private IEnemy _spiderEnemy3;
 
-	private CollisionManager _collisionManager;
+    private CollisionManager _collisionManager;
 
-	public Game1()
-	{
-		_graphics = new GraphicsDeviceManager(this);
-		Content.RootDirectory = "Content";
-		IsMouseVisible = true;
-	}
+    // Entities that should always be registered as dynamic colliders regardless of room
+    private readonly List<IEntity> _persistentDynamicEntities = new();
 
-	protected override void Initialize()
-	{
-		_keyboardService = new MonoGameKeyboardService();
-		_keyboardController = new KeyboardController(_keyboardService);
-		
-		_mouseService = new MonoGameMouseService();
-		_mouseController = new MouseController(_mouseService);
-		
-		base.Initialize();
-	}
+    public Game1()
+    {
+        _graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = "Content";
+        IsMouseVisible = true;
+    }
 
-	protected override void LoadContent()
-	{
-		Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
+    protected override void Initialize()
+    {
+        _keyboardService = new MonoGameKeyboardService();
+        _keyboardController = new KeyboardController(_keyboardService);
 
-		_spriteBatch = new SpriteBatch(GraphicsDevice);
+        _mouseService = new MonoGameMouseService();
+        _mouseController = new MouseController(_mouseService);
 
-		// Create Content pipeline 
-		_font = Content.Load<SpriteFont>("File");
+        base.Initialize();
+    }
 
-		// Load Player Sprites into factory 
-		SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
+    protected override void LoadContent()
+    {
+        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
 
-		// Load Enemy Sprites into factory
-		SpriteFactory.Instance.LoadTexture(Content, "SpiderEnemy.json", "SpiderEnemy");
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-		// Load Projectile Sprites and Manager_projectileManager.Update(delta);
-		_projectileManager = new ProjectileManager();
-		
-		//load Tile Sprites and room Manager
-		SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
-		SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
+        // Create Content pipeline 
+        _font = Content.Load<SpriteFont>("File");
+
+        // Load Player Sprites into factory 
+        SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
+
+        // Load Enemy Sprites into factory
+        SpriteFactory.Instance.LoadTexture(Content, "SpiderEnemy.json", "SpiderEnemy");
+
+        // Load Projectile Sprites and Manager_projectileManager.Update(delta);
+        _projectileManager = new ProjectileManager();
+
+        //load Tile Sprites and room Manager
+        SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
         SpriteFactory.Instance.LoadTexture(Content, "images/Fire.json", "images/Fire");
         SpriteFactory.Instance.LoadTexture(Content, "images/RoomBackground.json", "images/RoomBackground");
 
@@ -106,35 +111,31 @@ public class Game1 : Game
 
         // Create entities now that the sprite factory has textures
         _entities = new List<IEntity>();
-		_player =
-			new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
-		_entities.Add(_player);
+        _player = new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
+        _entities.Add(_player);
 
-		IWeapon basicWeapon = new BasicWeapon(_projectileManager);
-		IWeapon bombWeapon = new BombWeapon(_projectileManager);
-		
-		_player.AddWeaponToInventory(basicWeapon);
-		_player.EquipPrimaryWeapon(0);
-		
-		_player.AddWeaponToInventory(bombWeapon);
-		_player.EquipSecondaryWeapon(1);
+        IWeapon basicWeapon = new BasicWeapon(_projectileManager);
+        IWeapon bombWeapon = new BombWeapon(_projectileManager);
+
+        _player.AddWeaponToInventory(basicWeapon);
+        _player.EquipPrimaryWeapon(0);
+
+        _player.AddWeaponToInventory(bombWeapon);
+        _player.EquipSecondaryWeapon(1);
 
         // temporary items for demo
         _player.AddItemToInventory(new TeleportItem(_player, pos => true));
         _player.AddItemToInventory(new AdrenalineItem(_player));
 
-		_spiderEnemy1 = new SpiderEnemy(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.25f), new BasicWeapon(_projectileManager));
-		//_entities.Add(_spiderEnemy1);
-		_spiderEnemy2 = new SpiderEnemy(new Vector2(screenDimensions.Width * 0.15f, screenDimensions.Height * 0.15f), new BasicWeapon(_projectileManager));
-		//_entities.Add(_spiderEnemy2);
-		_spiderEnemy3 = new SpiderEnemy(new Vector2(screenDimensions.Width * 0.8f, screenDimensions.Height * 0.7f), new BasicWeapon(_projectileManager));
-		//_entities.Add(_spiderEnemy3);
+        _spiderEnemy1 = new SpiderEnemy(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.25f), new BasicWeapon(_projectileManager));
+        _spiderEnemy2 = new SpiderEnemy(new Vector2(screenDimensions.Width * 0.15f, screenDimensions.Height * 0.15f), new BasicWeapon(_projectileManager));
+        _spiderEnemy3 = new SpiderEnemy(new Vector2(screenDimensions.Width * 0.8f, screenDimensions.Height * 0.7f), new BasicWeapon(_projectileManager));
 
-		//to allow for cycling through enemies
-		_enemyManager = new EnemyManager();
-		_enemyManager.AddEnemy(_spiderEnemy1);
-		_enemyManager.AddEnemy(_spiderEnemy2);
-		_enemyManager.AddEnemy(_spiderEnemy3);
+        //to allow for cycling through enemies
+        _enemyManager = new EnemyManager();
+        _enemyManager.AddEnemy(_spiderEnemy1);
+        _enemyManager.AddEnemy(_spiderEnemy2);
+        _enemyManager.AddEnemy(_spiderEnemy3);
 
         //load Item Sprites and manager
         SpriteFactory.Instance.LoadTexture(Content, "images/8Ball.json", "images/8Ball");
@@ -146,125 +147,116 @@ public class Game1 : Game
         RegisterControls(screenDimensions);
 
         _collisionManager = new CollisionManager();
-        _collisionManager.AddDynamicEntity(_player);
-        _collisionManager.AddDynamicEntity(_spiderEnemy1);
-        _collisionManager.AddDynamicEntity(_spiderEnemy2);
-        _collisionManager.AddDynamicEntity(_spiderEnemy3);
-        
+
+        // Persistent dynamic colliders (demo setup)
+        _persistentDynamicEntities.Clear();
+        _persistentDynamicEntities.Add(_player);
+        _persistentDynamicEntities.Add(_spiderEnemy1);
+        _persistentDynamicEntities.Add(_spiderEnemy2);
+        _persistentDynamicEntities.Add(_spiderEnemy3);
+
         /*
          * Subscribe the collision manager to the event of a new projectile
          * being created from basicWeapon and bombWeapon
          */
         basicWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
         bombWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
-        
+
+        // Re-register collidables whenever the room changes
+        _roomManager.RoomChanged += RegisterRoomCollidables;
+
+        // Register current room (starting room) once
+        RegisterRoomCollidables(_roomManager.CurrentRoom);
+
         // TODO: Can add projectile manager subscriptions here
         // Or really any spot after the weapons are created
-        
-        // TODO: Need to add the "pre-loaded" entities (from JSON data) to the collision manager
-		/*
-		 * Perhaps _roomManager.CurrentRoom.GetEnemies() and
-		 *		_roomManager.CurrentRoom.GetItems() (for pre-loaded items) and
-		 *		_roomManager.CurrentRoom.GetTiles()
-		 * These methods would return a List<IEnemy>, List<IItem>, and List<ITile>
-		 * Then do for-each loops, doing _collisionManager.AddDynamicEntity()
-		 *		and _collisionManager.AddStaticEntity() as appropriate
-		 *
-		 * It is worth noting this action will need to be repeated for every room,
-		 * so maybe move this to a private method?
-		 *		Or even a class (i.e., RoomLoader).
-		 *
-		 * Then also need ability to unload the preloaded entities when we go to
-		 * the next room.
-		 *		Could just unload everything with _collisionManager.RemoveDynamicEntity()
-		 *		and _collisionManager.RemoveStaticEntity()
-		 *		until the returned object is null.
-		 *		OR
-		 *		Better idea: _collisionManager.ClearEntityLists()
-		 *			calls Clear() for both of the Lists
-		 *			This is an O(2*1) operation vs O(2*n^2)
-		 * 
-		 * Then just call LoadRoom() from the proposed RoomLoader class
-		 */
-	}
+    }
 
-	protected override void Update(GameTime delta)
-	{
-		_keyboardController.Update();
-		_mouseController.Update();
+    protected override void Update(GameTime delta)
+    {
+        _keyboardController.Update();
+        _mouseController.Update();
 
-		/*
-         * Add various other things that need to be updated.
-         */
-
-		_projectileManager.Update(delta);
-		_roomManager.Update(delta);
-		_itemManager.Update(delta);
+        _projectileManager.Update(delta);
+        _roomManager.Update(delta);
+        _itemManager.Update(delta);
         _player.CurrentItem?.Update(delta);
-		_enemyManager.Update(delta);
+        _enemyManager.Update(delta);
 
         foreach (IEntity e in _entities)
-		{
-			e.Update(delta);
-		}
-        
-        // this is crashing the game rn because of the NotImplementedExceptions in Entity classes.
-        // _collisionManager.Update(delta); 
-        
-		base.Update(delta);
+        {
+            e.Update(delta);
+        }
 
-	}
+        // Enable once all collidable entities have non-throwing OnCollision implementations
+        _collisionManager.Update(delta); 
 
-	protected override void Draw(GameTime delta)
-	{
-		GraphicsDevice.Clear(Color.CornflowerBlue);
-		_spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend , SamplerState.PointClamp);
+        base.Update(delta);
+    }
+
+    protected override void Draw(GameTime delta)
+    {
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         GraphicsDevice.Clear(Color.Black);
-        /*
-         * Add various other things that need to be drawn
-         *      e.g., ITile objects, GUI, etc.
-         */
-        
-		_roomManager.Draw(_spriteBatch);
-		_itemManager.Draw(_spriteBatch);
-		_enemyManager.Draw(_spriteBatch);
+
+        _roomManager.Draw(_spriteBatch);
+        _itemManager.Draw(_spriteBatch);
+        _enemyManager.Draw(_spriteBatch);
         _projectileManager.Draw(_spriteBatch);
 
         foreach (IEntity e in _entities)
-		{
-			e.Draw(_spriteBatch);
-		}
+        {
+            e.Draw(_spriteBatch);
+        }
 
-		_spriteBatch.End();
-		base.Draw(delta);
-	}
+        _spriteBatch.End();
+        base.Draw(delta);
+    }
 
-	private void RegisterControls(Rectangle screenDimensions)
-	{
-		/*
-         * Controls are initialized here using RegisterCommand()
-         * Use a KeyboardInput or MouseInput struct to register an input for mouse/keyboard
-         * Then use some ICommand concrete class to register *what* that input does.
-         *
-         * e.g., _keyboardController.RegisterCommand(new KeyboardInput(BinaryInputState.Pressed, KeyboardButton.Escape), new ExitCommand(this));
-         * or _mouseController.RegisterCommand(
-         *      new MouseInput(new InputRegion(0, 0, screenDimensions.Width, screenDimensions.Height), BinaryInputState.Pressed, MouseButton.Right), 
-         *      new ExitCommand(this));
-         * to register the D0 key and right click to exit the game.
-         */
-		// Movement controls
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.W), new MoveUpCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.A), new MoveLeftCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.S), new MoveDownCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.D), new MoveRightCommand(_player));
 
-		// Attacking controls
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.LeftShift), new SecondaryAttackDownCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.RightShift), new SecondaryAttackDownCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Up), new PrimaryAttackUpCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Left), new PrimaryAttackLeftCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Down), new PrimaryAttackDownCommand(_player));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Right), new PrimaryAttackRightCommand(_player));
+    /// Bulk-register dynamic + static colliders for the given room.
+    /// Keeps collision knowledge in Game1 (RoomManager, projectile manager, etc. remain decoupled)
+    private void RegisterRoomCollidables(Room room)
+    {
+        if (room == null) return;
+
+        _collisionManager.ClearEntityLists();
+
+        // Always-present dynamic colliders (player, demo enemies, etc.)
+        foreach (IEntity entity in _persistentDynamicEntities)
+        {
+            _collisionManager.AddDynamicEntity(entity);
+        }
+
+        // Room-defined entities (from JSON). Assumes Room.Entities contains IEntity instances.
+        foreach (IEntity entity in room.Entities)
+        {
+            _collisionManager.AddDynamicEntity(entity);
+        }
+
+        // Room tiles (static)
+        foreach (ITile tile in room.TileMap.PlacedTiles)
+        {
+            _collisionManager.AddStaticEntity(tile);
+        }
+    }
+
+    private void RegisterControls(Rectangle screenDimensions)
+    {
+        // Movement controls
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.W), new MoveUpCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.A), new MoveLeftCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.S), new MoveDownCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.D), new MoveRightCommand(_player));
+
+        // Attacking controls
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.LeftShift), new SecondaryAttackDownCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.RightShift), new SecondaryAttackDownCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Up), new PrimaryAttackUpCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Left), new PrimaryAttackLeftCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Down), new PrimaryAttackDownCommand(_player));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Right), new PrimaryAttackRightCommand(_player));
 
         // Room Manager Controls (Sprint 3)
         _keyboardController.RegisterCommand(
@@ -275,60 +267,62 @@ public class Game1 : Game
             new KeyboardInput(InputState.JustPressed, KeyboardButton.T),
             new PreviousRoomCommand(_roomManager));
 
-        //Item Manager Controls
+        // Item Manager Controls
         _keyboardController.RegisterCommand(
-			new KeyboardInput(InputState.JustPressed, KeyboardButton.I),
-			new NextItemCommand(_itemManager));
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.I),
+            new NextItemCommand(_itemManager));
 
-		_keyboardController.RegisterCommand(
-			new KeyboardInput(InputState.JustPressed, KeyboardButton.U),
-			new PreviousItemCommand(_itemManager));
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.U),
+            new PreviousItemCommand(_itemManager));
+
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Space),
             new UseItemCommand(_player));
-        
+
         // Temporary key for triggering player damaged and deadstate for sprint 2
         _keyboardController.RegisterCommand(
-	        new KeyboardInput(InputState.Pressed, KeyboardButton.E),
-	        new TriggerPlayerDamagedStateCommand(_player, 1)
-	        );
-        
+            new KeyboardInput(InputState.Pressed, KeyboardButton.E),
+            new TriggerPlayerDamagedStateCommand(_player, 1)
+            );
+
         // Temporary key for triggering player Reset() for sprint 2
         _keyboardController.RegisterCommand(
-	        new KeyboardInput(InputState.Pressed, KeyboardButton.R),
-	        new ResetPlayerCommand(_player, 
-		        new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f)
-		        )
-	        );
+            new KeyboardInput(InputState.Pressed, KeyboardButton.R),
+            new ResetPlayerCommand(
+                _player,
+                new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f),
+                () => RegisterRoomCollidables(_roomManager.CurrentRoom)
+            )
+        );
 
-		// Temporary keys for cycling through enemies for sprint 2
-		_keyboardController.RegisterCommand(
-			new KeyboardInput(InputState.JustPressed, KeyboardButton.O),
-			new NextEnemyCommand(_enemyManager));
+        // Temporary keys for cycling through enemies for sprint 2
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.O),
+            new NextEnemyCommand(_enemyManager));
 
-		_keyboardController.RegisterCommand(
-			new KeyboardInput(InputState.JustPressed, KeyboardButton.P),
-			new PreviousEnemyCommand(_enemyManager));
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.P),
+            new PreviousEnemyCommand(_enemyManager));
 
-//Mouse controls
+        // Mouse controls
         _mouseController.RegisterCommand(
-			new MouseInput(
-				new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-				InputState.Pressed,
-				MouseButton.Right),
-			new SecondaryAttackDynamicMouseCommand(_player, _mouseService)
-			);
-		_mouseController.RegisterCommand(
-			new MouseInput(
-				new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-				InputState.Pressed,
-				MouseButton.Left),
-			new PrimaryAttackDynamicMouseCommand(_player, _mouseService)
-			);
-		
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Escape), new ExitCommand(this));
-		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Q), new ExitCommand(this));
-	}
+            new MouseInput(
+                new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
+                InputState.Pressed,
+                MouseButton.Right),
+            new SecondaryAttackDynamicMouseCommand(_player, _mouseService)
+            );
+
+        _mouseController.RegisterCommand(
+            new MouseInput(
+                new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
+                InputState.Pressed,
+                MouseButton.Left),
+            new PrimaryAttackDynamicMouseCommand(_player, _mouseService)
+            );
+
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Escape), new ExitCommand(this));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Q), new ExitCommand(this));
+    }
 }
-
-

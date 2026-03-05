@@ -5,73 +5,74 @@ namespace TheShacklingOfSimon.Entities.Collisions;
 
 public class CollisionManager
 {
-    private List<IEntity> _dynamicEntities;
-    private List<IEntity> _staticEntities;
+    private readonly List<IEntity> _dynamicEntities;
+    private readonly List<IEntity> _staticEntities;
 
     public CollisionManager()
     {
-        this._dynamicEntities = new List<IEntity>();
-        this._staticEntities = new List<IEntity>();
+        _dynamicEntities = new List<IEntity>();
+        _staticEntities = new List<IEntity>();
     }
 
     public void Update(GameTime delta)
     {
-        /*
-         * Check dynamic vs. dynamic entities
-         */
+        PruneInactive(_dynamicEntities);
+        PruneInactive(_staticEntities);
+
+        // Dynamic vs dynamic (each unordered pair once)
         for (int i = 0; i < _dynamicEntities.Count; i++)
         {
+            IEntity a = _dynamicEntities[i];
+            if (a == null) continue;
+
             for (int j = i + 1; j < _dynamicEntities.Count; j++)
             {
-                if (CollisionDetector.CheckRectangleCollision(
-                        _dynamicEntities[i].Hitbox,
-                        _dynamicEntities[j].Hitbox
-                        )
-                    )
+                IEntity b = _dynamicEntities[j];
+                if (b == null) continue;
+
+                if (CollisionDetector.CheckRectangleCollision(a.Hitbox, b.Hitbox))
                 {
-                    /*
-                     * Trigger the "double dispatch"
-                     *      i.e., let the entities resolve their own changes to
-                     *      their respective health, state, physics, etc.
-                     */
-                    _dynamicEntities[i].OnCollision(_dynamicEntities[j]);
-                    _dynamicEntities[j].OnCollision(_dynamicEntities[i]);
+                    // manager calls both directions
+                    a.OnCollision(b);
+                    b.OnCollision(a);
                 }
             }
         }
-        
-        /*
-         * Check dynamic vs. static entities
-         */
+
+        // Dynamic vs static
         foreach (IEntity dynamicEntity in _dynamicEntities)
         {
+            if (dynamicEntity == null) continue;
+
             foreach (IEntity staticEntity in _staticEntities)
             {
-                if (CollisionDetector.CheckRectangleCollision(
-                        dynamicEntity.Hitbox,
-                        staticEntity.Hitbox
-                        )
-                    )
+                if (staticEntity == null) continue;
+
+                if (CollisionDetector.CheckRectangleCollision(dynamicEntity.Hitbox, staticEntity.Hitbox))
                 {
-                    /*
-                     * Trigger the "double dispatch"
-                     *      i.e., let the entities resolve their own changes to
-                     *      their respective health, state, physics, etc.
-                     */
                     dynamicEntity.OnCollision(staticEntity);
                     staticEntity.OnCollision(dynamicEntity);
                 }
             }
         }
-        
-        /*
-         * Do not check static vs. static entities
-         */
+    }
+
+    private static void PruneInactive(List<IEntity> entities)
+    {
+        // Remove null or inactive entries (e.g., destroyed tiles/projectiles)
+        entities.RemoveAll(e => e == null || !e.IsActive);
     }
 
     public void AddDynamicEntity(IEntity dynamicEntity)
     {
+        if (dynamicEntity == null || !dynamicEntity.IsActive) return;
         _dynamicEntities.Add(dynamicEntity);
+    }
+
+    public void AddStaticEntity(IEntity staticEntity)
+    {
+        if (staticEntity == null || !staticEntity.IsActive) return;
+        _staticEntities.Add(staticEntity);
     }
 
     public IEntity RemoveDynamicEntity(int pos)
@@ -82,13 +83,7 @@ public class CollisionManager
             result = _dynamicEntities[pos];
             _dynamicEntities.RemoveAt(pos);
         }
-
         return result;
-    }
-
-    public void AddStaticEntity(IEntity staticEntity)
-    {
-        _staticEntities.Add(staticEntity);
     }
 
     public IEntity RemoveStaticEntity(int pos)
@@ -99,7 +94,6 @@ public class CollisionManager
             result = _staticEntities[pos];
             _staticEntities.RemoveAt(pos);
         }
-
         return result;
     }
 

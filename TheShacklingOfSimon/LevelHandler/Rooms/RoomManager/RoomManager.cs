@@ -27,6 +27,10 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
         public Room CurrentRoom { get; private set; }
         public IReadOnlyList<string> RoomIds => roomIds;
 
+        /// Fired whenever CurrentRoom is changed through GoTo/NextRoom/PrevRoom.
+        /// RoomManager does not handle collision, it only announces room transitions.
+        public event Action<Room> RoomChanged;
+
         public RoomManager(
             JsonRoomReader roomReader,
             RoomIndexReader indexReader,
@@ -56,20 +60,33 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 
             int idx = roomIds.IndexOf(roomId);
             if (idx >= 0) currentIndex = idx;
+
+            RaiseRoomChanged();
         }
 
         public void NextRoom()
         {
             if (roomIds.Count == 0) return;
+
             currentIndex = (currentIndex + 1) % roomIds.Count;
             CurrentRoom = Load(roomIds[currentIndex]);
+
+            RaiseRoomChanged();
         }
 
         public void PrevRoom()
         {
             if (roomIds.Count == 0) return;
+
             currentIndex = (currentIndex - 1 + roomIds.Count) % roomIds.Count;
             CurrentRoom = Load(roomIds[currentIndex]);
+
+            RaiseRoomChanged();
+        }
+
+        private void RaiseRoomChanged()
+        {
+            RoomChanged?.Invoke(CurrentRoom);
         }
 
         private void InitializeIndex()
@@ -85,6 +102,9 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
             string start = string.IsNullOrWhiteSpace(idx.StartingRoom) ? roomIds[0] : idx.StartingRoom;
             currentIndex = Math.Max(0, roomIds.IndexOf(start));
             CurrentRoom = Load(roomIds[currentIndex]);
+
+            // we do NOT raise RoomChanged here to avoid surprising side-effects during construction.
+            // Game1 should call RegisterRoomCollidables(CurrentRoom) once after subscribing
         }
 
         private Room Load(string roomId)
@@ -98,7 +118,7 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
                 dataCache[roomId] = data;
             }
 
-            //pass viewport size so the factory can compute a centered origin
+            // pass viewport size so the factory can compute a centered origin
             var vp = graphicsDevice.Viewport;
             var room = factory.Create(data, vp.Width, vp.Height);
 

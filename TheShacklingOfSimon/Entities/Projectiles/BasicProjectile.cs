@@ -78,31 +78,39 @@ public class BasicProjectile : IProjectile
 
     public void OnCollision(IEntity other)
     {
-        throw new System.NotImplementedException();
-    }
+        if (!IsActive || other == null) return;
 
-    public void OnCollision(IPlayer player)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnCollision(IEnemy enemy)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnCollision(IProjectile projectile)
-    {
-        throw new System.NotImplementedException();
+        switch (other)
+        {
+            case ITile tile: OnCollision(tile); break;
+            case IEnemy enemy: OnCollision(enemy); break;
+            case IPlayer player: OnCollision(player); break;
+            case IProjectile projectile: OnCollision(projectile); break;
+            case IPickup pickup: OnCollision(pickup); break;
+        }
     }
 
     public void OnCollision(ITile tile)
     {
-        throw new System.NotImplementedException();
+        if (!IsActive || tile == null) return;
+
+        // Extinguish fire (and any future projectile-affectable tiles)
+        if (tile is TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor.IProjectileAffectableTile affectable)
+        {
+            affectable.OnProjectileHit();
+            Discontinue();
+            return;
+        }
+
+        if (tile.BlocksProjectiles)
+        {
+            Discontinue();
+        }
     }
 
-    public void OnCollision(IPickup pickup)
-    {
-        throw new System.NotImplementedException();
-    }
+    // for now these are no ops, they still need implementation or simple behaviors
+    public void OnCollision(IEnemy enemy) { Discontinue(); }
+    public void OnCollision(IPlayer player) { }
+    public void OnCollision(IProjectile projectile) { }
+    public void OnCollision(IPickup pickup) { }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
@@ -7,7 +8,7 @@ using TheShacklingOfSimon.Sprites.Products;
 namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 {
     // Walkable hazard that can be extinguished by projectiles
-    public sealed class FireTile : Tile, IProjectileAffectableTile
+    public sealed class FireTile : Tile, IProjectileAffectableTile, ITriggerTile
     {
         public override bool BlocksGround => false;
         public override bool BlocksFly => false;
@@ -30,6 +31,14 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
         public void OnProjectileHit()
         {
             Discontinue();
+        }
+
+        public void OnIntersect(IEntity entity)
+        {
+            if (entity is IDamageable damageable)
+            {
+                damageable.TakeDamage(1);
+            }
         }
     }
 }

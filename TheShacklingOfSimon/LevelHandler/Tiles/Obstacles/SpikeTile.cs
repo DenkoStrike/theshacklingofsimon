@@ -16,8 +16,10 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 
         public void OnIntersect(IEntity entity)
         {
-            //wire into damage system later
-            // Example later: if (entity is IDamageable d) d.TakeDamage(1);
+            if (entity is IDamageable damageable)
+            {
+                damageable.TakeDamage(1);
+            }
         }
     }
 }

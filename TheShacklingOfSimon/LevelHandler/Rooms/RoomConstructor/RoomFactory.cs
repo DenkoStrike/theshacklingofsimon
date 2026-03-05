@@ -56,8 +56,8 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
                 var top = new Point(x, 0);
                 var bottom = new Point(x, h - 1);
 
-                tileMap.PlaceTile(top, tileFactory.Create(TileType.Rock, tileMap, top));
-                tileMap.PlaceTile(bottom, tileFactory.Create(TileType.Rock, tileMap, bottom));
+                tileMap.PlaceTile(top, tileFactory.Create(TileType.Wall, tileMap, top));
+                tileMap.PlaceTile(bottom, tileFactory.Create(TileType.Wall, tileMap, bottom));
             }
 
             for (int y = 1; y < h - 1; y++)
@@ -65,8 +65,8 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
                 var left = new Point(0, y);
                 var right = new Point(w - 1, y);
 
-                tileMap.PlaceTile(left, tileFactory.Create(TileType.Rock, tileMap, left));
-                tileMap.PlaceTile(right, tileFactory.Create(TileType.Rock, tileMap, right));
+                tileMap.PlaceTile(left, tileFactory.Create(TileType.Wall, tileMap, left));
+                tileMap.PlaceTile(right, tileFactory.Create(TileType.Wall, tileMap, right));
             }
         }
 

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.Entities.Projectiles;
@@ -25,6 +27,7 @@ public class BombProjectile : IProjectile
     private float explosionDuration = 0.4f;
 
     private float explosionSize = 80f;
+    private readonly HashSet<ITile> _tilesExploded = new();
 
     private Texture2D pixel; // for red square
 
@@ -102,31 +105,35 @@ public class BombProjectile : IProjectile
 
     public void OnCollision(IEntity other)
     {
-        throw new System.NotImplementedException();
-    }
+        if (!IsActive || other == null) return;
 
-    public void OnCollision(IPlayer player)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnCollision(IEnemy enemy)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnCollision(IProjectile projectile)
-    {
-        throw new System.NotImplementedException();
+        switch (other)
+        {
+            case ITile tile: OnCollision(tile); break;
+            case IEnemy enemy: OnCollision(enemy); break;
+            case IPlayer player: OnCollision(player); break;
+            case IProjectile projectile: OnCollision(projectile); break;
+            case IPickup pickup: OnCollision(pickup); break;
+        }
     }
 
     public void OnCollision(ITile tile)
     {
-        throw new System.NotImplementedException();
+        if (!IsActive || tile == null) return;
+
+        // Only apply bomb effects during explosion
+        if (!hasExploded) return;
+
+        if (tile is IBombableTile bombable && _tilesExploded.Add(tile))
+        {
+            bombable.OnExplode();
+        }
     }
 
-    public void OnCollision(IPickup pickup)
-    {
-        throw new System.NotImplementedException();
-    }
+    public void OnCollision(IEnemy enemy) { }
+
+    public void OnCollision(IPlayer player) { }
+    public void OnCollision(IProjectile projectile) { }
+    public void OnCollision(IPickup pickup) { }
+
 }
