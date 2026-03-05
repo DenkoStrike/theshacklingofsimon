@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
 
 namespace TheShacklingOfSimon.Weapons;
@@ -22,5 +23,8 @@ public class BasicWeapon : IWeapon
 	{
 		var projectile = new BasicProjectile(pos, direction, stats);
 		_projectileManager.AddProjectile(projectile);
+		OnProjectileFired?.Invoke(projectile);
 	}
+
+	public event Action<IProjectile> OnProjectileFired;
 }

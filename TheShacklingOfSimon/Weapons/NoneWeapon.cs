@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
 
 namespace TheShacklingOfSimon.Weapons;
@@ -12,4 +13,6 @@ public class NoneWeapon : IWeapon
     {
         // No-op
     }
+
+    public event Action<IProjectile> OnProjectileFired;
 }

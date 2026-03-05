@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
 
 namespace TheShacklingOfSimon.Weapons;
@@ -7,7 +8,6 @@ public interface IWeapon
 {
     string Name { get; }
     string Description { get; }
-    // IProjectile Projectile { get; }
 
     /*
      * pos is the starting position of the Projectile
@@ -17,5 +17,5 @@ public interface IWeapon
      *      The speed of the Projectile
      */
     void Fire(Vector2 pos, Vector2 direction, ProjectileStats stats);
-    // IProjectile SwapProjectile(IProjectile newProjectile);
+    event Action<IProjectile> OnProjectileFired;
 }

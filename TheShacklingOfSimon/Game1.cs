@@ -12,6 +12,7 @@ using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Keyboard;
 using TheShacklingOfSimon.Controllers.Mouse;
 using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Entities.Players;
@@ -54,6 +55,7 @@ public class Game1 : Game
 	private IEnemy _spiderEnemy2;
 	private IEnemy _spiderEnemy3;
 
+	private CollisionManager _collisionManager;
 
 	public Game1()
 	{
@@ -91,8 +93,7 @@ public class Game1 : Game
 		// Load Projectile Sprites and Manager_projectileManager.Update(delta);
 
 		_projectileManager = new ProjectileManager();
-
-
+		
 		//load Tile Sprites and room Manager
 		SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
 		SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
@@ -110,10 +111,13 @@ public class Game1 : Game
 			new PlayerWithTwoSprites(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
 		_entities.Add(_player);
 
-		_player.AddWeaponToInventory(new BasicWeapon(_projectileManager));
+		IWeapon basicWeapon = new BasicWeapon(_projectileManager);
+		IWeapon bombWeapon = new BombWeapon(_projectileManager);
+		
+		_player.AddWeaponToInventory(basicWeapon);
 		_player.EquipPrimaryWeapon(0);
 		
-		_player.AddWeaponToInventory(new BombWeapon(_projectileManager));
+		_player.AddWeaponToInventory(bombWeapon);
 		_player.EquipSecondaryWeapon(1);
 
         // temporary items for demo
@@ -141,6 +145,9 @@ public class Game1 : Game
 
         // Register controls now that the player exists
         RegisterControls(screenDimensions);
+
+        _collisionManager = new CollisionManager();
+        basicWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
 	}
 
 	protected override void Update(GameTime delta)

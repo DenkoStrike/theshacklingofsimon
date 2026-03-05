@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Sprites.Factory;
 
@@ -27,5 +28,8 @@ public class BombWeapon : IWeapon
         var bomb = new BombProjectile(pos, bombSprite, stats);
 
         _projectileManager.AddProjectile(bomb);
+        OnProjectileFired?.Invoke(bomb);
     }
+    
+    public event Action<IProjectile> OnProjectileFired;
 }
