@@ -180,7 +180,7 @@ public class Game1 : Game
 		 *		and _collisionManager.RemoveStaticEntity()
 		 *		until the returned object is null.
 		 *		OR
-		 *		Better idea: _collisionManager.Clear()
+		 *		Better idea: _collisionManager.ClearEntityLists()
 		 *			calls Clear() for both of the Lists
 		 *			This is an O(2*1) operation vs O(2*n^2)
 		 * 
@@ -330,4 +330,5 @@ public class Game1 : Game
 		_keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Q), new ExitCommand(this));
 	}
 }
+
 
