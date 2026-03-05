@@ -173,6 +173,12 @@ public class Game1 : Game
 		 * It is worth noting this action will need to be repeated for every room,
 		 * so maybe move this to a private method?
 		 *		Or even a class (i.e., RoomLoader).
+		 *
+		 * Then also need ability to unload the preloaded entities when we go to
+		 * the next room.
+		 *		Could just unload everything with _collisionManager.RemoveDynamicEntity()
+		 *		and _collisionManager.RemoveStaticEntity()
+		 *		until the returned object is null.
 		 */
 	}
 
