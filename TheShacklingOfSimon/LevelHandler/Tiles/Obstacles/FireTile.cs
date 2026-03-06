@@ -14,7 +14,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
     {
         public override bool BlocksGround => false;
         public override bool BlocksFly => false;
-        public override bool BlocksProjectiles => false;
+        public override bool BlocksProjectiles => true;
 
         // Fire frames are ~32x41, so center them in a 64x64 tile
         private static readonly Vector2 DrawOffset =

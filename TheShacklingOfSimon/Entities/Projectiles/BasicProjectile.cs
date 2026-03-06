@@ -106,9 +106,10 @@ public class BasicProjectile : IProjectile
     }
 
     public void OnCollision(IPlayer player)
-    {
-		player.TakeDamage(this.Stats.Damage);   
-		Discontinue();
+    {	
+		//This code is bugged and makes it so even player made shots hit themselves probably fix this 
+		//player.TakeDamage(this.Stats.Damage);   
+		//Discontinue();
     }
 
     public void OnCollision(IProjectile projectile)
