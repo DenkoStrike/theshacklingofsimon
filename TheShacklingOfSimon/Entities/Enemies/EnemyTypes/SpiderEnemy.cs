@@ -32,7 +32,7 @@ public class SpiderEnemy : DamageableEntity, IEnemy
     private Vector2 _movementInput;
     private Vector2 _attack;
 
-    public SpiderEnemy(Vector2 startPosition, IWeapon weapon)
+    public SpiderEnemy(Vector2 startPosition, ProjectileManager projectileManager)
     {   
         // IDamageable properties
         this.Health = 3;
@@ -46,7 +46,7 @@ public class SpiderEnemy : DamageableEntity, IEnemy
         this.AttackCooldown = 3.0f;
         _attackTimer = 0f;
         this.AttackRange = 10.0f;
-        this.Weapon = weapon;
+        this.Weapon = new BasicWeapon(projectileManager);
 
         this.Sprite = SpriteFactory.Instance.CreateStaticSprite("EnemyIdleDown");
         
@@ -81,6 +81,7 @@ public class SpiderEnemy : DamageableEntity, IEnemy
 
     public void RegisterAttack(float dt, Vector2 targetDirection)
     {
+        /*
         if (targetDirection.LengthSquared() > AttackRange)
         {
             _attack = Vector2.Zero;
@@ -94,6 +95,10 @@ public class SpiderEnemy : DamageableEntity, IEnemy
 
             _attack = direction;
         }
+        */
+        //temp so attacks go through, though theres no target
+        Vector2 direction = Velocity;
+        _attack = direction;
 
         // Attack cooldown logic
         _attackTimer -= dt;
