@@ -10,6 +10,7 @@ using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
+using TheShacklingOfSimon.Entities.Enemies.Movement;
 
 
 namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
@@ -25,14 +26,9 @@ public class SpiderEnemy : DamageableEntity, IEnemy
     private float _attackTimer;
     public float AttackRange { get; set; }
 
+    private EnemyMovement _movement;
     private Vector2 _movementInput;
     private Vector2 _attack;
-
-    // Wander variables
-    private static Random _rng = new Random();
-    private float _wanderTimer;
-    private float _wanderInterval = 1.5f;
-    private Vector2 _wanderDirection;
 
     public SpiderEnemy(Vector2 startPosition, IWeapon weapon)
     {   
@@ -40,11 +36,12 @@ public class SpiderEnemy : DamageableEntity, IEnemy
         this.Health = 3;
         this.MaxHealth = 3;
         
-        // Enemy properties
+        // Movement class properties
+        _movement = new EnemyMovement();
         
         // These can all be overriden with public set method
         this.MoveSpeedStat = 17.0f;
-        this.AttackCooldown = 3000.0f;
+        this.AttackCooldown = 3.0f;
         _attackTimer = 0f;
         this.AttackRange = 50.0f;
         this.Weapon = weapon;
@@ -71,43 +68,6 @@ public class SpiderEnemy : DamageableEntity, IEnemy
     {
         // Placeholder for target finding logic, e.g., find the player or other entities
         return Position + new Vector2(100, 0); // This will be replaced with actual target finding logic in a real implementation
-    }
-
-    private void Wander(float dt)
-    {
-        _wanderTimer -= dt;
-
-        if (_wanderTimer <= 0f)
-        {
-            float angle = (float)(_rng.NextDouble() * Math.PI * 2);
-
-            _wanderDirection = new Vector2(
-                (float)Math.Cos(angle),
-                (float)Math.Sin(angle)
-            );
-
-            _wanderTimer = _wanderInterval;
-        }
-
-        _movementInput = _wanderDirection;
-    }
-
-    public void Pathfind(Vector2 targetPosition)
-    {
-        //pre-check if target is found
-        if (targetPosition == Vector2.Zero)
-        {
-            _movementInput = Vector2.Zero;
-            return;
-        }
-
-        // Simple pathfinding logic: move directly towards the target
-        Vector2 direction = targetPosition - Position;
-        if (direction.LengthSquared() > 0.0001f)
-        {
-            direction.Normalize();
-        }
-        _movementInput += direction * MoveSpeedStat;
     }
 
     public void RegisterAttack(float dt, Vector2 targetDirection)
@@ -139,9 +99,7 @@ public class SpiderEnemy : DamageableEntity, IEnemy
     public void RegisterMovement(float dt, Vector2 targetPosition)
     {
         // Movement logic
-        //Pathfind(targetPosition);
-        //_movementInput = new Vector2(0.5f, 0f); // for testing
-        Wander(dt);
+        _movementInput = _movement.Wander(dt);
         if (_movementInput.LengthSquared() > 0.0001f)
         {
             _movementInput.Normalize();
