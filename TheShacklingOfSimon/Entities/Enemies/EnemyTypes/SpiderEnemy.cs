@@ -11,6 +11,7 @@ using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 using TheShacklingOfSimon.Entities.Enemies.Movement;
+using System.ComponentModel.Design;
 
 
 namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
@@ -67,7 +68,7 @@ public class SpiderEnemy : DamageableEntity, IEnemy
     public Vector2 FindTarget() //this method will return (0,0) if no target found
     {
         // Placeholder for target finding logic, e.g., find the player or other entities
-        return Position + new Vector2(100, 0); // This will be replaced with actual target finding logic in a real implementation
+        return new Vector2(0, 0);
     }
 
     public void RegisterAttack(float dt, Vector2 targetDirection)
@@ -94,12 +95,22 @@ public class SpiderEnemy : DamageableEntity, IEnemy
             CurrentState.HandleAttack(Velocity, AttackCooldown);
             _attackTimer = AttackCooldown; // reset cooldown
         }
+        _attack = Vector2.Zero;
+    }
+
+    public void StandardMovement(float dt, Vector2 targetPosition)
+    {
+        if (targetPosition.LengthSquared() < 0.0001f)
+            _movementInput = _movement.Wander(dt);
+        else
+            _movementInput = _movement.Pathfind(Position, targetPosition);
     }
 
     public void RegisterMovement(float dt, Vector2 targetPosition)
     {
         // Movement logic
-        _movementInput = _movement.Wander(dt);
+        _movementInput = Vector2.Zero;
+        StandardMovement(dt, targetPosition);
         if (_movementInput.LengthSquared() > 0.0001f)
         {
             _movementInput.Normalize();
@@ -113,18 +124,9 @@ public class SpiderEnemy : DamageableEntity, IEnemy
     {
         float dt = (float)delta.ElapsedGameTime.TotalSeconds;
         // Find target
-        //Vector2 targetPosition = FindTarget();
-        RegisterMovement(dt, new Vector2(0f, 0f)); // No specific target for now, just wander
+        Vector2 targetPosition = FindTarget();
+        RegisterMovement(dt,targetPosition); // No specific target for now, just wander
         RegisterAttack(dt, Position + Velocity); // Attack in the direction of movement for testing
-        /*
-        if (targetPosition.LengthSquared() > 0.0001f)
-        {
-            RegisterAttack(targetPosition);
-            CurrentState.HandleAttack(_attack, AttackCooldown);
-        }
-        */
-
-        _attack = Vector2.Zero;
         
         Position += Velocity * dt;
         Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 20, 20);
