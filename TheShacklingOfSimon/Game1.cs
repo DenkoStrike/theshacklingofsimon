@@ -307,7 +307,18 @@ public class Game1 : Game
             new PrimaryAttackDynamicMouseCommand(_player, _mouseService)
             );
 
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Escape), new ExitCommand(this));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Q), new ExitCommand(this));
+        // Mouse room switching (Sprint 3) click in "map" region, To be added later
+        var mapRegion = new MouseInputRegion(0, 0, 200, 200);
+
+        _mouseController.RegisterCommand(
+            new MouseInput(mapRegion, InputState.JustPressed, MouseButton.Left),
+            new PreviousRoomCommand(_roomManager));
+
+        _mouseController.RegisterCommand(
+            new MouseInput(mapRegion, InputState.JustPressed, MouseButton.Right),
+            new NextRoomCommand(_roomManager));
+
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape), new ExitCommand(this));
+        _keyboardController.RegisterCommand(new KeyboardInput(InputState.JustPressed, KeyboardButton.Q), new ExitCommand(this));
     }
 }

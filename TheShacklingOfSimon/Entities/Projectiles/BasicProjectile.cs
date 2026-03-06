@@ -86,12 +86,10 @@ public class BasicProjectile : IProjectile
     {
         if (!IsActive || tile == null) return;
 
-        // Extinguish fire (and any future projectile-affectable tiles)
+        // effect any projectile-affectable tiles
         if (tile is TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor.IProjectileAffectableTile affectable)
         {
             affectable.OnProjectileHit();
-            Discontinue();
-            return;
         }
 
         if (tile.BlocksProjectiles)

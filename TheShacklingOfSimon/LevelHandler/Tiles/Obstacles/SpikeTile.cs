@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
+using TheShacklingOfSimon.Entities.Enemies;
+using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 {
-    // Walkable hazard; collision system should apply damage on overlap
-    public sealed class SpikeTile : Tile, ITriggerTile
+    public sealed class SpikeTile : Tile
     {
         public override bool BlocksGround => false;
         public override bool BlocksFly => false;
@@ -14,9 +14,17 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 
         public SpikeTile(ISprite sprite, Vector2 position) : base(sprite, position) { }
 
-        public void OnIntersect(IEntity entity)
+        public override void OnCollision(IPlayer player)
         {
-            if (entity is IDamageable damageable)
+            if (player is IDamageable damageable)
+            {
+                damageable.TakeDamage(1);
+            }
+        }
+
+        public override void OnCollision(IEnemy enemy)
+        {
+            if (enemy is IDamageable damageable)
             {
                 damageable.TakeDamage(1);
             }

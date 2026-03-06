@@ -293,12 +293,30 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
     }
 
     public override void OnCollision(ITile tile)
-    {
-        /*
-         * No-op
-         * Collision logic handled by specific concrete tile class: Avoids complex
-         * conditional logic in the player class.
-         */
+    { 
+           if (tile == null || !IsActive) return;
+
+           // Player handles physics response, tile decides if it blocks via BlocksGround
+           if (!tile.BlocksGround) return;
+
+           Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(Hitbox, tile.Hitbox);
+           if (mtv == Vector2.Zero) return;
+
+           Position += mtv;
+           Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
+
+           switch (CollisionDetector.GetCollisionSideFromMtv(mtv))
+           {
+               case CollisionSide.Left:
+               case CollisionSide.Right:
+                   Velocity = new Vector2(0.0f, Velocity.Y);
+                   break;
+
+               case CollisionSide.Top:
+               case CollisionSide.Bottom:
+                   Velocity = new Vector2(Velocity.X, 0.0f);
+                   break;
+           }
     }
 
     public override void OnCollision(IPickup pickup)

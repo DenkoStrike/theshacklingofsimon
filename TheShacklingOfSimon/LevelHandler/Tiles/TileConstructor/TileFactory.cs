@@ -22,7 +22,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
                 { TileType.Hole,  pos => new HoleTile(spriteFactory.CreateStaticSprite("images/Hole"), pos) },
                 { TileType.Spike, pos => new SpikeTile(spriteFactory.CreateStaticSprite("images/Spikes"), pos) },
                 { TileType.Wall,  pos => new WallTile(spriteFactory.CreateStaticSprite("images/Rocks"), pos) },
-                { TileType.Fire,  pos => new FireTile(spriteFactory.CreateStaticSprite("images/Fire"), pos) }
+                { TileType.Fire,  pos => new FireTile(spriteFactory.CreateAnimatedSprite("images/Fire", 0.15f), pos) }
             };
         }
 

@@ -13,10 +13,4 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
     {
         void OnProjectileHit();
     }
-
-    // Tile triggers an effect when an entity overlaps it (spikes, hazards)
-    public interface ITriggerTile
-    {
-        void OnIntersect(IEntity entity);
-    }
 }

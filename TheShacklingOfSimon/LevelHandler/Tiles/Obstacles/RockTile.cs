@@ -17,5 +17,6 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
         {
             Discontinue(); // TileMap removes it, becomes floor
         }
+
     }
 }
