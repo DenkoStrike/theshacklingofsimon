@@ -1,0 +1,236 @@
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Entities.Collisions;
+using TheShacklingOfSimon.Entities.Enemies.States;
+using TheShacklingOfSimon.Entities.Pickup;
+using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.Entities.Projectiles;
+using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.Weapons;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using TheShacklingOfSimon.Entities.Enemies.Movement;
+
+
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
+
+public class RamEnemy : DamageableEntity, IEnemy
+{    
+
+    public bool MarkedForRemoval { get; private set; }
+
+    public IEnemyState CurrentState { get; private set; }
+    public IWeapon Weapon { get; private set; }
+
+    public float MoveSpeedStat { get; set; }
+    public float AttackCooldown { get; set; }
+    private float _attackTimer;
+    public float AttackRange { get; set; }
+    //Needs a damage value for collision
+    public float ContactDamage { get; }
+
+    private EnemyMovementManager _movement;
+    private Vector2 _movementInput;
+    private Vector2 _attack;
+
+    //should take out the projectile manager and weapon, will do once tested
+    public RamEnemy(Vector2 startPosition, ProjectileManager projectileManager)
+    {   
+        // IDamageable properties
+        this.Health = 3;
+        this.MaxHealth = 3;
+        
+        // Movement class properties
+        _movement = new EnemyMovementManager();
+        
+        // These can all be overriden with public set method
+        this.MoveSpeedStat = 17.0f;
+        this.AttackCooldown = 3.0f;
+        _attackTimer = 0f;
+        this.AttackRange = 10.0f;
+        this.ContactDamage = 1.0f;
+        this.Weapon = new BasicWeapon(projectileManager);
+
+        this.Sprite = SpriteFactory.Instance.CreateStaticSprite("EnemyIdleDown");
+        
+        Reset(startPosition);
+    }
+
+    public void Reset(Vector2 startPosition)
+    {
+        Position = startPosition;
+        Velocity = Vector2.Zero;
+        IsActive = true;
+        Hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, 20, 20);
+        Health = MaxHealth;
+        this.CurrentState = new EnemyIdleState(this, Velocity);
+        this.CurrentState.Enter();
+        this._movementInput = Vector2.Zero;
+        this._attack = Vector2.Zero;
+    }
+
+    public void MarkForRemoval()
+    {
+        MarkedForRemoval = true;
+    }
+
+    public Vector2 FindTarget() //this method will return (0,0) if no target found
+    {
+        // Placeholder for target finding logic, e.g., find the player or other entities
+        Vector2 targetPosition = Position + new Vector2(25, 0);
+        Vector2 targetDirection = targetPosition - Position;
+        return targetDirection;
+    }
+
+    public void RegisterAttack(float dt, Vector2 targetDirection)
+    {
+        /*
+        if (targetDirection.LengthSquared() > AttackRange)
+        {
+            _attack = Vector2.Zero;
+        }
+        else
+        {
+            Vector2 direction = targetDirection;
+
+            if (direction.LengthSquared() > 0.0001f)
+                direction.Normalize();
+
+            _attack = direction;
+        }
+        */
+        //temp so attacks go through, though theres no target
+        Vector2 direction = Velocity;
+        _attack = direction;
+
+        // Attack cooldown logic
+        _attackTimer -= dt;
+        if (_attackTimer < 0f)
+            _attackTimer = 0f;
+
+        if (_attackTimer <= 0f && _attack != Vector2.Zero)
+        {
+            CurrentState.HandleAttack(_attack, AttackCooldown);
+            _attackTimer = AttackCooldown;
+        }
+        _attack = Vector2.Zero;
+    }
+
+    public void StandardMovement(float dt, Vector2 targetDirection)
+    {
+        if (targetDirection.LengthSquared() > AttackRange)
+            _movementInput = _movement.Wander(dt);
+        else
+            _movementInput = _movement.Pathfind(targetDirection);
+    }
+
+    public void RegisterMovement(float dt, Vector2 targetDirection)
+    {
+        // Movement logic
+        _movementInput = Vector2.Zero;
+        StandardMovement(dt, targetDirection);
+        if (_movementInput.LengthSquared() > 0.0001f)
+        {
+            _movementInput.Normalize();
+        }
+        Velocity = _movementInput * MoveSpeedStat; // <-- apply velocity
+        CurrentState.HandleMovement(_movementInput);
+        _movementInput = Vector2.Zero;
+    }
+
+    public override void Update(GameTime delta)
+    {
+        float dt = (float)delta.ElapsedGameTime.TotalSeconds;
+        // Find target
+        Vector2 targetDirection = FindTarget();
+        RegisterMovement(dt, targetDirection); // No specific target for now, just wander
+        //This enemy is only colliding, so no projectile attacks needed
+        //RegisterAttack(dt, targetDirection); // Attack in the direction of movement for testing
+        
+        Position += Velocity * dt;
+        Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 20, 20);
+        
+        CurrentState.Update(delta);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        SpriteEffects flip = SpriteEffects.None;
+        if (Velocity.X < -0.0001f)
+        {
+            flip = SpriteEffects.FlipHorizontally;
+        }
+
+        if (Sprite != null)
+        {
+            Sprite.Draw(spriteBatch, Position, Color.White, 0.0f,
+                        new Vector2(0, 0), 1.0f, flip, 0.0f);
+        }
+        
+    }
+
+    public override void OnCollision(IEntity other)
+    {
+        if (other == null || !IsActive) return;
+        other.OnCollision(this);
+    }
+
+    public override void OnCollision(IPlayer player)
+    {
+        if (player == null || !IsActive) return;
+
+        // Deal 1 damage on contact
+        player.TakeDamage((int)ContactDamage);
+    }
+
+    public override void OnCollision(IEnemy enemy)
+    {
+        // No-op for now (avoid enemies pushing each other until desired).
+    }
+
+    public override void OnCollision(IProjectile projectile)
+    {
+        // No-op for now if projectiles should damage enemies,
+        // implement damage in projectile or here consistently across the codebase.
+    }
+
+    public override void OnCollision(ITile tile)
+    {
+        if (tile == null || !tile.BlocksGround) return;
+
+        Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(Hitbox, tile.Hitbox);
+        if (mtv == Vector2.Zero) return;
+
+        Position += mtv;
+        Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
+
+        switch (CollisionDetector.GetCollisionSideFromMtv(mtv))
+        {
+            case CollisionSide.Left:
+            case CollisionSide.Right:
+                Velocity = new Vector2(0.0f, Velocity.Y);
+                break;
+
+            case CollisionSide.Top:
+            case CollisionSide.Bottom:
+                Velocity = new Vector2(Velocity.X, 0.0f);
+                break;
+        }
+    }
+
+    public override void OnCollision(IPickup pickup)
+    {
+        // No-op
+    }
+
+    public void ChangeState(IEnemyState newState)
+    {
+        if (CurrentState != newState)
+        {
+            CurrentState?.Exit();
+            CurrentState = newState;
+            CurrentState?.Enter();
+        }
+    }
+}
