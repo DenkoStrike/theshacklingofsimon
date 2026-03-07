@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TheShacklingOfSimon.Entities.Enemies
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyManager
 {
     public class EnemyManager
     {
@@ -34,7 +34,7 @@ namespace TheShacklingOfSimon.Entities.Enemies
                 enemy.Update(gameTime);
 
                 // Remove enemies that are marked for removal
-                if (enemy.MarkedForRemoval)
+                if (enemy.IsActive == false)
                 {
                     _enemies.RemoveAt(i);
                 }

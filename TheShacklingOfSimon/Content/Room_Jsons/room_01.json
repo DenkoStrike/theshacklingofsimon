@@ -6,6 +6,10 @@
     { "x": 11, "y": 5, "type": "Fire" }
   ],
   "entities": [],
+  "enemies": [
+    { "type": "SpiderEnemy", "x": 5, "y": 5 },
+    { "type": "BlackMaw", "x": 10, "y": 3}
+  ],
   "doors": [
     {
       "x": 0,

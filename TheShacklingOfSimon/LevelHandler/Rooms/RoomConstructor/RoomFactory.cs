@@ -6,6 +6,9 @@ using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.Entities.Enemies.EnemyTypes.EnemyTypeList;
+using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
+using TheShacklingOfSimon.Entities.Enemies;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {
@@ -42,8 +45,13 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
             // Doors are FULL grid coords on the border
             PlaceDoors(tileMap, spriteFactory, data.Doors);
 
-            IEnumerable<IEntity> entities = new List<IEntity>();
-            return new Room(data.Id, tileMap, entities, data.Doors, background);
+            IList<IEntity> entities = new List<IEntity>();
+
+            //Enemies placement
+            PlaceEnemies(tileMap, entities, data.Enemies);
+
+            IEnumerable<IEntity> exposedEntities = entities;
+            return new Room(data.Id, tileMap, exposedEntities, data.Doors, background);
         }
 
         private static void BuildBorderWalls(TileMap tileMap, TileFactory tileFactory)
@@ -154,6 +162,25 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
             if (d.X == 0) return (new Point(0, d.Y), DoorSide.West);
 
             return (new Point(maxX, d.Y), DoorSide.East);
+        }
+
+        private static void PlaceEnemies(TileMap tileMap, IList<IEntity> entities, List<EnemyData> enemies)
+        {
+            if (enemies == null) return;
+
+            foreach (var e in enemies)
+            {
+                Vector2 worldPos = tileMap.GridToWorld(new Point(e.X, e.Y));
+
+                IEnemy enemy = e.Type switch
+                {
+                    EnemyTypeList.SpiderEnemy => new SpiderEnemy(worldPos),
+                    EnemyTypeList.BlackMaw => new BlackMaw(worldPos),
+                    _ => throw new InvalidOperationException($"Unknown enemy type: {e.Type}")
+                };
+
+                entities.Add(enemy);
+            }
         }
     }
 }

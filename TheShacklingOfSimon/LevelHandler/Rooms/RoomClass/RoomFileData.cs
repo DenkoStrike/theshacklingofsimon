@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TheShacklingOfSimon.Entities.Enemies.EnemyTypes.EnemyTypeList;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
@@ -9,6 +10,7 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
         public List<TileData> Tiles { get; set; } = new();
         public List<EntityData> Entities { get; set; } = new();
         public List<DoorData> Doors { get; set; } = new();
+        public List<EnemyData> Enemies { get; set; } = new();
     }
 
     // Tile coordinates are in INTERIOR grid space: (0..12, 0..6)
@@ -46,6 +48,13 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
 
     public sealed class DoorSpawn
     {
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
+
+    public sealed class EnemyData
+    {
+        public EnemyTypeList Type { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
     }

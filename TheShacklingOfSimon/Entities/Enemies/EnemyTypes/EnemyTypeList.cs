@@ -1,7 +1,7 @@
-namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes.EnemyTypeList
 {
     // Type-safe identifiers for enemies that can appear in room files.
-    public enum EnemyType
+    public enum EnemyTypeList
     {
         SpiderEnemy,
         BlackMaw

@@ -36,7 +36,7 @@ public class BlackMaw : DamageableEntity, IEnemy
     private Vector2 _attack;
 
     //should take out the projectile manager and weapon, will do once tested
-    public BlackMaw(Vector2 startPosition, ProjectileManager projectileManager)
+    public BlackMaw(Vector2 startPosition)
     {   
         // IDamageable properties
         this.Health = 3;
@@ -51,7 +51,6 @@ public class BlackMaw : DamageableEntity, IEnemy
         _attackTimer = 0f;
         this.AttackRange = 10.0f;
         this.ContactDamage = 1.0f;
-        this.Weapon = new BasicWeapon(projectileManager);
 
         this.Sprite = SpriteFactory.Instance.CreateStaticSprite("EnemyIdleDown");
         
@@ -71,9 +70,14 @@ public class BlackMaw : DamageableEntity, IEnemy
         this._attack = Vector2.Zero;
     }
 
+    public void SetProjectileManager(ProjectileManager projectileManager)
+    {
+        this.Weapon = new BasicWeapon(projectileManager);
+    }
+
     public void MarkForRemoval()
     {
-        MarkedForRemoval = true;
+        IsActive = false;
     }
 
     public Vector2 FindTarget() //this method will return (0,0) if no target found

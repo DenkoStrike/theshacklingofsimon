@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Enemies.States;
 using TheShacklingOfSimon.Weapons;
+using TheShacklingOfSimon.Entities.Projectiles;
 
 namespace TheShacklingOfSimon.Entities.Enemies;
 
@@ -45,6 +46,7 @@ public interface IEnemy : IDamageable
     float AttackRange { get; set; }
 
     IWeapon Weapon { get; }
+    void SetProjectileManager(ProjectileManager projectileManager);
 
     // are attacks specialized to each enemy or considered weapons
     //void Attack(Vector2 direction, float attackDamage, float attackCooldown, float attackRange);

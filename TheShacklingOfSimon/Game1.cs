@@ -51,9 +51,6 @@ public class Game1 : Game
     private List<IEntity> _entities;
     private ProjectileManager _projectileManager; //_projectileManager = new ProjectileManager();
 
-    //temp for enemy
-    private EnemyManager _enemyManager;
-
     private CollisionManager _collisionManager;
 
     // Entities that should always be registered as dynamic colliders regardless of room
@@ -126,11 +123,6 @@ public class Game1 : Game
         _player.AddItemToInventory(new AdrenalineItem(_player));
 
 
-        //eventually to be handled by room manager
-        _enemyManager = new EnemyManager();
-        _enemyManager.AddEnemy(new SpiderEnemy(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.25f), _projectileManager));
-        _enemyManager.AddEnemy(new BlackMaw(new Vector2(screenDimensions.Width * 0.4f, screenDimensions.Height * 0.3f), _projectileManager));
-
         //load Item Sprites and manager
         SpriteFactory.Instance.LoadTexture(Content, "images/8Ball.json", "images/8Ball");
         SpriteFactory.Instance.LoadTexture(Content, "images/Red_Heart.json", "images/Red_Heart");
@@ -145,10 +137,6 @@ public class Game1 : Game
         // Persistent dynamic colliders (demo setup)
         _persistentDynamicEntities.Clear();
         _persistentDynamicEntities.Add(_player);
-        foreach (IEnemy enemy in _enemyManager.Enemies)
-        {
-            _persistentDynamicEntities.Add(enemy);
-        }
 
         /*
          * Subscribe the collision manager to the event of a new projectile
@@ -164,6 +152,13 @@ public class Game1 : Game
         RegisterRoomCollidables(_roomManager.CurrentRoom);
 
         // TODO: Can add projectile manager subscriptions here
+        foreach (IEntity entity in _roomManager.CurrentRoom.Entities)
+        {
+            if (entity is IEnemy enemy)
+            {
+                enemy.SetProjectileManager(_projectileManager);
+            }
+        }
         // Or really any spot after the weapons are created
     }
 
@@ -176,7 +171,6 @@ public class Game1 : Game
         _roomManager.Update(delta);
         _itemManager.Update(delta);
         _player.CurrentItem?.Update(delta);
-        _enemyManager.Update(delta);
 
         foreach (IEntity e in _entities)
         {
@@ -197,7 +191,6 @@ public class Game1 : Game
 
         _roomManager.Draw(_spriteBatch);
         _itemManager.Draw(_spriteBatch);
-        _enemyManager.Draw(_spriteBatch);
         _projectileManager.Draw(_spriteBatch);
 
         foreach (IEntity e in _entities)
