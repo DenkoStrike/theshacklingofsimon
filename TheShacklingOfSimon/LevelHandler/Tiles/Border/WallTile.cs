@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Entities.Collisions;
+using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
@@ -18,5 +21,16 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 
         // No animation needed; avoid updating sprite work
         public override void Update(GameTime delta) { }
+        public override void OnCollision(IPlayer player)
+        {
+            if (player == null || !IsActive) return;
+
+            if (player is not IEntity entity) return;
+
+            Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(entity.Hitbox, this.Hitbox);
+            if (mtv == Vector2.Zero) return;
+
+            player.SetPosition(entity.Position + mtv);
+        }
     }
 }

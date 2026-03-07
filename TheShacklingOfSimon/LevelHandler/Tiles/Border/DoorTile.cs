@@ -7,7 +7,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
     {
         public override bool BlocksGround => false;
         public override bool BlocksFly => false;
-        public override bool BlocksProjectiles => false;
+        public override bool BlocksProjectiles => true;
 
         public string ToRoom { get; }
         public Point SpawnInterior { get; }   // interior coords (0..12,0..6)

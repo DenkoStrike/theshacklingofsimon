@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Entities.Collisions;
+using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
 
@@ -15,8 +18,19 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 
         public void OnExplode()
         {
-            Discontinue(); // TileMap removes it, becomes floor
+            Discontinue();
         }
 
+        public override void OnCollision(IPlayer player)
+        {
+            if (player == null || !IsActive) return;
+
+            if (player is not IEntity entity) return;
+
+            Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(entity.Hitbox, this.Hitbox);
+            if (mtv == Vector2.Zero) return;
+
+            player.SetPosition(entity.Position + mtv);
+        }
     }
 }
