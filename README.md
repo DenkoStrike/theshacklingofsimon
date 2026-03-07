@@ -1,25 +1,16 @@
-Here lies a Binding of Isaac ripoff being made for a school project. WIP<br><br>
+Here lies a Binding of Isaac ripoff being made for a school project. WIP<br>
+Controls are temporary for sprint 3.<br><br>
 
 Controls (Keyboard):<br>
 WASD for directional movement<br>
 Arrow keys for shooting<br>
 LShift/RShift for bombs<br>
-esc to quit the game<br><br>
-
-Controls (Mouse):<br>
-Left click (and mouse position relative to player) for shooting<br>
-Right click for bombs<br>
-
-Temporary controls for sprint2:<br>
-Y to show the next room<br>
-T to show the previous room<br>
+esc to quit the game<br>
 I to select the next item<br>
 U to select the previous item<br>
-O to show the next enemy<br>
-P to show the previous enemy<br>
 SPACE to use the currently selected item<br>
-E to cause player to take damage (6 times for death)<br>
 R to reset player
 
-
-Known bugs:<br>
+Controls (Mouse):<br>
+Left click for next room
+Right click for previous room

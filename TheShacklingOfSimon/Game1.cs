@@ -267,12 +267,7 @@ public class Game1 : Game
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Space),
             new UseItemCommand(_player));
-
-        // Temporary key for triggering player damaged and deadstate for sprint 2
-        _keyboardController.RegisterCommand(
-            new KeyboardInput(InputState.Pressed, KeyboardButton.E),
-            new TriggerPlayerDamagedStateCommand(_player, 1)
-            );
+        
 
         // Temporary key for triggering player Reset() for sprint 2
         _keyboardController.RegisterCommand(
