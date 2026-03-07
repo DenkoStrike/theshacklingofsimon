@@ -6,7 +6,6 @@ using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
-using TheShacklingOfSimon.Entities.Enemies.EnemyTypes.EnemyTypeList;
 using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Entities.Enemies;
 

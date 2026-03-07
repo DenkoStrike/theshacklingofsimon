@@ -10,7 +10,6 @@ using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
-using TheShacklingOfSimon.Entities.Enemies.Movement;
 
 
 namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;

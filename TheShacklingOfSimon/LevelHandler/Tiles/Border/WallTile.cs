@@ -5,7 +5,7 @@ using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
+namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
 {
     /// Invisible, indestructible wall used for borders. Blocks everything.
     public sealed class WallTile : Tile

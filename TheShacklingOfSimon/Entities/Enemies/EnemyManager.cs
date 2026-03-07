@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TheShacklingOfSimon.Entities.Enemies.EnemyManager
+namespace TheShacklingOfSimon.Entities.Enemies
 {
     public class EnemyManager
     {

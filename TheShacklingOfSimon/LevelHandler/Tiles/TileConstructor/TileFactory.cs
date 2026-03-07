@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 using TheShacklingOfSimon.LevelHandler.Tiles.Obstacles;
 using TheShacklingOfSimon.Sprites.Factory;
 

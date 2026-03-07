@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TheShacklingOfSimon.Entities.Enemies.EnemyTypes.EnemyTypeList;
+using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
