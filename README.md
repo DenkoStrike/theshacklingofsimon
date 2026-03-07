@@ -4,7 +4,7 @@ Controls are temporary for sprint 3.<br><br>
 Controls (Keyboard):<br>
 WASD for directional movement<br>
 Arrow keys for shooting<br>
-LShift/RShift for bombs<br>
+LShift/RShift/E for bombs<br>
 esc to quit the game<br>
 I to select the next item<br>
 U to select the previous item<br>
