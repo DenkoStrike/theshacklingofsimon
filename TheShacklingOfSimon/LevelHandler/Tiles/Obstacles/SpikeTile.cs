@@ -16,18 +16,12 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 
         public override void OnCollision(IPlayer player)
         {
-            if (player is IDamageable damageable)
-            {
-                damageable.TakeDamage(1);
-            }
+                player.TakeDamage(1);
         }
 
         public override void OnCollision(IEnemy enemy)
         {
-            if (enemy is IDamageable damageable)
-            {
-                damageable.TakeDamage(1);
-            }
+                enemy.TakeDamage(1);
         }
     }
 }
