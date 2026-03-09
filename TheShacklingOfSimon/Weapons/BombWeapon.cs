@@ -20,9 +20,10 @@ public class BombWeapon : IWeapon
         Description = "Drops a bomb that explodes.";
     }
 
-    public void Fire(Vector2 pos, Vector2 direction, ProjectileStats stats)
+    
+
+    public void Fire(Vector2 pos, Vector2 direction, ProjectileStats stats, ProjectileOwner owner)
     {
-        
         var bombSprite = SpriteFactory.Instance.CreateAnimatedSprite("PlayerHeadShootingDown", 0.1f);
 
         var bomb = new BombProjectile(pos, bombSprite, stats);
@@ -30,6 +31,6 @@ public class BombWeapon : IWeapon
         _projectileManager.AddProjectile(bomb);
         OnProjectileFired?.Invoke(bomb);
     }
-    
+
     public event Action<IProjectile> OnProjectileFired;
 }

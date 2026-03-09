@@ -6,6 +6,7 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
+using static TheShacklingOfSimon.Entities.Projectiles.ProjectileOwner;
 
 namespace TheShacklingOfSimon.Entities.Projectiles;
 
@@ -16,14 +17,16 @@ public class BasicProjectile : IProjectile
 	public bool IsActive { get; private set; }
 	public Rectangle Hitbox { get; private set; }
 	public ISprite Sprite { get; set; }
+    public ProjectileOwner OwnerType { get; private set; }
 
-	public ProjectileStats Stats { get; private set; }
+    public ProjectileStats Stats { get; private set; }
 
 	private float timeActive;
 	private Texture2D debugTexture;
-	public BasicProjectile(Vector2 startPos, Vector2 direction, ProjectileStats stats)
+	public BasicProjectile(Vector2 startPos, Vector2 direction, ProjectileStats stats,ProjectileOwner owner)
 	{
-		Position = startPos;
+        OwnerType = owner;
+        Position = startPos;
 		Stats = stats;
 		IsActive = true;
 
