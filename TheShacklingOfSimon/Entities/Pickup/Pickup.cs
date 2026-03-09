@@ -31,7 +31,7 @@ public class Pickup : IPickup
         Velocity = Vector2.Zero;
         IsActive = true;
         Hitbox = new Rectangle((int)position.X, (int)position.Y, 32, 32);
-        Sprite = Sprite;
+        Sprite = sprite;
     }
 
     public void Update(GameTime delta)
