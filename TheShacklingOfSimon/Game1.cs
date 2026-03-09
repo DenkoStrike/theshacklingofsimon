@@ -38,19 +38,18 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private Texture2D _texture;
     private SpriteFont _font;
-
-    private IKeyboardService _keyboardService;
+    
     private IController<KeyboardInput> _keyboardController;
-    private IMouseService _mouseService;
     private IController<MouseInput> _mouseController;
 
     private RoomManager _roomManager; //room manager for sprint 3
     private ItemManager _itemManager; //Temporary item switching for sprint 2
+    private InputManager _inputManager;
 
     private IPlayer _player;
     private List<IEntity> _entities;
     private ProjectileManager _projectileManager; //_projectileManager = new ProjectileManager();
-
+    private CollisionBulkLoader _collisionBulkLoader;
     private CollisionManager _collisionManager;
 
     // Entities that should always be registered as dynamic colliders regardless of room
@@ -65,12 +64,8 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _keyboardService = new MonoGameKeyboardService();
-        _keyboardController = new KeyboardController(_keyboardService);
-
-        _mouseService = new MonoGameMouseService();
-        _mouseController = new MouseController(_mouseService);
-
+        _keyboardController = new KeyboardController(new MonoGameKeyboardService());
+        _mouseController = new MouseController(new MonoGameMouseService());
         base.Initialize();
     }
 
@@ -130,7 +125,16 @@ public class Game1 : Game
         _itemManager = new ItemManager(_player, SpriteFactory.Instance);
 
         // Register controls now that the player exists
-        RegisterControls(screenDimensions);
+        _inputManager = new InputManager(
+            _keyboardController,
+            _mouseController,
+            _player, 
+            this, 
+            _roomManager, 
+            _itemManager,
+            Reset
+        );
+        _inputManager.LoadDefaultControls();
 
         _collisionManager = new CollisionManager();
 
@@ -146,10 +150,11 @@ public class Game1 : Game
         bombWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
 
         // Re-register collidables whenever the room changes
-        _roomManager.RoomChanged += RegisterRoomCollidables;
+        _collisionBulkLoader = new CollisionBulkLoader(_collisionManager, _persistentDynamicEntities);
+        _roomManager.RoomChanged += _collisionBulkLoader.RegisterRoomCollidables;
 
         // Register current room (starting room) once
-        RegisterRoomCollidables(_roomManager.CurrentRoom);
+        _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
 
         // TODO: Can add projectile manager subscriptions here
         foreach (IEntity entity in _roomManager.CurrentRoom.Entities)
@@ -202,93 +207,16 @@ public class Game1 : Game
         base.Draw(delta);
     }
 
-
-    /// Bulk-register dynamic + static colliders for the given room.
-    /// Keeps collision knowledge in Game1 (RoomManager, projectile manager, etc. remain decoupled)
-    private void RegisterRoomCollidables(Room room)
+    // Master reset method
+    private void Reset()
     {
-        if (room == null) return;
-
-        _collisionManager.ClearEntityLists();
-
-        // Always-present dynamic colliders (player, demo enemies, etc.)
-        foreach (IEntity entity in _persistentDynamicEntities)
-        {
-            _collisionManager.AddDynamicEntity(entity);
-        }
-
-        // Room-defined entities (from JSON). Assumes Room.Entities contains IEntity instances.
-        foreach (IEntity entity in room.Entities)
-        {
-            _collisionManager.AddDynamicEntity(entity);
-        }
-
-        // Room tiles (static)
-        foreach (ITile tile in room.TileMap.PlacedTiles)
-        {
-            _collisionManager.AddStaticEntity(tile);
-        }
-    }
-
-    private void RegisterControls(Rectangle screenDimensions)
-    {
-        // Movement controls
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.W), new MoveUpCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.A), new MoveLeftCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.S), new MoveDownCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.D), new MoveRightCommand(_player));
-
-        // Attacking controls
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.LeftShift), new SecondaryAttackDownCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.RightShift), new SecondaryAttackDownCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.E), new SecondaryAttackDownCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Up), new PrimaryAttackUpCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Left), new PrimaryAttackLeftCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Down), new PrimaryAttackDownCommand(_player));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.Pressed, KeyboardButton.Right), new PrimaryAttackRightCommand(_player));
-
-        // Item Manager Controls
-        _keyboardController.RegisterCommand(
-            new KeyboardInput(InputState.JustPressed, KeyboardButton.I),
-            new NextItemCommand(_itemManager));
-
-        _keyboardController.RegisterCommand(
-            new KeyboardInput(InputState.JustPressed, KeyboardButton.U),
-            new PreviousItemCommand(_itemManager));
-
-        _keyboardController.RegisterCommand(
-            new KeyboardInput(InputState.JustPressed, KeyboardButton.Space),
-            new UseItemCommand(_player));
+        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
         
-
-        // Temporary key for triggering player Reset() for sprint 2
-        _keyboardController.RegisterCommand(
-            new KeyboardInput(InputState.Pressed, KeyboardButton.R),
-            new ResetPlayerCommand(
-                _player,
-                new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f),
-                () => RegisterRoomCollidables(_roomManager.CurrentRoom)
-            )
-        );
-
-        // Mouse controls sprint3
-        _mouseController.RegisterCommand(
-            new MouseInput(
-                new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-                InputState.JustPressed,
-                MouseButton.Right),
-            new PreviousRoomCommand(_roomManager)
-            );
-
-        _mouseController.RegisterCommand(
-            new MouseInput(
-                new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-                InputState.JustPressed,
-                MouseButton.Left),
-            new NextRoomCommand(_roomManager)
-            );
-
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape), new ExitCommand(this));
-        _keyboardController.RegisterCommand(new KeyboardInput(InputState.JustPressed, KeyboardButton.Q), new ExitCommand(this));
+        _player.Reset(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
+        
+        // TODO: Load starting room here again
+        
+        // Now rebuild collision lists for starting room
+        _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
     }
 }
