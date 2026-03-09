@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies;
@@ -8,10 +9,14 @@ using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
+using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 
 namespace TheShacklingOfSimon.Entities.Pickup;
 public class Pickup : IPickup
 {
+    private List<IPickup> _pickups = new();
+
     public IItem Item { get; set; }
     public Vector2 Position { get; private set; }
     public Vector2 Velocity { get; set; }
@@ -26,7 +31,7 @@ public class Pickup : IPickup
         Velocity = Vector2.Zero;
         IsActive = true;
         Hitbox = new Rectangle((int)position.X, (int)position.Y, 32, 32);
-        Sprite = sprite;
+        Sprite = Sprite;
     }
 
     public void Update(GameTime delta)

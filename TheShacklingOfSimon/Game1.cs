@@ -259,6 +259,10 @@ public class Game1 : Game
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Space),
             new UseItemCommand(_player));
+
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.F),
+            new DropItemCommand(_itemManager));
         
 
         // Temporary key for triggering player Reset() for sprint 2
