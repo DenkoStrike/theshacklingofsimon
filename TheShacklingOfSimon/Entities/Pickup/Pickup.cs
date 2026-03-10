@@ -10,7 +10,6 @@ using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.Sprites.Factory;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 
 namespace TheShacklingOfSimon.Entities.Pickup;
 public class Pickup : IPickup
@@ -36,7 +35,7 @@ public class Pickup : IPickup
 
     public void Update(GameTime delta)
     {
-        // No-op
+        Sprite.Update(delta);
     }
     
     public void Draw(SpriteBatch spriteBatch)
@@ -46,7 +45,10 @@ public class Pickup : IPickup
             Sprite.Draw(spriteBatch, Position, Color.White);
         }
     }
-    
+    public void Drop()
+    {
+        //AddPickup(this);
+    }
     public void Discontinue()
     {
         IsActive = false;

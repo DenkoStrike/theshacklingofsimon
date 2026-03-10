@@ -91,8 +91,8 @@ public class ItemManager
 
         _currentIndex %= count;
         IItem item = _player.RemoveItemFromInventory(_currentIndex);
-        IPickup itemPickup = new Pickup(_player.Position, item, _icons[_currentIndex].Sprite);
-        
+        Pickup itemPickup = new Pickup(_player.Position, item, _icons[_currentIndex].Sprite);
+        itemPickup.Drop();
     }
 
     public void UseCurrent()
