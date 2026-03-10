@@ -12,6 +12,7 @@ public class GamepadController : IGamepadController
     private readonly Dictionary<GamepadJoystickInput, Commands.ICommand> _joystickMap;
 
     private readonly Dictionary<GamepadButton, InputState> _previousButtonStates;
+    private readonly Dictionary<GamepadJoystickInput, bool> _previousJoystickStates;
 
     public GamepadController(IGamepadService gamepadService)
     {
@@ -23,6 +24,12 @@ public class GamepadController : IGamepadController
         foreach (GamepadButton btn in System.Enum.GetValues(typeof(GamepadButton)))
         {
             _previousButtonStates.Add(btn, InputState.Released);
+        }
+
+        _previousJoystickStates = new Dictionary<GamepadJoystickInput, bool>();
+        foreach (GamepadJoystickInput input in System.Enum.GetValues(typeof(GamepadJoystickInput)))
+        {
+            _previousJoystickStates.Add(input, false);
         }
     }
 
@@ -38,7 +45,7 @@ public class GamepadController : IGamepadController
 
     public void UnregisterCommand(GamepadButtonInput input)
     {
-        bool success = _buttonMap.Remove(input);
+        _buttonMap.Remove(input);
     }
 
     public void UnregisterCommand(GamepadJoystickInput input)
@@ -97,10 +104,19 @@ public class GamepadController : IGamepadController
                 }
             }
 
-            if (input.Region.Contains(rawInput))
+            bool isInRegion = input.Region.Contains(rawInput);
+            bool wasInRegion = _previousJoystickStates[input];
+            bool isJustPressed = isInRegion && !wasInRegion;
+            bool isJustReleased = !isInRegion && wasInRegion;
+
+            if ((input.State == InputState.Pressed && isInRegion) ||
+                (input.State == InputState.Released && isJustReleased) ||
+                (input.State == InputState.JustPressed && isJustPressed))
             {
                 _joystickMap[input].Execute();
             }
+            
+            _previousJoystickStates[input] = isInRegion;
         }
     }
 }
