@@ -155,8 +155,10 @@ public class Game1 : Game
 
         // Register current room (starting room) once
         _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
-
-        // TODO: Can add projectile manager subscriptions here
+        
+        basicWeapon.OnProjectileFired += _projectileManager.AddProjectile;
+        bombWeapon.OnProjectileFired += _projectileManager.AddProjectile;
+        
         foreach (IEntity entity in _roomManager.CurrentRoom.Entities)
         {
             if (entity is IEnemy enemy)
@@ -164,7 +166,6 @@ public class Game1 : Game
                 enemy.SetProjectileManager(_projectileManager);
             }
         }
-        // Or really any spot after the weapons are created
     }
 
     protected override void Update(GameTime delta)
