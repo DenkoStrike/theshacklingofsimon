@@ -27,10 +27,6 @@ public class GamepadController : IGamepadController
         }
 
         _previousJoystickStates = new Dictionary<GamepadJoystickInput, bool>();
-        foreach (GamepadJoystickInput input in System.Enum.GetValues(typeof(GamepadJoystickInput)))
-        {
-            _previousJoystickStates.Add(input, false);
-        }
     }
 
     public void RegisterCommand(GamepadButtonInput input, Commands.ICommand cmd)
@@ -40,7 +36,11 @@ public class GamepadController : IGamepadController
 
     public void RegisterCommand(GamepadJoystickInput input, Commands.ICommand cmd)
     { 
-        _joystickMap.TryAdd(input, cmd);
+        bool success = _joystickMap.TryAdd(input, cmd);
+        if (success)
+        {
+            _previousJoystickStates.Add(input, false);
+        }
     }
 
     public void UnregisterCommand(GamepadButtonInput input)
