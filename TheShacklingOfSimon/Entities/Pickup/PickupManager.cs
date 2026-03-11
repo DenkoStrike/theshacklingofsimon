@@ -10,12 +10,13 @@ namespace TheShacklingOfSimon.Entities.Pickup;
 
 public class pickupManager
 {
-    private readonly List<IPickup> _pickups;
-    private readonly Room _room;
+    private List<IPickup> _pickups;
+    private Room _room;
+    ISprite temp;
 
-    public PickupManager(Room room, SpriteFactory spriteFactory)
+    public void PickupManager(Room room, SpriteFactory spriteFactory)
     {
-        ISprite temp = spriteFactory.CreateStaticSprite("images/8Ball");
+        temp = spriteFactory.CreateStaticSprite("images/8Ball");
         _room = room;
     }
     public void AddPickup(IPickup pickup)
