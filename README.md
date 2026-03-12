@@ -1,4 +1,4 @@
-Here lies a Binding of Isaac ripoff being made for a school project. WIP<br>
+Here lies a Binding of Isaac ripoff being made for a school project. Kill enemies by shooting them with projectiles and explore the rooms to gain items to grow stronger and kill the boss. (WIP)<br>
 Controls are temporary for sprint 3.<br><br>
 
 Controls (Keyboard):<br>

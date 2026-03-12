@@ -25,12 +25,10 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
         {
             if (player == null || !IsActive) return;
 
-            if (player is not IEntity entity) return;
-
-            Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(entity.Hitbox, this.Hitbox);
+            Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(player.Hitbox, this.Hitbox);
             if (mtv == Vector2.Zero) return;
 
-            player.SetPosition(entity.Position + mtv);
+            player.SetPosition(player.Position + mtv);
         }
     }
 }
