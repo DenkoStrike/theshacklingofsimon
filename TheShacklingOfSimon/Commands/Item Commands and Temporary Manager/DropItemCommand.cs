@@ -1,4 +1,6 @@
+using System.Numerics;
 using TheShacklingOfSimon.Entities.Pickup;
+using TheShacklingOfSimon.Items;
 
 namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager
 {
@@ -14,8 +16,11 @@ namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager
 		}
 
 		public void Execute()
-		{ 
-			pickupManager.DropItem(itemManager.DropItem());
+		{
+			Vector2 pos = Vector2.Zero;
+			IPickup toDrop = itemManager.DropItem();
+			if (toDrop != null)
+			pickupManager.DropItem(toDrop);
 			
 		}
 	}

@@ -10,7 +10,7 @@ namespace TheShacklingOfSimon.Entities.Pickup;
 
 public class PickupManager
 {
-    private List<IPickup> _pickups;
+    private List<IPickup> _pickups = new List<IPickup>();
     private Room _room;
     ISprite temp;
 
@@ -57,9 +57,10 @@ public class PickupManager
             }
         }
 
-        public void DropItem(IItem item)
+        public void DropItem(IPickup toDrop)
         {
-            AddPickup(new Pickup(Vector2.Zero, item, temp));
+            if(toDrop is NoneItem) return;
+            AddPickup(toDrop);
         }
 
         public void ClearAllPickups()
