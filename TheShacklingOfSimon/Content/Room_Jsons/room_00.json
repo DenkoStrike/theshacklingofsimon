@@ -42,9 +42,11 @@
     "entities": [],
     "enemies": [
         {
-            "type": "SpiderEnemy",
+            "type": "ProjectileEnemy",
             "x": 7,
-            "y": 3
+            "y": 3,
+            "name": "SpiderEnemy",
+            "weapon": "BasicWeapon"
         }
     ],
     "doors": [

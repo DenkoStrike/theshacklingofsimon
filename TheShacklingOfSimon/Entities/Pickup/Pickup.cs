@@ -50,6 +50,13 @@ public class Pickup : IPickup
         IsActive = false;
     }
 
+    public void SetPosition(Vector2 position)
+    {
+        Position = position;
+        Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
+        Velocity = Vector2.Zero;
+    }
+
     public void OnCollision(IEntity other)
     {
         other.OnCollision(this);

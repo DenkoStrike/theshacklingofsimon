@@ -8,6 +8,7 @@ using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Entities.Enemies;
+using TheShacklingOfSimon.Entities.Enemies.Managers;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Weapons;
 
@@ -178,31 +179,16 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
             {
                 Vector2 worldPos = tileMap.GridToWorld(new Point(e.X, e.Y));
 
+                IWeapon weapon = EnemyWeaponFactory.CreateWeapon(e.Weapon);
+
                 IEnemy enemy = e.Type switch
                 {
-                    EnemyTypeList.SpiderEnemy => new SpiderEnemy(worldPos),
-                    EnemyTypeList.BlackMaw => new BlackMaw(worldPos),
+                    EnemyTypeList.ProjectileEnemy => new ProjectileEnemy(worldPos, weapon, e.Name),
+                    EnemyTypeList.ChaseEnemy => new ChaseEnemy(worldPos, weapon, e.Name),
                     _ => throw new InvalidOperationException($"Unknown enemy type: {e.Type}")
                 };
-                
-                // TODO: Allow weapon data for enemies in JSON loading
-                // This is temporary to avoid null reference exceptions
-                enemy.SetWeapon(
-                    new BasicWeapon(
-                        new BasicProjectile(
-                            new Vector2(0, 0), 
-                            new Vector2(0, 1), 
-                            SpriteFactory.Instance.CreateStaticSprite("BasicProjectile"), 
-                            new ProjectileStats(1, 200.0f, ProjectileOwner.Enemy)
-                            )
-                        )
-                    );
 
-                // TEMPORARY
-                if (OnProjectileCreated != null)
-                {
-                    enemy.Weapon.OnProjectileFired += proj => OnProjectileCreated?.Invoke(proj);
-                }
+                enemy.OnProjectileCreated += proj => OnProjectileCreated?.Invoke(proj);
                 
                 entities.Add(enemy);
             }

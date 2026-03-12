@@ -10,17 +10,11 @@ using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.Entities.Projectiles;
 
-public class BasicProjectile : IProjectile
+public class BasicProjectile : ProjectileBase
 {
-	public Vector2 Position { get; private set; }
-	public Vector2 Velocity { get; set; }
-	public bool IsActive { get; private set; }
-	public Rectangle Hitbox { get; private set; }
-	public ISprite Sprite { get; set; }
-    public ProjectileStats Stats { get; private set; }
-
 	private float timeActive;
 	private Texture2D debugTexture;
+	
 	public BasicProjectile(Vector2 startPos, Vector2 direction, ISprite sprite, ProjectileStats stats)
 	{
         Position = startPos;
@@ -42,7 +36,7 @@ public class BasicProjectile : IProjectile
 		Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 8, 8);
     }
 
-	public void Update(GameTime gameTime)
+	public override void Update(GameTime gameTime)
 	{
 		float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 		timeActive +=dt;
@@ -54,7 +48,7 @@ public class BasicProjectile : IProjectile
 		Sprite?.Update(gameTime);
 	}
 
-	public void Draw(SpriteBatch spriteBatch)
+	public override void Draw(SpriteBatch spriteBatch)
 	{
         debugTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
 		debugTexture.SetData(new[] { Color.White });
@@ -62,7 +56,7 @@ public class BasicProjectile : IProjectile
         spriteBatch.Draw(debugTexture, Hitbox, Color.Red);
 	}
 
-	public IProjectile Clone(Vector2 startPos, Vector2 direction, ISprite sprite, ProjectileStats stats)
+	public override IProjectile Clone(Vector2 startPos, Vector2 direction, ISprite sprite, ProjectileStats stats)
 	{
 		return new BasicProjectile(startPos, direction, sprite, stats);
 	}
@@ -78,18 +72,7 @@ public class BasicProjectile : IProjectile
 		}
 	}
 
-	public void Discontinue()
-	{
-		IsActive = false;
-	}
-
-    public void OnCollision(IEntity other)
-    {
-        if (other == null || !IsActive) return;
-        other.OnCollision(this);
-    }
-
-    public void OnCollision(ITile tile)
+    public override void OnCollision(ITile tile)
     {
         if (!IsActive || tile == null) return;
 
@@ -103,40 +86,5 @@ public class BasicProjectile : IProjectile
         {
             Discontinue();
         }
-    }
-    
-    public void OnCollision(IEnemy enemy)
-    {	
-		if (Stats.OwnerType != ProjectileOwner.Enemy)
-		{
-            enemy.TakeDamage(this.Stats.Damage);
-            Discontinue();
-        }
-    }
-
-    public void OnCollision(IPlayer player)
-    {
-        if (Stats.OwnerType != ProjectileOwner.Player)
-        {
-            player.TakeDamage(this.Stats.Damage);
-            Discontinue();
-        }
-        
-    }
-
-    public void OnCollision(IProjectile projectile)
-    {
-		/*
-		 * No-op for now
-		 * Could easily make projectiles cancel themselves out
-		 * by calling Discontinue() here.
-		 */
-    }
-
-    public void OnCollision(IPickup pickup)
-    {
-	    /*
-	     * No-op
-	     */
     }
 }
