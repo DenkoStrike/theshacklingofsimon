@@ -24,7 +24,6 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private Texture2D _texture;
     private SpriteFont _font;
     
     private IController<KeyboardInput> _keyboardController;
@@ -209,7 +208,7 @@ public class Game1 : Game
 		//_projectileManager.Clear();
 
 		_player.Reset(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
-
+        _projectileManager.ClearAllProjectiles();
 		_roomManager.ResetToGameStart();
 
 		_collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
