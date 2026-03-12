@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Entities.Collisions;
+using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
 using TheShacklingOfSimon.Sprites.Products;
 
@@ -37,10 +40,20 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
 
 		public override void OnCollision(IPlayer player)
 		{
-			if (player == null || roomManager == null)
-				return;
-
+			if (player == null || roomManager == null) return;
+			
 			roomManager.RequestRoomSwitch(this, player);
+		}
+
+		public override void OnCollision(IEnemy enemy)
+		{
+			if (enemy == null || !IsActive) return;
+
+			Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(enemy.Hitbox, this.Hitbox);
+			if (mtv.LengthSquared() < 0.0001f) return;
+            
+			// Handles position, velocity, and hitbox
+			enemy.SetPosition(enemy.Position + mtv);
 		}
 	}
 }
