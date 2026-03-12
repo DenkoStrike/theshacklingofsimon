@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Enemies.States;
 using TheShacklingOfSimon.Weapons;
 using TheShacklingOfSimon.Entities.Projectiles;
+using System;
 
 namespace TheShacklingOfSimon.Entities.Enemies;
 
@@ -44,8 +45,10 @@ public interface IEnemy : IDamageable
     float MoveSpeedStat { get; set; }
     float AttackCooldown { get; set; }
     float AttackRange { get; set; }
+    float ContactDamage { get; set; }
 
     IWeapon Weapon { get; }
+    public event Action<IProjectile> OnProjectileCreated;
 
     void SetWeapon(IWeapon weapon);
     void MarkForRemoval();

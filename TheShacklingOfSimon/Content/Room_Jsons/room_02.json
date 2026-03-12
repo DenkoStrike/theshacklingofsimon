@@ -41,9 +41,11 @@
     "entities": [],
     "enemies": [
         {
-            "type": "BlackMaw",
+            "type": "ChaseEnemy",
             "x": 9,
-            "y": 4
+            "y": 4,
+            "name": "BlackMaw",
+            "weapon": "NoneWeapon"
         }
     ],
     "doors": [
