@@ -6,33 +6,7 @@ using TheShacklingOfSimon.Weapons;
 namespace TheShacklingOfSimon.Entities.Players;
 
 public interface IPlayer : IDamageable
-{
-    /*
-     * Inherits
-     * Vector2 Position { get; }
-     * Vector2 Velocity { get; }
-     * bool IsActive { get; }
-     * Rectangle Hitbox { get; }
-     * ISprite Sprite { get; }
-     * 
-     * void Update(GameTime delta),
-     * void Draw(SpriteBatch spriteBatch),
-     * void Discontinue();
-     *
-     * To be implemented after Sprint 2:
-     * void Interact(IEntity other)
-     * 
-     * from IEntity
-     */
-    /*
-     * Inherits
-     * Health { get; },
-     * MaxHealth { get; },
-     * void TakeDamage(float amt),
-     * void Heal(float amt)
-     * from IDamageable
-     */
-    
+{ 
     Inventory Inventory { get; }
     IWeapon CurrentPrimaryWeapon { get; }
     IWeapon CurrentSecondaryWeapon { get; }
@@ -59,9 +33,7 @@ public interface IPlayer : IDamageable
     void RegisterPrimaryAttackInput(Vector2 direction);
     void RegisterSecondaryAttackInput(Vector2 direction);
 
-    void SetPosition(Vector2 worldPosition);
     void Reset(Vector2 startPosition);
-
     void SetSkin(string category, string skinPrefix);
     string GetSkin(string category);
     
