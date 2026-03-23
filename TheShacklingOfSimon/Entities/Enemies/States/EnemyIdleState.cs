@@ -48,7 +48,6 @@ public class EnemyIdleState : IEnemyState
         if (direction != Vector2.Zero)
         {
             _enemy.ChangeState(new EnemyAttackingState(_enemy, cardinal, stateDuration));
-
         }
     }
 
