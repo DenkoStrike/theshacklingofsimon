@@ -5,11 +5,12 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
+using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {
-    public sealed class RoomManager
+    public sealed class RoomManager : INavigationService
     {
         private readonly JsonRoomReader roomReader;
         private readonly RoomIndexReader indexReader;
@@ -184,6 +185,19 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 	        CurrentRoom = Load(roomIds[currentIndex]);
 
 	        RaiseRoomChanged();
+        }
+
+        public Vector2 GetNextDirection(Vector2 currentPosition, Vector2 targetPosition, Func<ITile, bool> rules)
+        {
+	        // TODO: Implement this
+	        // Calls the private calculation method below
+	        return new Vector2(0, 0);
+        }
+        
+        private Point CalculateAStarStep(TileMap map, Point start, Point end, Func<ITile, bool> rules) {
+	        // Implement pathfinding here with A* pathfinding (or whatever pathfinding)
+	        // Returns immediate next point enemy should step on.
+	        return new Point(0, 0);
         }
 	}
 }
