@@ -164,6 +164,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         }
     }
 
+    // For ITargetProvider
     public Vector2 GetPosition()
     {
         return Position;
