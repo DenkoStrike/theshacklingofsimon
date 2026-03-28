@@ -13,6 +13,6 @@ public class UseItemCommand : ICommand
 
     public void Execute()
     {
-        _player.CurrentItem?.Effect();
+        _player.Inventory.CurrentActiveItem?.Effect();
     }
 }
