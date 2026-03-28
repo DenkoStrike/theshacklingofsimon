@@ -4,7 +4,7 @@ using TheShacklingOfSimon.LevelHandler.Tiles;
 
 namespace TheShacklingOfSimon.LevelHandler;
 
-public interface INavigationService
+public interface IPathfindingService
 {
     /*
      * Client classes pass in a 'rules' parameter which decides the result of GetNextDirection()

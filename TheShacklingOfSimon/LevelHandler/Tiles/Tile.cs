@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
@@ -17,10 +18,12 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
         public Vector2 Velocity { get; set; } = Vector2.Zero;
         public bool IsActive { get; protected set; } = true;
 
-        // Default behavior: most tiles do not block unless overridden
-        public virtual bool BlocksGround => false;
-        public virtual bool BlocksFly => false;
-        public virtual bool BlocksProjectiles => false;
+        // keep the public properties for compatibility, but now they are driven by one flags value.
+        protected virtual TileCollisionFlags CollisionFlags => TileCollisionFlags.None;
+
+        public bool BlocksGround => CollisionFlags.HasFlag(TileCollisionFlags.BlocksGround);
+        public bool BlocksFly => CollisionFlags.HasFlag(TileCollisionFlags.BlocksFly);
+        public bool BlocksProjectiles => CollisionFlags.HasFlag(TileCollisionFlags.BlocksProjectiles);
 
         // Tile hitbox is always one grid cell
         public Rectangle Hitbox => new Rectangle(
@@ -54,7 +57,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
         {
             IsActive = false;
         }
-        
+
         public void SetPosition(Vector2 position)
         {
             Position = position;
@@ -65,6 +68,18 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
         {
             if (other == null || !IsActive) return;
             other.OnCollision(this);
+        }
+
+        // pulled the repeated MTV push-out code here so solid tiles do not copy it everywhere.
+        protected void ResolveEntityCollision(IEntity entity)
+        {
+            if (entity == null || !IsActive) return;
+
+            Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(entity.Hitbox, this.Hitbox);
+            if (mtv.LengthSquared() < 0.0001f) return;
+
+            // Handles position, velocity, and hitbox
+            entity.SetPosition(entity.Position + mtv);
         }
 
         // Default no-ops (override in specific tiles if needed)

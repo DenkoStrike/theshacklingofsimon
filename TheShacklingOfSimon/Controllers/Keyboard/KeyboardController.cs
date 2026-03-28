@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Keyboard;
 
@@ -10,59 +11,75 @@ public class KeyboardController : IController<KeyboardInput>
     private readonly Dictionary<KeyboardInput, Commands.ICommand> _map;
     private readonly Dictionary<KeyboardButton, InputState> _previousStates;
 
-	public KeyboardController(IKeyboardService service)
+    public KeyboardController(IKeyboardService service)
     {
         _keyboardService = service;
         _map = new Dictionary<KeyboardInput, Commands.ICommand>();
         _previousStates = new Dictionary<KeyboardButton, InputState>();
-	}
+    }
 
-	public void RegisterCommand(KeyboardInput k, Commands.ICommand cmd)
-	{
-		bool success = _map.TryAdd(k, cmd);
-		if (success)
-		{
-			_previousStates.Add(k.Button, InputState.Released);
-		}
-	}
+    public void RegisterCommand(KeyboardInput input, Commands.ICommand command)
+    {
+        bool success = _map.TryAdd(input, command);
+        if (success && !_previousStates.ContainsKey(input.Button))
+        {
+            _previousStates.Add(input.Button, InputState.Released);
+        }
+    }
 
-	public void UnregisterCommand(KeyboardInput input)
-	{
-		bool success = _map.Remove(input);
-		if (success)
-		{
-			_previousStates.Remove(input.Button);
-		}
-	}
+    public void UnregisterCommand(KeyboardInput input)
+    {
+        bool success = _map.Remove(input);
+        if (!success)
+        {
+            return;
+        }
 
-	public void ClearCommands()
-	{
-		_map.Clear();
-		_previousStates.Clear();
-	}
+        bool buttonStillUsed = _map.Keys.Any(existingInput => existingInput.Button.Equals(input.Button));
+        if (!buttonStillUsed)
+        {
+            _previousStates.Remove(input.Button);
+        }
+    }
 
-	public void Update()
-	{
-		foreach (KeyboardInput k in _map.Keys)
-		{
-			InputState currentState = _keyboardService.GetKeyState(k.Button);
-			InputState previousState = _previousStates[k.Button];
+    public void ClearCommands()
+    {
+        _map.Clear();
+        _previousStates.Clear();
+    }
 
-			bool isJustPressed =
-				currentState == InputState.Pressed &&
-				previousState == InputState.Released;
+    public void Update()
+    {
+        // we use a snapshot here so commands can safely change bindings during update.
+        KeyValuePair<KeyboardInput, Commands.ICommand>[] bindings = _map.ToArray();
 
-			if (
-				(k.State == InputState.Pressed && currentState == InputState.Pressed) ||
-				(k.State == InputState.Released && currentState == InputState.Released) ||
-				(k.State == InputState.JustPressed && isJustPressed)
-			)
-			{
-				_map[k].Execute();
-			}
+        foreach (KeyValuePair<KeyboardInput, Commands.ICommand> entry in bindings)
+        {
+            KeyboardInput input = entry.Key;
+            Commands.ICommand command = entry.Value;
 
-			_previousStates[k.Button] = currentState;
-		}
-	}
+            if (!_previousStates.ContainsKey(input.Button))
+            {
+                _previousStates[input.Button] = InputState.Released;
+            }
 
+            InputState currentState = _keyboardService.GetKeyState(input.Button);
+            InputState previousState = _previousStates[input.Button];
+
+            bool isJustPressed =
+                currentState == InputState.Pressed &&
+                previousState == InputState.Released;
+
+            if (
+                (input.State == InputState.Pressed && currentState == InputState.Pressed) ||
+                (input.State == InputState.Released && currentState == InputState.Released) ||
+                (input.State == InputState.JustPressed && isJustPressed)
+            )
+            {
+                command.Execute();
+            }
+
+            _previousStates[input.Button] = currentState;
+        }
+    }
 }

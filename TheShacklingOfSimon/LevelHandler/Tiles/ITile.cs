@@ -5,13 +5,11 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
     // Tile-specific collision flags on top of standard IEntity stuff
     public interface ITile : IEntity
     {
-        // Blocks entities that move on the ground
+        // still expose these as properties because the rest of the project likely uses them directly.
         bool BlocksGround { get; }
 
-        // Blocks entities that can fly
         bool BlocksFly { get; }
 
-        // Blocks projectiles (arrows, tears, etc.)
         bool BlocksProjectiles { get; }
     }
 }

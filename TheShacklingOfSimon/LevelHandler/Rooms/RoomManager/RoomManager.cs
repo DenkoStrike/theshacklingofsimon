@@ -5,33 +5,27 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
-using TheShacklingOfSimon.LevelHandler.Tiles;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {
-    public sealed class RoomManager : INavigationService
+    public sealed class RoomManager : IRoomNavigator
     {
-        private readonly JsonRoomReader roomReader;
         private readonly RoomIndexReader indexReader;
-        private readonly RoomFactory factory;
-
-        // needed to compute centered origin from the actual viewport size
-        private readonly GraphicsDevice graphicsDevice;
+        private readonly RoomLoader roomLoader;
 
         private readonly Dictionary<string, RoomFileData> dataCache = new();
         private readonly Dictionary<string, Room> roomCache = new();
 
         private readonly bool preserveRoomState;
-        private DoorTile pendingDoor;
-        private IPlayer pendingPlayer;
 
-		private readonly List<string> roomIds = new();
+        // I make this nullable so pendingSwitch can cleanly be "none".
+        private PendingRoomSwitch? pendingSwitch;
+
+        private readonly List<string> roomIds = new();
         private int currentIndex;
         private string startingRoomId;
 
-
-		public Room CurrentRoom { get; private set; }
+        public Room CurrentRoom { get; private set; }
         public IReadOnlyList<string> RoomIds => roomIds;
 
         /// Fired whenever CurrentRoom is changed through GoTo/NextRoom/PrevRoom.
@@ -45,10 +39,12 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
             GraphicsDevice graphicsDevice,
             bool preserveRoomState = true)
         {
-            this.roomReader = roomReader ?? throw new ArgumentNullException(nameof(roomReader));
             this.indexReader = indexReader ?? throw new ArgumentNullException(nameof(indexReader));
-            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            this.graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
+            roomLoader = new RoomLoader(
+                roomReader ?? throw new ArgumentNullException(nameof(roomReader)),
+                factory ?? throw new ArgumentNullException(nameof(factory)),
+                graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice)));
+
             this.preserveRoomState = preserveRoomState;
 
             InitializeIndex();
@@ -66,36 +62,45 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
             CurrentRoom = Load(roomId);
 
             int idx = roomIds.IndexOf(roomId);
-            if (idx >= 0) currentIndex = idx;
+            if (idx >= 0)
+            {
+                currentIndex = idx;
+            }
 
             RaiseRoomChanged();
         }
 
-		public void RequestRoomSwitch(DoorTile door, IPlayer player)
-		{
-			if (door == null || player == null)
-				return;
+        public void RequestRoomSwitch(string roomId, Point spawnGrid, IPlayer player)
+        {
+            if (string.IsNullOrWhiteSpace(roomId) || player == null)
+            {
+                return;
+            }
 
-			if (pendingDoor != null)
-				return;
+            if (pendingSwitch.HasValue)
+            {
+                return;
+            }
 
-			pendingDoor = door;
-			pendingPlayer = player;
-		}
+            pendingSwitch = new PendingRoomSwitch(roomId, spawnGrid, player);
+        }
 
-		public void ResolvePendingRoomSwitch()
-		{
-			if (pendingDoor == null || pendingPlayer == null)
-				return;
+        public void ResolvePendingRoomSwitch()
+        {
+            if (!pendingSwitch.HasValue)
+            {
+                return;
+            }
 
-			GoTo(pendingDoor.ToRoom);
-			pendingPlayer.SetPosition(CurrentRoom.TileMap.GridToWorld(pendingDoor.SpawnGrid));
+            PendingRoomSwitch request = pendingSwitch.Value;
 
-			pendingDoor = null;
-			pendingPlayer = null;
-		}
+            GoTo(request.RoomId);
+            request.Player.SetPosition(CurrentRoom.TileMap.GridToWorld(request.SpawnGrid));
 
-		public void NextRoom()
+            pendingSwitch = null;
+        }
+
+        public void NextRoom()
         {
             if (roomIds.Count == 0) return;
 
@@ -130,74 +135,79 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
             roomIds.Clear();
             roomIds.AddRange(idx.Rooms);
 
-			startingRoomId = string.IsNullOrWhiteSpace(idx.StartingRoom) ? roomIds[0] : idx.StartingRoom;
-			currentIndex = Math.Max(0, roomIds.IndexOf(startingRoomId));
-			CurrentRoom = Load(roomIds[currentIndex]);
+            startingRoomId = string.IsNullOrWhiteSpace(idx.StartingRoom) ? roomIds[0] : idx.StartingRoom;
+            currentIndex = Math.Max(0, roomIds.IndexOf(startingRoomId));
+            CurrentRoom = Load(roomIds[currentIndex]);
 
-			// we do NOT raise RoomChanged here to avoid surprising side-effects during construction.
-			// Game1 should call RegisterRoomCollidables(CurrentRoom) once after subscribing
-		}
+            // I do not raise RoomChanged here to avoid side effects during construction.
+            // Game1 should register collidables once after subscribing.
+        }
 
-		private Room Load(string roomId)
-		{
-			if (preserveRoomState && roomCache.TryGetValue(roomId, out var existing))
-				return existing;
-
-			if (!dataCache.TryGetValue(roomId, out var data))
-			{
-				data = roomReader.Read(roomId);
-				dataCache[roomId] = data;
-			}
-
-			var vp = graphicsDevice.Viewport;
-			var room = factory.Create(data, vp.Width, vp.Height);
-
-			foreach (var tile in room.TileMap.PlacedTiles)
-			{
-				if (tile is DoorTile door)
-				{
-					door.BindRoomManager(this);
-				}
-			}
-
-			if (preserveRoomState)
-				roomCache[roomId] = room;
-
-			return room;
-		}
-
-		public void ResetToGameStart()
+        private Room Load(string roomId)
         {
-	        dataCache.Clear();
-	        roomCache.Clear();
+            if (preserveRoomState && roomCache.TryGetValue(roomId, out var existing))
+            {
+                return existing;
+            }
 
-	        RoomIndexData idx = indexReader.ReadIndex();
+            if (!dataCache.TryGetValue(roomId, out var data))
+            {
+                data = roomLoader.ReadData(roomId);
+                dataCache[roomId] = data;
+            }
 
-	        if (idx.Rooms == null || idx.Rooms.Count == 0)
-		        throw new InvalidOperationException("room_index.json has no rooms.");
+            Room room = roomLoader.CreateRoom(data);
 
-	        roomIds.Clear();
-	        roomIds.AddRange(idx.Rooms);
+            foreach (var tile in room.TileMap.PlacedTiles)
+            {
+                if (tile is Tiles.Border.DoorTile door)
+                {
+                    door.BindNavigator(this);
+                }
+            }
 
-	        startingRoomId = string.IsNullOrWhiteSpace(idx.StartingRoom) ? roomIds[0] : idx.StartingRoom;
-	        currentIndex = Math.Max(0, roomIds.IndexOf(startingRoomId));
+            if (preserveRoomState)
+            {
+                roomCache[roomId] = room;
+            }
 
-	        CurrentRoom = Load(roomIds[currentIndex]);
-
-	        RaiseRoomChanged();
+            return room;
         }
 
-        public Vector2 GetNextDirection(Vector2 currentPosition, Vector2 targetPosition, Func<ITile, bool> rules)
+        public void ResetToGameStart()
         {
-	        // TODO: Implement this
-	        // Calls the private calculation method below
-	        return new Vector2(0, 0);
+            dataCache.Clear();
+            roomCache.Clear();
+            pendingSwitch = null;
+
+            RoomIndexData idx = indexReader.ReadIndex();
+
+            if (idx.Rooms == null || idx.Rooms.Count == 0)
+                throw new InvalidOperationException("room_index.json has no rooms.");
+
+            roomIds.Clear();
+            roomIds.AddRange(idx.Rooms);
+
+            startingRoomId = string.IsNullOrWhiteSpace(idx.StartingRoom) ? roomIds[0] : idx.StartingRoom;
+            currentIndex = Math.Max(0, roomIds.IndexOf(startingRoomId));
+
+            CurrentRoom = Load(roomIds[currentIndex]);
+
+            RaiseRoomChanged();
         }
-        
-        private Point CalculateAStarStep(TileMap map, Point start, Point end, Func<ITile, bool> rules) {
-	        // Implement pathfinding here with A* pathfinding (or whatever pathfinding)
-	        // Returns immediate next point enemy should step on.
-	        return new Point(0, 0);
+
+        private readonly struct PendingRoomSwitch
+        {
+            public string RoomId { get; }
+            public Point SpawnGrid { get; }
+            public IPlayer Player { get; }
+
+            public PendingRoomSwitch(string roomId, Point spawnGrid, IPlayer player)
+            {
+                RoomId = roomId;
+                SpawnGrid = spawnGrid;
+                Player = player;
+            }
         }
-	}
+    }
 }

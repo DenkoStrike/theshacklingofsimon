@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {

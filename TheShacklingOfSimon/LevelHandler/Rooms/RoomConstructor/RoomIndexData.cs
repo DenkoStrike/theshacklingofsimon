@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
+namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {
     public sealed class RoomIndexData
     {

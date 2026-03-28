@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
@@ -12,9 +11,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
     // Walkable hazard that can be extinguished by projectiles
     public sealed class FireTile : Tile, IProjectileAffectableTile
     {
-        public override bool BlocksGround => false;
-        public override bool BlocksFly => false;
-        public override bool BlocksProjectiles => true;
+        protected override TileCollisionFlags CollisionFlags => TileCollisionFlags.BlocksProjectiles;
 
         // Fire frames are ~32x41, so center them in a 64x64 tile
         private static readonly Vector2 DrawOffset =
@@ -37,12 +34,12 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
 
         public override void OnCollision(IPlayer player)
         {
-            player.TakeDamage(1);
+            player?.TakeDamage(1);
         }
 
         public override void OnCollision(IEnemy enemy)
         {
-            enemy.TakeDamage(1);
+            enemy?.TakeDamage(1);
         }
     }
 }

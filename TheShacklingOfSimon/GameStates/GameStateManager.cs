@@ -17,49 +17,52 @@ public class GameStateManager
     {
         if (state == null)
         {
-            return; 
+            return;
         }
+
         _states.Push(state);
-        _states.Peek().Enter();
+        state.Enter();
     }
 
     public void RemoveTopState()
     {
-        if (_states.Count <= 0)
+        if (_states.Count == 0)
         {
             return;
         }
 
         _states.Peek().Exit();
         _states.Pop();
-        
-        // Automatically enter the previous state (if there is one)
-        if (_states.Count <= 0)
+
+        // When we leave pause, we want the play state to reload its controls.
+        if (_states.Count > 0)
         {
-            return;
-            
+            _states.Peek().Enter();
         }
-        _states.Peek().Enter();
     }
 
     public void Clear()
     {
-        _states.Clear();
+        while (_states.Count > 0)
+        {
+            _states.Peek().Exit();
+            _states.Pop();
+        }
     }
 
     public void Update(GameTime delta)
     {
-        // Only update the state at the top (if it exists)
-        if (_states.Count <= 0)
+        if (_states.Count == 0)
         {
             return;
         }
+
         _states.Peek().Update(delta);
     }
 
-    public void Draw(SpriteBatch spriteBatch, bool drawOnlyTop)
+    public void Draw(SpriteBatch spriteBatch, bool drawOnlyTop = false)
     {
-        if (_states.Count <= 0)
+        if (_states.Count == 0)
         {
             return;
         }
@@ -69,8 +72,7 @@ public class GameStateManager
             _states.Peek().Draw(spriteBatch);
             return;
         }
-        
-        // Draw from bottom of stack to top for layering effect
+
         IGameState[] statesArray = _states.ToArray();
         for (int i = statesArray.Length - 1; i >= 0; i--)
         {
