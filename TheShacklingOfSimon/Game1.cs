@@ -182,11 +182,11 @@ public class Game1 : Game
                 SpriteFactory.Instance.CreateAnimatedSprite("PlayerHeadShootingDown", 0.1f),
                 new ProjectileStats(1, 0.0f, ProjectileOwner.Player)));
 
-        _player.AddWeaponToInventory(playerBasicWeapon);
-        _player.EquipPrimaryWeapon(0);
+        _player.Inventory.Add(playerBasicWeapon);
+        _player.Inventory.CurrentPrimaryWeapon = playerBasicWeapon;
 
-        _player.AddWeaponToInventory(playerBombWeapon);
-        _player.EquipSecondaryWeapon(1);
+        _player.Inventory.Add(playerBombWeapon);
+        _player.Inventory.CurrentSecondaryWeapon = playerBombWeapon;
 
         // I hook these here so player-fired projectiles go to both collision and rendering.
         playerBasicWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
@@ -198,8 +198,8 @@ public class Game1 : Game
 
     private void CreatePlayerItems()
     {
-        _player.AddItemToInventory(new TeleportItem(_player, pos => true));
-        _player.AddItemToInventory(new AdrenalineItem(_player));
+        _player.Inventory.Add(new TeleportItem(_player, pos => true));
+        _player.Inventory.Add(new AdrenalineItem(_player));
     }
 
     private void CreateItemAndPickupManagers()
