@@ -30,7 +30,7 @@ public class PlayerHeadAttackingState : IPlayerHeadState
         _weapon.Fire(
             new Vector2(projectilePositionX, projectilePositionY),
             _direction, 
-            new ProjectileStats(_player.DamageMultiplierStat, 200.0f * _player.ProjectileSpeedMultiplierStat, ProjectileOwner.Player)
+            new ProjectileStats(_player.Stats.DamageMultiplierStat, 200.0f * _player.Stats.ProjectileSpeedMultiplierStat, ProjectileOwner.Player)
             );
 
         string spriteAnimationName = _player.GetSkin("Head");

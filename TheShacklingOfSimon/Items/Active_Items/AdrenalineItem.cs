@@ -86,29 +86,29 @@ public class AdrenalineItem : IItem
     {
         _buffActive = true;
 
-        Player.MoveSpeedStat *= _moveSpeedMultiplier;
+        Player.Stats.MoveSpeedStat *= _moveSpeedMultiplier;
 
         // Faster firing by reducing cooldown numbers
-        Player.PrimaryAttackCooldown *= _fireRateMultiplier;
-        Player.SecondaryAttackCooldown *= _fireRateMultiplier;
+        Player.Stats.PrimaryAttackCooldown *= _fireRateMultiplier;
+        Player.Stats.SecondaryAttackCooldown *= _fireRateMultiplier;
 
         // Faster projectiles
-        Player.ProjectileSpeedMultiplierStat *= _projSpeedMultiplier;
+        Player.Stats.ProjectileSpeedMultiplierStat *= _projSpeedMultiplier;
 
         // Safety clamp so you can't hit 0 cooldown by stacking bugs
-        if (Player.PrimaryAttackCooldown < 0.05f) Player.PrimaryAttackCooldown = 0.05f;
-        if (Player.SecondaryAttackCooldown < 0.05f) Player.SecondaryAttackCooldown = 0.05f;
+        if (Player.Stats.PrimaryAttackCooldown < 0.05f) Player.Stats.PrimaryAttackCooldown = 0.05f;
+        if (Player.Stats.SecondaryAttackCooldown < 0.05f) Player.Stats.SecondaryAttackCooldown = 0.05f;
     }
 
     private void EndBuff()
     {
         _buffActive = false;
 
-        Player.MoveSpeedStat /= _moveSpeedMultiplier;
+        Player.Stats.MoveSpeedStat /= _moveSpeedMultiplier;
 
-        Player.PrimaryAttackCooldown /= _fireRateMultiplier;
-        Player.SecondaryAttackCooldown /= _fireRateMultiplier;
+        Player.Stats.PrimaryAttackCooldown /= _fireRateMultiplier;
+        Player.Stats.SecondaryAttackCooldown /= _fireRateMultiplier;
 
-        Player.ProjectileSpeedMultiplierStat /= _projSpeedMultiplier;
+        Player.Stats.ProjectileSpeedMultiplierStat /= _projSpeedMultiplier;
     }
 }

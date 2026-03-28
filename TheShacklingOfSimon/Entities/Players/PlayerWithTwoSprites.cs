@@ -2,17 +2,14 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players.States;
 using TheShacklingOfSimon.Entities.Players.States.Body;
 using TheShacklingOfSimon.Entities.Players.States.Head;
 using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
-using TheShacklingOfSimon.Weapons;
 
 namespace TheShacklingOfSimon.Entities.Players;
 
@@ -44,19 +41,9 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         set => BodySprite = value;
     }
 
-    /*
-     * Player property defaults that can be overriden by public
-     * set methods
-     */
-    public float MoveSpeedStat { get; set; }
-    public int DamageMultiplierStat { get; set; }
-    public float ProjectileSpeedMultiplierStat { get; set; }
-    public float PrimaryAttackCooldown { get; set; }
-    public float SecondaryAttackCooldown { get; set; }
-    public float MovementFrameDuration { get; set; }
-    public float DeathFrameDuration { get; set; }
-    public float InvulnerabilityDuration { get; set; }
-
+    // The miscellaneous stats
+    public PlayerStats Stats { get; private set; }
+    
     private readonly Vector2 _headOffset = new Vector2(-4.75f, -16);
     private readonly Vector2 _damagedStateOffset = new Vector2(0, -5);
 
@@ -114,13 +101,13 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         if (Health <= 0)
         {
             ChangeHeadState(new PlayerHeadDeadState(this));
-            ChangeBodyState(new PlayerBodyDeadState(this, DeathFrameDuration, DeathFrameDuration));
+            ChangeBodyState(new PlayerBodyDeadState(this, Stats.DeathFrameDuration, Stats.DeathFrameDuration));
         }
         // If not dead, then damaged
         else
         {
             ChangeHeadState(new PlayerHeadDamagedState(this));
-            ChangeBodyState(new PlayerBodyDamagedState(this, InvulnerabilityDuration));
+            ChangeBodyState(new PlayerBodyDamagedState(this, Stats.InvulnerabilityDuration));
         }
     }
 
@@ -137,18 +124,18 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
             _movementInput.Normalize();
         }
 
-        CurrentBodyState.HandleMovement(_movementInput, MovementFrameDuration);
+        CurrentBodyState.HandleMovement(_movementInput, Stats.MovementFrameDuration);
         _movementInput = Vector2.Zero;
 
         // Attack logic
         if (_primaryAttackInput.LengthSquared() > 0.0001f)
         {
-            CurrentHeadState.HandlePrimaryAttack(_primaryAttackInput, PrimaryAttackCooldown);
+            CurrentHeadState.HandlePrimaryAttack(_primaryAttackInput, Stats.PrimaryAttackCooldown);
         }
 
         if (_secondaryAttackInput.LengthSquared() > 0.0001f)
         {
-            CurrentHeadState.HandleSecondaryAttack(_secondaryAttackInput, SecondaryAttackCooldown);
+            CurrentHeadState.HandleSecondaryAttack(_secondaryAttackInput, Stats.SecondaryAttackCooldown);
         }
 
         _primaryAttackInput = Vector2.Zero;
@@ -268,15 +255,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         Hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, 20, 20);
         Health = 6;
         MaxHealth = 6;
+        Stats = new PlayerStats();
         
-        DamageMultiplierStat = 1;
-        MoveSpeedStat = 100.0f;
-        PrimaryAttackCooldown = 0.5f;
-        ProjectileSpeedMultiplierStat = 1.0f;
-        SecondaryAttackCooldown = 1.5f;
-        MovementFrameDuration = 0.05f;
-        DeathFrameDuration = 1.0f;
-        InvulnerabilityDuration = 0.333334f;
         Inventory = new PlayerInventory(this);
         
         /*

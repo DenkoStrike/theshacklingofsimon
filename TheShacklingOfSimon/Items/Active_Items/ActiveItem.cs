@@ -21,10 +21,10 @@ public class ActiveItem : IItem
     
     public void Effect()
     {
-        Player.DamageMultiplierStat += Effects.Attack;
+        Player.Stats.DamageMultiplierStat += Effects.Attack;
         Player.Heal(Effects.Health);
         Player.MaxHealth += Effects.MaxHealth;
-        Player.MoveSpeedStat += Effects.Speed;
+        Player.Stats.MoveSpeedStat += Effects.Speed;
         if (Effects.OneTime)
         {
             // I doubt we need to worry about this rn
@@ -32,8 +32,8 @@ public class ActiveItem : IItem
     }
     public void ClearEffect()
     {
-        Player.DamageMultiplierStat -= Effects.Attack;
+        Player.Stats.DamageMultiplierStat -= Effects.Attack;
         Player.MaxHealth -= Effects.MaxHealth;
-        Player.MoveSpeedStat -= Effects.Speed;
+        Player.Stats.MoveSpeedStat -= Effects.Speed;
     }
 }

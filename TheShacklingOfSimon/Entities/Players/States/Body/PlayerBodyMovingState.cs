@@ -43,7 +43,7 @@ public class PlayerBodyMovingState : IPlayerBodyState
         }
         else
         {
-            _player.Velocity = direction * _player.MoveSpeedStat;
+            _player.Velocity = direction * _player.Stats.MoveSpeedStat;
             UpdateSprite();
         }
     }

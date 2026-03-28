@@ -16,14 +16,14 @@ public class PassiveItem : IItem
     
     public void Effect()
     {
-        Player.DamageMultiplierStat += Effects.Attack;
+        Player.Stats.DamageMultiplierStat += Effects.Attack;
         Player.MaxHealth += Effects.MaxHealth;
-        Player.MoveSpeedStat += Effects.Speed;
+        Player.Stats.MoveSpeedStat += Effects.Speed;
     }
     public void ClearEffect()
     {
-        Player.DamageMultiplierStat -= Effects.Attack;
+        Player.Stats.DamageMultiplierStat -= Effects.Attack;
         Player.MaxHealth -= Effects.MaxHealth;
-        Player.MoveSpeedStat -= Effects.Speed;
+        Player.Stats.MoveSpeedStat -= Effects.Speed;
     }
 }
