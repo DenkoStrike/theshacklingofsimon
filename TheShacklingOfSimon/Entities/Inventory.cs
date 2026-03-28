@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Weapons;
 
@@ -6,56 +7,86 @@ namespace TheShacklingOfSimon.Entities;
 
 public class Inventory
 {
-    public List<IWeapon> Weapons { get; private set; }
-    public List<IItem> Items { get; private set; }
+    protected readonly ISet<IWeapon> _weapons;
+    protected readonly ISet<IItem> _items;
+
+    // Read-only public accessors (for GUI, etc.)
+    public IEnumerable<IWeapon> Weapons => _weapons;
+    public IEnumerable<IItem> Items => _items;
     
     public Inventory()
     {
-        Weapons = new List<IWeapon>();
-        Items = new List<IItem>();
+        _weapons = new HashSet<IWeapon>();
+        _items = new HashSet<IItem>();
     }
     
-    public void AddWeapon(IWeapon w)
+    public bool Add(IWeapon w)
     {
-        if (!Weapons.Contains(w))
-        {
-            Weapons.Add(w);
-        }
-    }
+        if (w == null) return false;
+        bool result = _weapons.Add(w);
 
-    /*
-     * Returns null if the specified IWeapon does not exist.
-     */
-    public IWeapon RemoveWeapon(int pos)
-    {
-        IWeapon item = null;
-        if (pos < Weapons.Count)
+        if (result)
         {
-            item = Weapons[pos];
-            Items.RemoveAt(pos);
+            NotifyInventoryChanged();
         }
-        return item;
+
+        return result;
     }
     
-    public void AddItem(IItem item)
+    public bool Remove(IWeapon w)
     {
-        if (!Items.Contains(item))
+        if (w == null) return false;
+        bool result = _weapons.Remove(w);
+
+        if (result)
         {
-            Items.Add(item);
+            NotifyInventoryChanged();
         }
+
+        return result;
+    }
+    
+    public bool Add(IItem item)
+    {
+        if (item == null) return false;
+        bool result = _items.Add(item);
+
+        if (result)
+        {
+            NotifyInventoryChanged();
+        }
+
+        return result;
     }
 
-    /*
-     * Returns null if the specified IItem does not exist.
-     */
-    public IItem RemoveItem(int pos)
+    public bool Remove(IItem item)
     {
-        IItem item = null;
-        if (pos < Items.Count)
+        if (item == null) return false;
+        bool result = _items.Remove(item);
+
+        if (result)
         {
-            item = Items[pos];
-            Items.RemoveAt(pos);
+            NotifyInventoryChanged();
         }
-        return item;
+        
+        return result;
     }
+
+    public bool Contains(IWeapon weapon)
+    {
+        return _weapons.Contains(weapon);
+    }
+    
+    public bool Contains(IItem item)
+    {
+        return _items.Contains(item);
+    }
+
+    protected void NotifyInventoryChanged()
+    {
+        OnInventoryChanged?.Invoke();
+    }
+
+    // Allow observer pattern to prevent 60 polls per second
+    public event Action OnInventoryChanged;
 }
