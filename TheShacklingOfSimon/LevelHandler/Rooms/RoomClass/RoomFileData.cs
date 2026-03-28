@@ -14,7 +14,7 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
         public List<EnemyData> Enemies { get; set; } = new();
     }
 
-    // Tile coordinates are in INTERIOR grid space: (0..12, 0..6)
+    // Tile coordinates are full room grid coords.
     public sealed class TileData
     {
         public int X { get; set; }
@@ -22,7 +22,6 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
         public TileType Type { get; set; }
     }
 
-    // Entity coordinates are in INTERIOR grid space unless the entity loader says otherwise.
     public sealed class EntityData
     {
         public string Type { get; set; } = "";
@@ -30,14 +29,17 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
         public int Y { get; set; }
     }
 
-    // Door coordinates are the INTERIOR cell adjacent to the door.
-    // The door tile itself is placed on the BORDER just outside that cell.
     public sealed class DoorData
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        // Destination data (room + spawn tile in destination interior grid).
+        // Base combat doors should default to enemy-clear unlock behavior.
+        public DoorUnlockType UnlockType { get; set; } = DoorUnlockType.ClearEnemies;
+
+        // can use this later if we want a condition keyed off some room event or puzzle id.
+        public string UnlockTag { get; set; } = "";
+
         public DoorDestination To { get; set; } = new();
     }
 

@@ -18,12 +18,13 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
         public Vector2 Velocity { get; set; } = Vector2.Zero;
         public bool IsActive { get; protected set; } = true;
 
-        // keep the public properties for compatibility, but now they are driven by one flags value.
+        // kept the flags system so most tiles only define one thing.
         protected virtual TileCollisionFlags CollisionFlags => TileCollisionFlags.None;
 
-        public bool BlocksGround => CollisionFlags.HasFlag(TileCollisionFlags.BlocksGround);
-        public bool BlocksFly => CollisionFlags.HasFlag(TileCollisionFlags.BlocksFly);
-        public bool BlocksProjectiles => CollisionFlags.HasFlag(TileCollisionFlags.BlocksProjectiles);
+        // These stay virtual so special tiles like doors can change behavior at runtime.
+        public virtual bool BlocksGround => CollisionFlags.HasFlag(TileCollisionFlags.BlocksGround);
+        public virtual bool BlocksFly => CollisionFlags.HasFlag(TileCollisionFlags.BlocksFly);
+        public virtual bool BlocksProjectiles => CollisionFlags.HasFlag(TileCollisionFlags.BlocksProjectiles);
 
         // Tile hitbox is always one grid cell
         public Rectangle Hitbox => new Rectangle(
@@ -73,7 +74,6 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles
         // pulled the repeated MTV push-out code here so solid tiles do not copy it everywhere.
         protected void ResolveEntityCollision(IEntity entity)
         {
-            if (entity == null || !IsActive) return;
 
             Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(entity.Hitbox, this.Hitbox);
             if (mtv.LengthSquared() < 0.0001f) return;

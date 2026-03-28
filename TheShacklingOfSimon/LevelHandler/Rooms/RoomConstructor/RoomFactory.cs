@@ -8,6 +8,7 @@ using TheShacklingOfSimon.Entities.Enemies.Managers;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Tiles.Border;
+using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
@@ -16,20 +17,28 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {
     public sealed class RoomFactory
     {
+        // we can set this once from Game1 after loading the two upright door textures.
+        public DoorTextureSet DoorTextures { get; set; }
+
         // TEMPORARY
         public Action<IProjectile> OnProjectileCreated { get; set; }
 
-        // I keep room creation focused here so RoomManager does not grow into a god class.
+        // I left this overridable so we can add special puzzle/boss/key door rules later
+        // without rewriting DoorTile.
+        public Func<DoorData, IDoorUnlockCondition> DoorConditionFactory { get; set; }
+
         public Room Create(RoomFileData data, int viewportWidth, int viewportHeight)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
 
+            if (DoorTextures == null)
+                throw new InvalidOperationException("DoorTextures must be assigned before creating rooms.");
+
             var tileMap = new TileMap();
             var spriteFactory = SpriteFactory.Instance;
             var tileFactory = new TileFactory(spriteFactory);
 
-            // Center the room in the viewport by setting TileMap.Origin.
             int roomW = RoomConstants.GridWidth * RoomConstants.TileSize;
             int roomH = RoomConstants.GridHeight * RoomConstants.TileSize;
 
@@ -38,21 +47,13 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
                 (viewportHeight - roomH) * 0.5f
             );
 
-            // Make the room background image
             var background = spriteFactory.CreateStaticSprite("images/RoomBackground");
 
-            // Border is the TRUE edge of the room: (x=0, x=w-1, y=0, y=h-1)
             BuildBorderWalls(tileMap, tileFactory);
-
-            // Tiles are FULL grid coords
             PlaceTiles(tileMap, tileFactory, data.Tiles);
-
-            // Doors are FULL grid coords on the border
-            PlaceDoors(tileMap, spriteFactory, data.Doors);
+            PlaceDoors(tileMap, data.Doors);
 
             IList<IEntity> entities = new List<IEntity>();
-
-            // Enemies placement
             PlaceEnemies(tileMap, entities, data.Enemies);
 
             IEnumerable<IEntity> exposedEntities = entities;
@@ -87,18 +88,28 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
         {
             if (tiles == null) return;
 
+            var used = new HashSet<Point>();
+
             foreach (var t in tiles)
             {
-                var gridPos = new Point(t.X, t.Y);
-
-                if (!tileMap.InBounds(gridPos))
+                if (t.X < 0 || t.X >= RoomConstants.GridWidth ||
+                    t.Y < 0 || t.Y >= RoomConstants.GridHeight)
+                {
                     throw new InvalidOperationException($"Tile out of room bounds: ({t.X},{t.Y}).");
+                }
 
-                tileMap.PlaceTile(gridPos, tileFactory.Create(t.Type, tileMap, gridPos));
+                var pos = new Point(t.X, t.Y);
+
+                if (!used.Add(pos))
+                {
+                    throw new InvalidOperationException($"Duplicate tile entry at ({t.X},{t.Y}).");
+                }
+
+                tileMap.PlaceTile(pos, tileFactory.Create(t.Type, tileMap, pos));
             }
         }
 
-        private static void PlaceDoors(TileMap tileMap, SpriteFactory spriteFactory, List<DoorData> doors)
+        private void PlaceDoors(TileMap tileMap, List<DoorData> doors)
         {
             if (doors == null) return;
 
@@ -106,47 +117,75 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 
             foreach (var d in doors)
             {
-                // DoorData coords are FULL grid coords now
                 if (d.X < 0 || d.X >= RoomConstants.GridWidth ||
                     d.Y < 0 || d.Y >= RoomConstants.GridHeight)
+                {
                     throw new InvalidOperationException($"Door out of room bounds: ({d.X},{d.Y}).");
+                }
 
                 if (d.To == null)
+                {
                     throw new InvalidOperationException($"Door destination missing for door at ({d.X},{d.Y}).");
+                }
 
                 if (string.IsNullOrWhiteSpace(d.To.Room))
+                {
                     throw new InvalidOperationException($"Door destination room missing for door at ({d.X},{d.Y}).");
+                }
 
                 if (d.To.Spawn == null)
+                {
                     throw new InvalidOperationException($"Door destination spawn missing for door at ({d.X},{d.Y}).");
+                }
 
-                // Spawn is FULL grid coords (consistent with door coords)
                 if (d.To.Spawn.X < 0 || d.To.Spawn.X >= RoomConstants.GridWidth ||
                     d.To.Spawn.Y < 0 || d.To.Spawn.Y >= RoomConstants.GridHeight)
+                {
                     throw new InvalidOperationException(
                         $"Door spawn out of room bounds: ({d.To.Spawn.X},{d.To.Spawn.Y}) for door at ({d.X},{d.Y}).");
+                }
 
                 var (borderPos, side) = DoorToBorderCell(d);
 
                 if (!used.Add(borderPos))
+                {
                     throw new InvalidOperationException(
                         $"Duplicate door placement on border at ({borderPos.X},{borderPos.Y}).");
+                }
 
-                var sprite = spriteFactory.CreateStaticSprite("images/Rocks");
+                IDoorUnlockCondition unlockCondition = CreateDoorCondition(d);
 
+                // DoorTile still inherits from Tile, so we pass a dummy sprite to the base class.
+                // Real drawing comes from the locked/unlocked upright textures in DoorTextureSet.
                 var door = new DoorTile(
-                    sprite,
+                    SpriteFactory.Instance.CreateStaticSprite("images/Rocks"),
                     tileMap.GridToWorld(borderPos),
                     d.To.Room,
                     new Point(d.To.Spawn.X, d.To.Spawn.Y),
-                    side
+                    side,
+                    DoorTextures,
+                    unlockCondition
                 );
 
                 tileMap.PlaceTile(borderPos, door);
             }
         }
 
-        // DoorData must specify a BORDER cell in FULL grid coords.
+        private IDoorUnlockCondition CreateDoorCondition(DoorData doorData)
+        {
+            if (DoorConditionFactory != null)
+            {
+                return DoorConditionFactory(doorData);
+            }
+
+            return doorData.UnlockType switch
+            {
+                DoorUnlockType.AlwaysUnlocked => new AlwaysUnlockedDoorCondition(),
+                DoorUnlockType.Custom => new CustomDoorCondition(),
+                _ => new ClearEnemiesDoorCondition()
+            };
+        }
+
         private static (Point borderPos, DoorSide side) DoorToBorderCell(DoorData d)
         {
             int maxX = RoomConstants.GridWidth - 1;

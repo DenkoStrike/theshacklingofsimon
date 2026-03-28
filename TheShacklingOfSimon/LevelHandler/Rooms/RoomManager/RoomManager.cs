@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
+using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {
@@ -160,7 +161,7 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 
             foreach (var tile in room.TileMap.PlacedTiles)
             {
-                if (tile is Tiles.Border.DoorTile door)
+                if (tile is DoorTile door)
                 {
                     door.BindNavigator(this);
                 }

@@ -17,6 +17,7 @@ using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Items.Active_Items;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
@@ -25,7 +26,12 @@ namespace TheShacklingOfSimon;
 
 public class Game1 : Game
 {
-    private GraphicsDeviceManager _graphics;
+    private const int ScreenWidth = 1024;
+    private const int ScreenHeight = 768;
+
+    private readonly GraphicsDeviceManager _graphics;
+    private readonly List<IEntity> _persistentDynamicEntities = new();
+
     private SpriteBatch _spriteBatch;
     private SpriteFont _font;
 
@@ -44,16 +50,14 @@ public class Game1 : Game
     private CollisionManager _collisionManager;
     private GameStateManager _gameStateManager;
 
-    private readonly List<IEntity> _persistentDynamicEntities = new();
-
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-        _graphics.PreferredBackBufferWidth = 1024;
-        _graphics.PreferredBackBufferHeight = 768;
+        _graphics.PreferredBackBufferWidth = ScreenWidth;
+        _graphics.PreferredBackBufferHeight = ScreenHeight;
     }
 
     protected override void Initialize()
@@ -61,113 +65,34 @@ public class Game1 : Game
         _keyboardController = new KeyboardController(new MonoGameKeyboardService());
         _mouseController = new MouseController(new MonoGameMouseService());
         _gamepadController = new GamepadController(new MonoGameGamepadService(PlayerIndex.One));
+
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
-
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("File");
 
-        SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
-        SpriteFactory.Instance.LoadTexture(Content, "SpiderEnemy.json", "SpiderEnemy");
-        SpriteFactory.Instance.LoadTexture(Content, "BlackMaw.json", "BlackMaw");
+        LoadSpriteAssets();
 
         _projectileManager = new ProjectileManager();
-
-        SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
-        SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
-        SpriteFactory.Instance.LoadTexture(Content, "images/Fire.json", "images/Fire");
-        SpriteFactory.Instance.LoadTexture(Content, "images/RoomBackground.json", "images/RoomBackground");
-
-        var roomReader = new JsonRoomReader(Content);
-        var indexReader = new RoomIndexReader(Content);
-        var roomFactory = new RoomFactory();
-
         _collisionManager = new CollisionManager();
-        roomFactory.OnProjectileCreated += _collisionManager.AddDynamicEntity;
-        roomFactory.OnProjectileCreated += _projectileManager.AddProjectile;
 
-        _roomManager = new RoomManager(roomReader, indexReader, roomFactory, GraphicsDevice, preserveRoomState: true);
-
-        _player = new PlayerWithTwoSprites(
-            new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
-
-        IWeapon playerBasicWeapon = new BasicWeapon(
-            new BasicProjectile(
-                new Vector2(0, 0),
-                new Vector2(0, 1),
-                SpriteFactory.Instance.CreateStaticSprite("BasicProjectile"),
-                new ProjectileStats(1, 200.0f, ProjectileOwner.Player)));
-
-        IWeapon playerBombWeapon = new BombWeapon(
-            new BombProjectile(
-                new Vector2(0, 0),
-                SpriteFactory.Instance.CreateAnimatedSprite("PlayerHeadShootingDown", 0.1f),
-                new ProjectileStats(1, 0.0f, ProjectileOwner.Player)));
-
-        _player.AddWeaponToInventory(playerBasicWeapon);
-        _player.EquipPrimaryWeapon(0);
-
-        _player.AddWeaponToInventory(playerBombWeapon);
-        _player.EquipSecondaryWeapon(1);
-
-        _player.AddItemToInventory(new TeleportItem(_player, pos => true));
-        _player.AddItemToInventory(new AdrenalineItem(_player));
-
-        SpriteFactory.Instance.LoadTexture(Content, "images/8Ball.json", "images/8Ball");
-        SpriteFactory.Instance.LoadTexture(Content, "images/Red_Heart.json", "images/Red_Heart");
-
-        _itemManager = new ItemManager(_player, SpriteFactory.Instance);
-        _pickupManager = new PickupManager();
-
-        _inputManager = new InputManager(
-            _keyboardController,
-            _mouseController,
-            _gamepadController,
-            _player,
-            this,
-            _roomManager,
-            _itemManager,
-            _pickupManager,
-            Reset);
-
-        _persistentDynamicEntities.Clear();
-        _persistentDynamicEntities.Add(_player);
-
-        playerBasicWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
-        playerBombWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
-
-        _collisionBulkLoader = new CollisionBulkLoader(_collisionManager, _persistentDynamicEntities);
-        _roomManager.RoomChanged += _collisionBulkLoader.RegisterRoomCollidables;
-        _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
-
-        playerBasicWeapon.OnProjectileFired += _projectileManager.AddProjectile;
-        playerBombWeapon.OnProjectileFired += _projectileManager.AddProjectile;
-
-        _pickupManager.OnPickupAdded += _collisionManager.AddStaticEntity;
-
-        _gameStateManager = new GameStateManager();
-        _gameStateManager.AddState(
-            new PlayGameState(
-                _gameStateManager,
-                _inputManager,
-                _font,
-                GraphicsDevice,
-                this,
-                _roomManager,
-                _itemManager,
-                _pickupManager,
-                _player,
-                _projectileManager,
-                _collisionManager));
+        RoomFactory roomFactory = CreateRoomFactory();
+        CreateRoomManager(roomFactory);
+        CreatePlayer();
+        CreatePlayerWeapons();
+        CreatePlayerItems();
+        CreateItemAndPickupManagers();
+        CreateInputManager();
+        ConfigureCollisionAndProjectileHooks();
+        CreateGameStates();
     }
 
     protected override void Update(GameTime delta)
     {
-        // we update input before the current state so the active bindings fire first.
+        // I update input before the active state so the current state's bindings fire first.
         _keyboardController.Update();
         _mouseController.Update();
         _gamepadController.Update();
@@ -188,11 +113,154 @@ public class Game1 : Game
         base.Draw(delta);
     }
 
-    private void Reset()
+    private void LoadSpriteAssets()
+    {
+        SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
+        SpriteFactory.Instance.LoadTexture(Content, "SpiderEnemy.json", "SpiderEnemy");
+        SpriteFactory.Instance.LoadTexture(Content, "BlackMaw.json", "BlackMaw");
+
+        SpriteFactory.Instance.LoadTexture(Content, "images/Rocks.json", "images/Rocks");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Spikes.json", "images/Spikes");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Fire.json", "images/Fire");
+        SpriteFactory.Instance.LoadTexture(Content, "images/RoomBackground.json", "images/RoomBackground");
+
+        SpriteFactory.Instance.LoadTexture(Content, "images/8Ball.json", "images/8Ball");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Red_Heart.json", "images/Red_Heart");
+
+        // These are the upright door sprites. The door tile rotates them by side.
+        SpriteFactory.Instance.LoadTexture(Content, "images/DoorLockedUp.json", "images/DoorLockedUp");
+        SpriteFactory.Instance.LoadTexture(Content, "images/DoorUnlockedUp.json", "images/DoorUnlockedUp");
+    }
+
+    private RoomFactory CreateRoomFactory()
+    {
+        var roomFactory = new RoomFactory();
+
+        // I assign door textures before RoomManager is created because the starting room
+        // gets loaded inside the RoomManager constructor.
+        roomFactory.DoorTextures = new DoorTextureSet(
+            Content.Load<Texture2D>("images/DoorLockedUp"),
+            Content.Load<Texture2D>("images/DoorUnlockedUp")
+        );
+
+        roomFactory.OnProjectileCreated += _collisionManager.AddDynamicEntity;
+        roomFactory.OnProjectileCreated += _projectileManager.AddProjectile;
+
+        return roomFactory;
+    }
+
+    private void CreateRoomManager(RoomFactory roomFactory)
+    {
+        var roomReader = new JsonRoomReader(Content);
+        var indexReader = new RoomIndexReader(Content);
+
+        _roomManager = new RoomManager(
+            roomReader,
+            indexReader,
+            roomFactory,
+            GraphicsDevice,
+            preserveRoomState: true);
+    }
+
+    private void CreatePlayer()
+    {
+        _player = new PlayerWithTwoSprites(GetScreenCenter());
+    }
+
+    private void CreatePlayerWeapons()
+    {
+        IWeapon playerBasicWeapon = new BasicWeapon(
+            new BasicProjectile(
+                Vector2.Zero,
+                new Vector2(0, 1),
+                SpriteFactory.Instance.CreateStaticSprite("BasicProjectile"),
+                new ProjectileStats(1, 200.0f, ProjectileOwner.Player)));
+
+        IWeapon playerBombWeapon = new BombWeapon(
+            new BombProjectile(
+                Vector2.Zero,
+                SpriteFactory.Instance.CreateAnimatedSprite("PlayerHeadShootingDown", 0.1f),
+                new ProjectileStats(1, 0.0f, ProjectileOwner.Player)));
+
+        _player.AddWeaponToInventory(playerBasicWeapon);
+        _player.EquipPrimaryWeapon(0);
+
+        _player.AddWeaponToInventory(playerBombWeapon);
+        _player.EquipSecondaryWeapon(1);
+
+        // I hook these here so player-fired projectiles go to both collision and rendering.
+        playerBasicWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
+        playerBombWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
+
+        playerBasicWeapon.OnProjectileFired += _projectileManager.AddProjectile;
+        playerBombWeapon.OnProjectileFired += _projectileManager.AddProjectile;
+    }
+
+    private void CreatePlayerItems()
+    {
+        _player.AddItemToInventory(new TeleportItem(_player, pos => true));
+        _player.AddItemToInventory(new AdrenalineItem(_player));
+    }
+
+    private void CreateItemAndPickupManagers()
+    {
+        _itemManager = new ItemManager(_player, SpriteFactory.Instance);
+        _pickupManager = new PickupManager();
+    }
+
+    private void CreateInputManager()
+    {
+        _inputManager = new InputManager(
+            _keyboardController,
+            _mouseController,
+            _gamepadController,
+            _player,
+            this,
+            _roomManager,
+            _itemManager,
+            _pickupManager,
+            Reset);
+    }
+
+    private void ConfigureCollisionAndProjectileHooks()
+    {
+        _persistentDynamicEntities.Clear();
+        _persistentDynamicEntities.Add(_player);
+
+        _collisionBulkLoader = new CollisionBulkLoader(_collisionManager, _persistentDynamicEntities);
+        _roomManager.RoomChanged += _collisionBulkLoader.RegisterRoomCollidables;
+        _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
+
+        _pickupManager.OnPickupAdded += _collisionManager.AddStaticEntity;
+    }
+
+    private void CreateGameStates()
+    {
+        _gameStateManager = new GameStateManager();
+        _gameStateManager.AddState(
+            new PlayGameState(
+                _gameStateManager,
+                _inputManager,
+                _font,
+                GraphicsDevice,
+                this,
+                _roomManager,
+                _itemManager,
+                _pickupManager,
+                _player,
+                _projectileManager,
+                _collisionManager));
+    }
+
+    private Vector2 GetScreenCenter()
     {
         Rectangle screenDimensions = GraphicsDevice.Viewport.Bounds;
+        return new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f);
+    }
 
-        _player.Reset(new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f));
+    private void Reset()
+    {
+        _player.Reset(GetScreenCenter());
         _projectileManager.ClearAllProjectiles();
         _roomManager.ResetToGameStart();
         _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
