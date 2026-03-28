@@ -16,12 +16,9 @@ using TheShacklingOfSimon.Weapons;
 
 namespace TheShacklingOfSimon.Entities.Players;
 
-public class PlayerWithTwoSprites : DamageableEntity, IPlayer
+public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
 {
-    public Inventory Inventory { get; private set; }
-    public IWeapon CurrentPrimaryWeapon { get; private set; }
-    public IWeapon CurrentSecondaryWeapon { get; private set; }
-    public IItem CurrentItem { get; private set; }
+    public PlayerInventory Inventory { get; private set; }
 
     private IPlayerHeadState CurrentHeadState { get; set; }
     private IPlayerBodyState CurrentBodyState { get; set; }
@@ -76,76 +73,6 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         Initialize(startPosition);
     }
 
-    public void AddWeaponToInventory(IWeapon weapon)
-    {
-        Inventory.AddWeapon(weapon);
-    }
-
-    public IWeapon RemoveWeaponFromInventory(int pos)
-    {
-        IWeapon weapon = new NoneWeapon();
-        if (pos < Inventory.Weapons.Count)
-        {
-            if (Inventory.Weapons[pos] == CurrentPrimaryWeapon)
-            {
-                CurrentPrimaryWeapon = new NoneWeapon();
-            }
-            else if (Inventory.Weapons[pos] == CurrentSecondaryWeapon)
-            {
-                CurrentSecondaryWeapon = new NoneWeapon();
-            }
-
-            weapon = Inventory.RemoveWeapon(pos);
-        }
-
-        return weapon;
-    }
-
-    public void AddItemToInventory(IItem item)
-    {
-        Inventory.AddItem(item);
-    }
-
-    public IItem RemoveItemFromInventory(int pos)
-    {
-        IItem item = new NoneItem(this);
-        if (pos < Inventory.Items.Count)
-        {
-            if (Inventory.Items[pos] == CurrentItem)
-            {
-                CurrentPrimaryWeapon = new NoneWeapon();
-            }
-
-            item = Inventory.RemoveItem(pos);
-        }
-
-        return item;
-    }
-
-    public void EquipPrimaryWeapon(int pos)
-    {
-        if (pos < Inventory.Weapons.Count)
-        {
-            CurrentPrimaryWeapon = Inventory.Weapons[pos];
-        }
-    }
-
-    public void EquipSecondaryWeapon(int pos)
-    {
-        if (pos < Inventory.Weapons.Count)
-        {
-            CurrentSecondaryWeapon = Inventory.Weapons[pos];
-        }
-    }
-
-    public void EquipItem(int pos)
-    {
-        if (pos < Inventory.Items.Count)
-        {
-            CurrentItem = Inventory.Items[pos];
-        }
-    }
-
     public void RegisterMoveInput(Vector2 direction)
     {
         /*
@@ -159,7 +86,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public void RegisterPrimaryAttackInput(Vector2 direction)
     {
-        if (CurrentPrimaryWeapon != null)
+        if (Inventory.CurrentPrimaryWeapon != null)
         {
             _primaryAttackInput += direction;
         }
@@ -167,7 +94,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
 
     public void RegisterSecondaryAttackInput(Vector2 direction)
     {
-        if (CurrentSecondaryWeapon != null)
+        if (Inventory.CurrentSecondaryWeapon != null)
         {
             _secondaryAttackInput += direction;
         }
@@ -257,49 +184,11 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         other.OnCollision(this);
     }
 
-    public override void OnCollision(IPlayer otherPlayer)
-    {
-        // No-op for now--no other players planned
-    }
-
-    public override void OnCollision(IEnemy enemy)
-    {
-        /*
-         * No-op for now
-         * Collision logic handled mainly by specific concrete enemy class: Avoids complex
-         * conditional logic in the player class.
-         *
-         * Could eventually add a "thorns" effect for damaging the enemy
-         * or any other interaction of the form (player does something to enemy).
-         */
-    }
-
-    public override void OnCollision(IProjectile projectile)
-    {
-        /*
-         * No-op
-         * Collision logic handled by specific concrete projectile class: Avoids complex
-         * conditional logic in the player class.
-         */
-    }
-
-    public override void OnCollision(ITile tile)
-    {
-        /*
-         * No-op
-         * Collision logic handled by specific concrete tile class: Avoids complex
-         * conditional logic in the player class.
-         */
-    }
-
-    public override void OnCollision(IPickup pickup)
-    {
-        /*
-         * No-op
-         * Collision logic handled by specific concrete pickup class: Avoids complex
-         * conditional logic in the player class.
-         */
-    }
+    public override void OnCollision(IPlayer otherPlayer) { }
+    public override void OnCollision(IEnemy enemy) { }
+    public override void OnCollision(IProjectile projectile) { }
+    public override void OnCollision(ITile tile) { }
+    public override void OnCollision(IPickup pickup) { }
 
     public void SetSkin(string category, string skinPrefix)
     {
@@ -336,6 +225,11 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
             CurrentBodyState = newBodyState;
             CurrentBodyState?.Enter();
         }
+    }
+
+    public Vector2 GetPosition()
+    {
+        return Position;
     }
 
     // More explicit interface implementation for renaming purposes
@@ -383,7 +277,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer
         MovementFrameDuration = 0.05f;
         DeathFrameDuration = 1.0f;
         InvulnerabilityDuration = 0.333334f;
-        Inventory = new Inventory();
+        Inventory = new PlayerInventory(this);
         
         /*
          * Other properties such as CurrentPrimaryWeapon set by public methods
