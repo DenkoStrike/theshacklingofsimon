@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies;
@@ -8,6 +9,7 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
+using TheShacklingOfSimon.StatusEffects;
 
 #endregion
 
@@ -16,6 +18,7 @@ namespace TheShacklingOfSimon.Entities;
 public abstract class DamageableEntity : IDamageable
 {
     protected float InvulnerabilityTimer;
+    protected readonly Dictionary<StatType, float> Stats = new();
     
     public Vector2 Position { get; protected set; }
     public Vector2 Velocity { get; set; }
@@ -25,6 +28,8 @@ public abstract class DamageableEntity : IDamageable
     
     public int Health { get; protected set; }
     public int MaxHealth { get; set; }
+    
+    public StatusEffectManager EffectManager { get; protected set; }
     
     /*
      * IEntity methods
@@ -37,6 +42,9 @@ public abstract class DamageableEntity : IDamageable
         {
             InvulnerabilityTimer -= (float) delta.ElapsedGameTime.TotalSeconds;
         }
+        
+        // Also handles status effect manager
+        EffectManager.Update(delta);
     }
 
     public abstract void Draw(SpriteBatch spriteBatch);
@@ -92,5 +100,16 @@ public abstract class DamageableEntity : IDamageable
         {
             Health = MaxHealth;
         }
+    }
+    
+    // Accessor and mutator helper methods for concrete effect implementations
+    public float GetStat(StatType stat)
+    {
+        return Stats.TryGetValue(stat, out var value) ? value : 0f;
+    }
+
+    public void SetStat(StatType type, float value)
+    {
+        Stats[type] = value;
     }
 }
