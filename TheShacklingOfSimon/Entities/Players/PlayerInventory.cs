@@ -1,7 +1,10 @@
+#region
+
 using System;
-using System.Transactions;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Weapons;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Players;
 
@@ -10,6 +13,8 @@ public class PlayerInventory : Inventory
     private IWeapon _currentPrimaryWeapon;
     private IWeapon _currentSecondaryWeapon;
     private IItem _currentActiveItem;
+    private int _numKeys;
+    private int _numCoins;
 
     public IWeapon CurrentPrimaryWeapon
     {
@@ -85,6 +90,26 @@ public class PlayerInventory : Inventory
             }
             
             _currentActiveItem = value;
+            NotifyInventoryChanged();
+        }
+    }
+
+    public int NumKeys
+    {
+        get { return _numKeys; }
+        set
+        {
+            _numKeys = value;
+            NotifyInventoryChanged();
+        }
+    }
+
+    public int NumCoins
+    {
+        get { return _numCoins;  }
+        set
+        {
+            _numCoins = value;
             NotifyInventoryChanged();
         }
     }

@@ -1,30 +1,36 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Mouse;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Mouse;
 
 public class MouseController : IController<MouseInput>
 {
     private readonly IMouseService _mouseService;
-    private readonly Dictionary<MouseInput, Commands.ICommand> _map;
+    private readonly Dictionary<MouseInput, ICommand> _map;
     private readonly Dictionary<MouseButton, InputState> _prevStates;
 
     public MouseController(IMouseService service)
     {
         _mouseService = service;
         _prevStates = new Dictionary<MouseButton, InputState>();
-        foreach (MouseButton btn in System.Enum.GetValues(typeof(MouseButton)))
+        foreach (MouseButton btn in Enum.GetValues(typeof(MouseButton)))
         {
             _prevStates.Add(btn, InputState.Released);
         }
 
-        _map = new Dictionary<MouseInput, Commands.ICommand>();
+        _map = new Dictionary<MouseInput, ICommand>();
     }
 
-    public void RegisterCommand(MouseInput input, Commands.ICommand cmd)
+    public void RegisterCommand(MouseInput input, ICommand cmd)
     {
         _map.TryAdd(input, cmd);
     }
@@ -44,12 +50,12 @@ public class MouseController : IController<MouseInput>
         Vector2 pos = _mouseService.GetPosition();
 
         // we use a snapshot here for the same reason as keyboard. (safely change binds)
-        KeyValuePair<MouseInput, Commands.ICommand>[] bindings = _map.ToArray();
+        KeyValuePair<MouseInput, ICommand>[] bindings = _map.ToArray();
 
-        foreach (KeyValuePair<MouseInput, Commands.ICommand> entry in bindings)
+        foreach (KeyValuePair<MouseInput, ICommand> entry in bindings)
         {
             MouseInput inputDefinition = entry.Key;
-            Commands.ICommand command = entry.Value;
+            ICommand command = entry.Value;
 
             if (!inputDefinition.Region.ContainsPoint(pos.X, pos.Y))
             {
@@ -74,7 +80,7 @@ public class MouseController : IController<MouseInput>
         }
 
         // Update the previous states for the next Update() call
-        foreach (MouseButton btn in System.Enum.GetValues(typeof(MouseButton)))
+        foreach (MouseButton btn in Enum.GetValues(typeof(MouseButton)))
         {
             _prevStates[btn] = _mouseService.GetButtonState(btn);
         }

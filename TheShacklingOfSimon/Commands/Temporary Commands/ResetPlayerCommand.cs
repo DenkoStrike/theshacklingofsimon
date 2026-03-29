@@ -1,6 +1,10 @@
+#region
+
 using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Temporary_Commands;
 

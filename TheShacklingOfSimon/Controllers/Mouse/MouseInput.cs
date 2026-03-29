@@ -1,5 +1,9 @@
-﻿using TheShacklingOfSimon.Input;
+﻿#region
+
+using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Mouse;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Mouse;
 

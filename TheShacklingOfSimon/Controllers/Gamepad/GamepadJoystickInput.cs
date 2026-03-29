@@ -1,6 +1,9 @@
-using Microsoft.Xna.Framework;
+#region
+
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Gamepad;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Gamepad;
 

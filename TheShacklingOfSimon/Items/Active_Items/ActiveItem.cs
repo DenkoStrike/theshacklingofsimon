@@ -1,9 +1,8 @@
-using Microsoft.VisualBasic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities;
+#region
+
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.Items.Active_Items;
 public class ActiveItem : IItem

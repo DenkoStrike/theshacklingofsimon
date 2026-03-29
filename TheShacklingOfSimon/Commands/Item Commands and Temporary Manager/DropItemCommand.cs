@@ -1,8 +1,9 @@
+#region
+
 using System;
-using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Pickup;
-using TheShacklingOfSimon.Items;
-using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager
 {

@@ -1,4 +1,8 @@
-﻿using TheShacklingOfSimon.Entities;
+﻿#region
+
+using TheShacklingOfSimon.Entities;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Tiles
 {

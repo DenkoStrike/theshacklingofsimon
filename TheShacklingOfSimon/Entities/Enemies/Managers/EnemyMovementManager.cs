@@ -1,5 +1,9 @@
+#region
+
 using System;
 using Microsoft.Xna.Framework;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Enemies.Managers
 {

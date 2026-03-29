@@ -1,4 +1,8 @@
+#region
+
 using TheShacklingOfSimon.Entities.Players;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Temporary_Commands;
 

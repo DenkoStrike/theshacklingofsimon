@@ -1,12 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿#region
+
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
 {

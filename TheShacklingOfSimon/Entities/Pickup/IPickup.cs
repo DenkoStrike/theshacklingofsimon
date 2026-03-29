@@ -1,7 +1,8 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities.Players;
+#region
+
 using TheShacklingOfSimon.Items;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Pickup;
 public interface IPickup : IEntity

@@ -1,7 +1,10 @@
+#region
+
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Controllers.Mouse;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.Input;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.PlayerAttack;
 

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,9 +11,10 @@ using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Tiles;
-using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
+
+#endregion
 
 
 namespace TheShacklingOfSimon.Entities.Enemies.EnemyTypes;

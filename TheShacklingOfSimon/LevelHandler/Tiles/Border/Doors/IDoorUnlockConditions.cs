@@ -1,4 +1,8 @@
-﻿using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+﻿#region
+
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
 {

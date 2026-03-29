@@ -1,4 +1,8 @@
+#region
+
 using TheShacklingOfSimon.Weapons;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Enemies.Config;
 public class EnemyConfig

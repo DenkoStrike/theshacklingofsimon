@@ -1,4 +1,8 @@
-﻿using TheShacklingOfSimon.GameStates;
+﻿#region
+
+using TheShacklingOfSimon.GameStates;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Gamestate;
 

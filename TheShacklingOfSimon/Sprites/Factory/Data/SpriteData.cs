@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
+
+#endregion
 
 namespace TheShacklingOfSimon.Sprites.Factory.Data;
 // Collection of frames given a name

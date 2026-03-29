@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Input;
+
+#endregion
 
 namespace TheShacklingOfSimon.GameStates.States;
 

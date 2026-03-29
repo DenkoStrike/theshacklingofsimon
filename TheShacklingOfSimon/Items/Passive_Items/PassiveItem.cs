@@ -1,4 +1,8 @@
+#region
+
 using TheShacklingOfSimon.Entities.Players;
+
+#endregion
 
 namespace TheShacklingOfSimon.Items.Passive_Items;
 public class PassiveItem : IItem

@@ -1,8 +1,11 @@
-﻿using System.Resources;
+﻿#region
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Mouse;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Mouse;
 

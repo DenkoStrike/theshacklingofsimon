@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework.Content;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {

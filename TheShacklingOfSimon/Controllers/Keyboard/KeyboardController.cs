@@ -1,24 +1,29 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
+using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Keyboard;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Keyboard;
 
 public class KeyboardController : IController<KeyboardInput>
 {
     private readonly IKeyboardService _keyboardService;
-    private readonly Dictionary<KeyboardInput, Commands.ICommand> _map;
+    private readonly Dictionary<KeyboardInput, ICommand> _map;
     private readonly Dictionary<KeyboardButton, InputState> _previousStates;
 
     public KeyboardController(IKeyboardService service)
     {
         _keyboardService = service;
-        _map = new Dictionary<KeyboardInput, Commands.ICommand>();
+        _map = new Dictionary<KeyboardInput, ICommand>();
         _previousStates = new Dictionary<KeyboardButton, InputState>();
     }
 
-    public void RegisterCommand(KeyboardInput input, Commands.ICommand command)
+    public void RegisterCommand(KeyboardInput input, ICommand command)
     {
         bool success = _map.TryAdd(input, command);
         if (success && !_previousStates.ContainsKey(input.Button))
@@ -51,12 +56,12 @@ public class KeyboardController : IController<KeyboardInput>
     public void Update()
     {
         // we use a snapshot here so commands can safely change bindings during update.
-        KeyValuePair<KeyboardInput, Commands.ICommand>[] bindings = _map.ToArray();
+        KeyValuePair<KeyboardInput, ICommand>[] bindings = _map.ToArray();
 
-        foreach (KeyValuePair<KeyboardInput, Commands.ICommand> entry in bindings)
+        foreach (KeyValuePair<KeyboardInput, ICommand> entry in bindings)
         {
             KeyboardInput input = entry.Key;
-            Commands.ICommand command = entry.Value;
+            ICommand command = entry.Value;
 
             if (!_previousStates.ContainsKey(input.Button))
             {

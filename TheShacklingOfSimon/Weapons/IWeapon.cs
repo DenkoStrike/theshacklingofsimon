@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
+
+#endregion
 
 namespace TheShacklingOfSimon.Weapons;
 

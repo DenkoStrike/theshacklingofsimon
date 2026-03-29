@@ -1,4 +1,8 @@
+#region
+
 using System.Collections.Generic;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Enemies.Config;
 public static class ConfigDB

@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Tiles;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Collisions;
 

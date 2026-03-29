@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager;
 using TheShacklingOfSimon.Entities.Collisions;
@@ -7,6 +9,8 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+
+#endregion
 
 namespace TheShacklingOfSimon.GameStates.States;
 

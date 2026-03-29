@@ -1,7 +1,10 @@
+#region
+
 using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
-using Microsoft.Xna.Framework.Graphics;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Enemies.States;
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager;
@@ -16,6 +18,8 @@ using TheShacklingOfSimon.Input.Mouse;
 using TheShacklingOfSimon.Items.Passive_Items;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
 using TheShacklingOfSimon.Sprites.Factory;
+
+#endregion
 
 namespace TheShacklingOfSimon.Input;
 

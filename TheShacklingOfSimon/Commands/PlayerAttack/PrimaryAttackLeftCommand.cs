@@ -1,5 +1,9 @@
+#region
+
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.PlayerAttack;
 

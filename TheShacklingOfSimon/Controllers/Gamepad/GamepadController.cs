@@ -1,16 +1,22 @@
+#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Gamepad;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Gamepad;
 
 public class GamepadController : IGamepadController
 {
     private readonly IGamepadService _gamepadService;
-    private readonly Dictionary<GamepadButtonInput, Commands.ICommand> _buttonMap;
-    private readonly Dictionary<GamepadJoystickInput, Commands.ICommand> _joystickMap;
+    private readonly Dictionary<GamepadButtonInput, ICommand> _buttonMap;
+    private readonly Dictionary<GamepadJoystickInput, ICommand> _joystickMap;
 
     private readonly Dictionary<GamepadButton, InputState> _previousButtonStates;
     private readonly Dictionary<GamepadJoystickInput, bool> _previousJoystickStates;
@@ -18,11 +24,11 @@ public class GamepadController : IGamepadController
     public GamepadController(IGamepadService gamepadService)
     {
         _gamepadService = gamepadService;
-        _buttonMap = new Dictionary<GamepadButtonInput, Commands.ICommand>();
-        _joystickMap = new Dictionary<GamepadJoystickInput, Commands.ICommand>();
+        _buttonMap = new Dictionary<GamepadButtonInput, ICommand>();
+        _joystickMap = new Dictionary<GamepadJoystickInput, ICommand>();
 
         _previousButtonStates = new Dictionary<GamepadButton, InputState>();
-        foreach (GamepadButton btn in System.Enum.GetValues(typeof(GamepadButton)))
+        foreach (GamepadButton btn in Enum.GetValues(typeof(GamepadButton)))
         {
             _previousButtonStates.Add(btn, InputState.Released);
         }
@@ -30,12 +36,12 @@ public class GamepadController : IGamepadController
         _previousJoystickStates = new Dictionary<GamepadJoystickInput, bool>();
     }
 
-    public void RegisterCommand(GamepadButtonInput input, Commands.ICommand cmd)
+    public void RegisterCommand(GamepadButtonInput input, ICommand cmd)
     {
         _buttonMap.TryAdd(input, cmd);
     }
 
-    public void RegisterCommand(GamepadJoystickInput input, Commands.ICommand cmd)
+    public void RegisterCommand(GamepadJoystickInput input, ICommand cmd)
     {
         bool success = _joystickMap.TryAdd(input, cmd);
         if (success)
@@ -65,12 +71,12 @@ public class GamepadController : IGamepadController
     public void Update()
     {
         // we use snapshots so bindings can safely change while commands run.
-        KeyValuePair<GamepadButtonInput, Commands.ICommand>[] buttonBindings = _buttonMap.ToArray();
+        KeyValuePair<GamepadButtonInput, ICommand>[] buttonBindings = _buttonMap.ToArray();
 
-        foreach (KeyValuePair<GamepadButtonInput, Commands.ICommand> entry in buttonBindings)
+        foreach (KeyValuePair<GamepadButtonInput, ICommand> entry in buttonBindings)
         {
             GamepadButtonInput input = entry.Key;
-            Commands.ICommand command = entry.Value;
+            ICommand command = entry.Value;
 
             InputState currentState = _gamepadService.GetButtonState(input.Button);
             InputState previousState = _previousButtonStates[input.Button];
@@ -91,12 +97,12 @@ public class GamepadController : IGamepadController
             _previousButtonStates[input.Button] = currentState;
         }
 
-        KeyValuePair<GamepadJoystickInput, Commands.ICommand>[] joystickBindings = _joystickMap.ToArray();
+        KeyValuePair<GamepadJoystickInput, ICommand>[] joystickBindings = _joystickMap.ToArray();
 
-        foreach (KeyValuePair<GamepadJoystickInput, Commands.ICommand> entry in joystickBindings)
+        foreach (KeyValuePair<GamepadJoystickInput, ICommand> entry in joystickBindings)
         {
             GamepadJoystickInput input = entry.Key;
-            Commands.ICommand command = entry.Value;
+            ICommand command = entry.Value;
 
             Vector2 rawInput;
             switch (input.Stick)

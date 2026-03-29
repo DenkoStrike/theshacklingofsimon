@@ -1,4 +1,8 @@
+#region
+
 using Microsoft.Xna.Framework;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Players.States.Head;
 

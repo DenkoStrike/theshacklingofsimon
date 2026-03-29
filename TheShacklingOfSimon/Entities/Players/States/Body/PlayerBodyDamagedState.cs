@@ -1,6 +1,10 @@
+#region
+
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players.States.Head;
 using TheShacklingOfSimon.Sprites.Factory;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Players.States.Body;
 

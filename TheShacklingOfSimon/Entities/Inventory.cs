@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Weapons;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities;
 

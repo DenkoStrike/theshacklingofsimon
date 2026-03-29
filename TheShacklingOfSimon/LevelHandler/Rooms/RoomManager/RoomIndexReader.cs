@@ -1,8 +1,13 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿#region
+
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Xna.Framework.Content;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {
@@ -37,7 +42,7 @@ namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
                                  ?? throw new InvalidOperationException($"Failed to deserialize room index file {fullPath}");
 
             if (data.Rooms == null)
-                data.Rooms = new System.Collections.Generic.List<string>();
+                data.Rooms = new List<string>();
 
             return data;
         }

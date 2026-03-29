@@ -1,12 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
 {
@@ -86,7 +90,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
                 texture.Width * 0.5f,
                 texture.Height * 0.5f);
 
-            float uniformScale = RoomConstants.TileSize / (float)System.Math.Max(texture.Width, texture.Height);
+            float uniformScale = RoomConstants.TileSize / (float)Math.Max(texture.Width, texture.Height);
 
             spriteBatch.Draw(
                 texture,

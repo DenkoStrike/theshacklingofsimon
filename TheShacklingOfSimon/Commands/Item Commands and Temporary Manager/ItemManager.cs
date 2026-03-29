@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region
+
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +10,8 @@ using TheShacklingOfSimon.Items.Active_Items;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.LevelHandler.Tiles.Obstacles;
 using TheShacklingOfSimon.Sprites.Factory;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager;
 

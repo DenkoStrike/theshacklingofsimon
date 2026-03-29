@@ -1,17 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Entities.Enemies.Managers;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border;
 using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
 {

@@ -1,8 +1,12 @@
+#region
+
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Gamepad;
+
+#endregion
 
 namespace TheShacklingOfSimon.Controllers.Gamepad;
 
@@ -45,13 +49,13 @@ public class MonoGameGamepadService : IGamepadService
     
     public Vector2 GetLeftJoystickPosition()
     {
-        GamePadState state = Microsoft.Xna.Framework.Input.GamePad.GetState(_playerIndex);
+        GamePadState state = GamePad.GetState(_playerIndex);
         return new Vector2(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
     }
 
     public Vector2 GetRightJoystickPosition()
     {
-        GamePadState state = Microsoft.Xna.Framework.Input.GamePad.GetState(_playerIndex);
+        GamePadState state = GamePad.GetState(_playerIndex);
         return new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
     }
     
@@ -60,7 +64,7 @@ public class MonoGameGamepadService : IGamepadService
         InputState state = InputState.Released;
         if (_buttonMap.TryGetValue(button, out Buttons xnaButton))
         {
-            state = Microsoft.Xna.Framework.Input.GamePad.GetState(_playerIndex).IsButtonDown(xnaButton)
+            state = GamePad.GetState(_playerIndex).IsButtonDown(xnaButton)
                 ? InputState.Pressed
                 : InputState.Released;
         }

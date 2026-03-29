@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -8,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Sprites.Factory.Data;
 using TheShacklingOfSimon.Sprites.Products;
 
+#endregion
 
 namespace TheShacklingOfSimon.Sprites.Factory;
 

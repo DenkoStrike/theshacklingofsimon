@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -10,6 +12,8 @@ using TheShacklingOfSimon.Entities.Players.States.Head;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Players;
 

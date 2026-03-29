@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
 using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
+
+#endregion
 
 namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
 {

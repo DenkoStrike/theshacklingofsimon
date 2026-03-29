@@ -1,4 +1,8 @@
-﻿using TheShacklingOfSimon.Entities.Players;
+﻿#region
+
+using TheShacklingOfSimon.Entities.Players;
+
+#endregion
 
 namespace TheShacklingOfSimon.Items;
 

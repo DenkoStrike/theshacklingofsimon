@@ -1,4 +1,8 @@
-﻿using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+﻿#region
+
+using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Room_Commands
 {

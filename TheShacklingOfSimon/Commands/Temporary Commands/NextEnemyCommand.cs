@@ -1,5 +1,8 @@
-using TheShacklingOfSimon.Entities.Enemies;
+#region
+
 using TheShacklingOfSimon.Entities.Enemies.Managers;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Temporary_Commands;
 

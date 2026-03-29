@@ -1,7 +1,9 @@
+#region
+
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players.States;
-using TheShacklingOfSimon.Items;
-using TheShacklingOfSimon.Weapons;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Players;
 

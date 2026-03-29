@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using TheShacklingOfSimon.Entities.Enemies;
-using TheShacklingOfSimon.Entities.Pickup;
-using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.LevelHandler.Tiles;
-using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Projectiles;
 
@@ -77,7 +77,7 @@ public class BasicProjectile : ProjectileBase
         if (!IsActive || tile == null) return;
 
         // effect any projectile-affectable tiles
-        if (tile is TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor.IProjectileAffectableTile affectable)
+        if (tile is IProjectileAffectableTile affectable)
         {
             affectable.OnProjectileHit();
         }

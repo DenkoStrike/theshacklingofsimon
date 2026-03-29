@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿#region
+
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Commands.Item_Commands_and_Temporary_Manager;
 using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Gamepad;
@@ -21,6 +23,8 @@ using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
+
+#endregion
 
 namespace TheShacklingOfSimon;
 
