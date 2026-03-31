@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Weapons;
 
-namespace TheShacklingOfSimon.Commands.PlayerItem;
+namespace TheShacklingOfSimon.Commands.PlayerInventoryManagement;
 
 public class PreviousSecondaryWeaponCommand : ICommand
 {

@@ -4,7 +4,7 @@ using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Commands.PlayerAttack;
-using TheShacklingOfSimon.Commands.PlayerItem;
+using TheShacklingOfSimon.Commands.PlayerInventoryManagement;
 using TheShacklingOfSimon.Commands.PlayerMovement;
 using TheShacklingOfSimon.Commands.Room_Commands;
 using TheShacklingOfSimon.Controllers;

@@ -3,7 +3,7 @@ using System.Linq;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Items;
 
-namespace TheShacklingOfSimon.Commands.PlayerItem
+namespace TheShacklingOfSimon.Commands.PlayerInventoryManagement
 {
 	public class NextActiveItemCommand : ICommand
 	{

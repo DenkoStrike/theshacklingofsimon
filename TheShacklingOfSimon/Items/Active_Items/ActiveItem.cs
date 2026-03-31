@@ -21,6 +21,7 @@ public class ActiveItem : IItem
     
     public void Effect()
     {
+        // TODO: use the StatusEffectManager instead of directly manipulating player stats
         Player.SetStat(StatType.DamageMultiplier, Player.GetStat(StatType.DamageMultiplier) + Effects.Attack);
         Player.Heal(Effects.Health);
         Player.MaxHealth += Effects.MaxHealth;
@@ -32,6 +33,7 @@ public class ActiveItem : IItem
     }
     public void ClearEffect()
     {
+        // TODO: use the StatusEffectManager instead of directly manipulating player stats
         Player.SetStat(StatType.DamageMultiplier, Player.GetStat(StatType.DamageMultiplier - Effects.Attack));
         Player.MaxHealth -= Effects.MaxHealth;
         Player.SetStat(StatType.MoveSpeed, Player.GetStat(StatType.MoveSpeed) - Effects.Speed);

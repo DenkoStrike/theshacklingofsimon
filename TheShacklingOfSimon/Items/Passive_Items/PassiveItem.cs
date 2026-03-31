@@ -1,6 +1,7 @@
 #region
 
 using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.StatusEffects;
 
 #endregion
 
@@ -20,14 +21,17 @@ public class PassiveItem : IItem
     
     public void Effect()
     {
-        Player.Stats.DamageMultiplierStat += Effects.Attack;
+        // TODO: use the StatusEffectManager instead of directly manipulating player stats
+        Player.SetStat(StatType.DamageMultiplier, Player.GetStat(StatType.DamageMultiplier) + Effects.Attack);
+        Player.Heal(Effects.Health);
         Player.MaxHealth += Effects.MaxHealth;
-        Player.Stats.MoveSpeedStat += Effects.Speed;
+        Player.SetStat(StatType.MoveSpeed, Player.GetStat(StatType.MoveSpeed) + Effects.Speed);
     }
     public void ClearEffect()
     {
-        Player.Stats.DamageMultiplierStat -= Effects.Attack;
+        // TODO: use the StatusEffectManager instead of directly manipulating player stats
+        Player.SetStat(StatType.DamageMultiplier, Player.GetStat(StatType.DamageMultiplier - Effects.Attack));
         Player.MaxHealth -= Effects.MaxHealth;
-        Player.Stats.MoveSpeedStat -= Effects.Speed;
+        Player.SetStat(StatType.MoveSpeed, Player.GetStat(StatType.MoveSpeed) - Effects.Speed);
     }
 }

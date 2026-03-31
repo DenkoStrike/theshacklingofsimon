@@ -4,7 +4,7 @@ using TheShacklingOfSimon.Entities.Players;
 
 #endregion
 
-namespace TheShacklingOfSimon.Commands.PlayerItem;
+namespace TheShacklingOfSimon.Commands.PlayerInventoryManagement;
 
 public class UseItemCommand : ICommand
 {

@@ -106,4 +106,6 @@ public class AdrenalineItem : IItem
         Player.EffectManager.AddEffect(_secondaryCooldownBuff);
         Player.EffectManager.AddEffect(_projectileSpeedBuff);
     }
+    
+    // No need for a RemoveBuff() method; the StatusEffectManager already handles effect removal
 }
