@@ -90,7 +90,7 @@ namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
                 texture.Width * 0.5f,
                 texture.Height * 0.5f);
 
-            float uniformScale = RoomConstants.TileSize / (float)Math.Max(texture.Width, texture.Height);
+            float uniformScale = (RoomConstants.TileSize  *1.38f) / (float)Math.Max(texture.Width, texture.Height);
 
             spriteBatch.Draw(
                 texture,
