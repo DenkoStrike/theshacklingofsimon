@@ -32,7 +32,7 @@ public class FireballProjectile : ProjectileBase
 			direction = new Vector2(0, 1);
 		}
 		
-		Velocity = direction * 50f;
+		Velocity = direction * stats.Speed;
 
 		Sprite = sprite;
 		Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 8, 8);
@@ -92,7 +92,7 @@ public class FireballProjectile : ProjectileBase
     public override void OnCollision(IEnemy enemy)
     {
 
-		enemy.TakeDamage(2);
+		enemy.TakeDamage(Stats.Damage);
 		Discontinue();
     }
 }
