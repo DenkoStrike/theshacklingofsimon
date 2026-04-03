@@ -1,40 +1,39 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using System;
 using TheShacklingOfSimon.Entities;
+
+#endregion
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
-public class PrimaryCooldownEffect : IStatusEffect
+public class PrimaryCooldownEffect : StatusEffect
 {
-    // TODO: Implement instance variables
-    
-    private float Strength { get; set; }
-    private float Duration { get; set; }
-    public bool IsFinished { get; private set; }
-    public IDamageableEntity Owner { get; private set; }
-
-    public PrimaryCooldownEffect(IDamageableEntity owner, float strength, float duration)
+    public PrimaryCooldownEffect(IDamageableEntity owner, float strength, float duration) 
+        : base(owner, strength, duration)
     {
-        IsFinished = false;
-        Owner = owner;
     }
     
-    public void OnApply()
+    public override void OnApply()
     {
-        // TODO: Implement this
+        Timer = 0.0f;
+        float currentCooldown = Owner.GetStat(StatType.PrimaryCooldown);
+        float newCooldown = currentCooldown + Strength;
+        
+        Difference = currentCooldown - newCooldown;
+        Owner.SetStat(StatType.PrimaryCooldown, newCooldown);
     }
 
-    public void OnRemove()
+    public override void OnRemove()
     {
-        // TODO: Implement this
+        Owner.SetStat(StatType.PrimaryCooldown, Owner.GetStat(StatType.PrimaryCooldown) + Difference);
     }
 
-    public void Update(GameTime delta)
+    public override void Merge(IStatusEffect other)
     {
-        // TODO: Implement this
-    }
+        if (other is not PrimaryCooldownEffect otherCasted) return;
 
-    public void Merge(IStatusEffect other)
-    {
-        // TODO: Implement this
+        Strength += otherCasted.Strength;
+        Duration = Math.Max(Duration, otherCasted.Duration);
     }
 }

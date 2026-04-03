@@ -1,65 +1,47 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿#region
+
+using System;
 using TheShacklingOfSimon.Entities;
+
+#endregion
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
-public class MoveSpeedEffect : IStatusEffect
+public class MoveSpeedEffect : StatusEffect
 {
-    /*
-     * Keep track of how much speed was taken away or added
-     * by *this* so it can be restored once *this* is removed.
-     */
-    private float _speedAmount;
-    private float _timer;
-    private float Strength { get; set; }
-    private float Duration { get; set; }
-    
-    public bool IsFinished { get; private set; }
-    public IDamageableEntity Owner { get; private set; }
-    
-    public MoveSpeedEffect(IDamageableEntity owner, float strength, float duration)
+
+    /// <summary>
+    /// Represents a status effect that additively modifies the movement speed of an object
+    /// of type <c>IDamageableEntity</c> for a specific duration.
+    /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is to be applied.</param>
+    /// <param name="strength">The amount of movement speed to be added or removed.</param>
+    /// <param name="duration">The duration of the effect in seconds.</param>
+    /// </summary>
+    public MoveSpeedEffect(IDamageableEntity owner, float strength, float duration) 
+        : base(owner, strength, duration)
     {
-        _speedAmount = 0.0f;
-        Strength = strength;
-        Duration = duration;
-        IsFinished = false;
-        Owner = owner;
     }
 
-    public void OnApply()
+    public override void OnApply()
     {
-        _timer = 0.0f;
+        Timer = 0.0f;
         float currentSpeed = Owner.GetStat(StatType.MoveSpeed);
-        float newSpeed = Math.Max(1f, currentSpeed * Strength);
+        float newSpeed = Math.Max(1f, currentSpeed + Strength);
 
-        _speedAmount = currentSpeed - newSpeed;
+        Difference = currentSpeed - newSpeed;
         Owner.SetStat(StatType.MoveSpeed, newSpeed);
     }
 
-    public void OnRemove()
+    public override void OnRemove()
     {
-        float currentSpeed = Owner.GetStat(StatType.MoveSpeed);
-        Owner.SetStat(StatType.MoveSpeed, currentSpeed + _speedAmount);
-    }
-
-    public void Update(GameTime delta)
-    {
-        _timer += (float) delta.ElapsedGameTime.TotalSeconds;
-        if (_timer >= Duration)
-        {
-            IsFinished = true;
-        }
+        Owner.SetStat(StatType.MoveSpeed, Owner.GetStat(StatType.MoveSpeed) + Difference);
     }
     
-    public void Merge(IStatusEffect other)
+    public override void Merge(IStatusEffect other)
     {
- 
         if (other is not MoveSpeedEffect castedOther) return; 
-        
-        // For now just "add" the multipliers
-        // and make the duration the average of the two
-        Strength = 1.0f - Strength - castedOther.Strength;
-        Duration = (Duration + castedOther.Duration) / 2;
+
+        Strength += castedOther.Strength;
+        Duration = Math.Max(Duration, castedOther.Duration);
     }
 }

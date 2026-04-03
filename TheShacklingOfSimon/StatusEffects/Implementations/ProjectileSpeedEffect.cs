@@ -1,40 +1,39 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using System;
 using TheShacklingOfSimon.Entities;
+
+#endregion
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
-public class ProjectileSpeedEffect : IStatusEffect
+public class ProjectileSpeedEffect : StatusEffect
 {
-    // TODO: Implement instance variables
-    
-    private float Strength { get; set; }
-    private float Duration { get; set; }
-    public bool IsFinished { get; private set; }
-    public IDamageableEntity Owner { get; private set; }
-
-    public ProjectileSpeedEffect(IDamageableEntity owner, float strength, float duration)
+    public ProjectileSpeedEffect(IDamageableEntity owner, float strength, float duration) 
+        : base(owner, strength, duration)
     {
-        IsFinished = false;
-        Owner = owner;
     }
     
-    public void OnApply()
+    public override void OnApply()
     {
-        // TODO: Implement this
+        Timer = 0.0f;
+        float currentSpeed = Owner.GetStat(StatType.ProjectileSpeedMultiplier);
+        float newSpeed = currentSpeed + Strength;
+
+        Difference = currentSpeed - newSpeed;
+        Owner.SetStat(StatType.MoveSpeed, newSpeed);
     }
 
-    public void OnRemove()
+    public override void OnRemove()
     {
-        // TODO: Implement this
+        Owner.SetStat(StatType.MoveSpeed, Owner.GetStat(StatType.MoveSpeed) + Difference);
     }
 
-    public void Update(GameTime delta)
+    public override void Merge(IStatusEffect other)
     {
-        // TODO: Implement this
-    }
+        if (other is not ProjectileSpeedEffect castedOther) return;
 
-    public void Merge(IStatusEffect other)
-    {
-        // TODO: Implement this
+        Strength += castedOther.Strength;
+        Duration = Math.Max(Duration, castedOther.Duration);
     }
 }
