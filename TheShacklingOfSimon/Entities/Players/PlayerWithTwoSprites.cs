@@ -22,25 +22,20 @@ namespace TheShacklingOfSimon.Entities.Players;
 public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
 {
     public PlayerInventory Inventory { get; private set; }
-    public PlayerTwoStateManager StateManager { get; set; }
-
-    // Renaming for clarity
-    IPlayerState IPlayer.CurrentState => StateManager.Body;
+    public PlayerTwoStatesManager StatesManager { get; private set; }
+    public PlayerTwoSpritesManager SpritesManager { get; private set; }
+    public PlayerInputBuffer InputBuffer { get; private set; }
     
-    public ISprite HeadSprite { get; set; }
-    public ISprite BodySprite { get; set; }
+    // Renaming for clarity
+    IPlayerState IPlayer.CurrentState => StatesManager.Body;
     
     // Renaming for clarity
     [Obsolete("PlayerWithTwoSprites does not use Sprite property. Use BodySprite or HeadSprite instead.", true)]
     public new ISprite Sprite
     {
-        get => BodySprite;
-        set => BodySprite = value;
+        get => SpritesManager.Body;
+        set => SpritesManager.Body = value;
     }
-    
-    public PlayerInputBuffer InputBuffer { get; private set; }
-
-    private PlayerWithTwoSpritesDrawManager _drawManager;
 
     public PlayerWithTwoSprites(Vector2 startPosition)
     {
@@ -52,7 +47,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         base.TakeDamage(damage);
         InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
         
-        StateManager.HandleDamageInterrupt(Health <= 0);
+        StatesManager.HandleDamageInterrupt(Health <= 0);
     }
 
     public void Reset(Vector2 startPosition)
@@ -63,31 +58,25 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     public override void Update(GameTime delta)
     {
         base.Update(delta);
-        
-        StateManager.Body.HandleMovement(InputBuffer.ConsumeMovement(), _drawManager.MovementFrameDuration);
-        StateManager.Head.HandlePrimaryAttack(InputBuffer.ConsumePrimaryAttack(), EffectStats[StatType.PrimaryCooldown]);
-        StateManager.Head.HandleSecondaryAttack(InputBuffer.ConsumeSecondaryAttack(), EffectStats[StatType.SecondaryCooldown]);
 
+        // Handle user input
+        StatesManager.Body.HandleMovement(InputBuffer.ConsumeMovement(), SpritesManager.MovementFrameDuration);
+        StatesManager.Head.HandlePrimaryAttack(InputBuffer.ConsumePrimaryAttack(), EffectStats[StatType.PrimaryCooldown]);
+        StatesManager.Head.HandleSecondaryAttack(InputBuffer.ConsumeSecondaryAttack(), EffectStats[StatType.SecondaryCooldown]);
+        
+        // Update position and velocity
         float dt = (float)delta.ElapsedGameTime.TotalSeconds;
         Position += Velocity * dt;
         Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
 
-        StateManager.Update(delta);
+        // Update states and sprites
+        StatesManager.Update(delta);
+        SpritesManager.Update(delta);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        SpriteEffects flip = SpriteEffects.None;
-        if (Velocity.X < -0.0001f)
-        {
-            flip = SpriteEffects.FlipHorizontally;
-        }
-        
-        Vector2 drawPos = (StateManager.Body is PlayerBodyDamagedState) ? Position + _drawManager.DamagedStateOffset : Position;
-        BodySprite?.Draw(spriteBatch, drawPos, Color.White, 0.0f,
-            new Vector2(0, 0), 1.0f, flip, 0.0f);
-        
-        HeadSprite?.Draw(spriteBatch, Position + _drawManager.HeadOffset, Color.White);
+        SpritesManager.Draw(spriteBatch);
     }
 
     public override void OnCollision(IEntity other)
@@ -111,13 +100,13 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     public string GetSkin(string category)
     {
         // Passthrough
-        return _drawManager.GetSkin(category);
+        return SpritesManager.GetSkin(category);
     }
     
     public void SetSkin(string category, string skinPrefix)
     {
         // Passthrough
-        _drawManager.SetSkin(category, skinPrefix);
+        SpritesManager.SetSkin(category, skinPrefix);
     }
 
     // More explicit interface implementation for renaming purposes
@@ -127,13 +116,13 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         {
             case IPlayerHeadState:
             {
-                StateManager.ChangeHeadState((IPlayerHeadState)newState);
+                StatesManager.ChangeHeadState((IPlayerHeadState)newState);
                 break;
             }
 
             case IPlayerBodyState:
             {
-                StateManager.ChangeBodyState((IPlayerBodyState)newState);
+                StatesManager.ChangeBodyState((IPlayerBodyState)newState);
                 break;
             }
             default:
@@ -168,8 +157,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         EffectStats.Add(StatType.SecondaryCooldown, config.SecondaryCooldown);
         
         InputBuffer = new PlayerInputBuffer();
-        _drawManager = new PlayerWithTwoSpritesDrawManager();
         Inventory = new PlayerInventory();
-        StateManager = new PlayerTwoStateManager(this, _drawManager);
+        SpritesManager = new PlayerTwoSpritesManager(this);
+        StatesManager = new PlayerTwoStatesManager(this, SpritesManager);
     }
 }

@@ -5,15 +5,15 @@ using TheShacklingOfSimon.Entities.Players.States.Head;
 
 namespace TheShacklingOfSimon.Entities.Players.States;
 
-public class PlayerTwoStateManager
+public class PlayerTwoStatesManager
 {
     private readonly PlayerWithTwoSprites _player;
-    private readonly PlayerWithTwoSpritesDrawManager _drawManager;
+    private readonly PlayerTwoSpritesManager _drawManager;
     
     public IPlayerHeadState Head { get; private set; }
     public IPlayerBodyState Body { get; private set; }
 
-    public PlayerTwoStateManager(PlayerWithTwoSprites player, PlayerWithTwoSpritesDrawManager drawManager)
+    public PlayerTwoStatesManager(PlayerWithTwoSprites player, PlayerTwoSpritesManager drawManager)
     {
         _player = player;
         _drawManager = drawManager;

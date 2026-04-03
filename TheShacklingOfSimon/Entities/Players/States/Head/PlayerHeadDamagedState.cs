@@ -17,7 +17,7 @@ public class PlayerHeadDamagedState : IPlayerHeadState
     
     public void Enter()
     {
-        _player.HeadSprite = null;
+        _player.SpritesManager.Head = null;
     }
 
     public void Exit()
@@ -30,16 +30,13 @@ public class PlayerHeadDamagedState : IPlayerHeadState
 
     public void Update(GameTime delta)
     {
-        // No-op
     }
 
     public void HandlePrimaryAttack(Vector2 direction, float stateDuration)
     {
-        // No-op
     }
 
     public void HandleSecondaryAttack(Vector2 direction, float stateDuration)
     {
-        // No-op
     }
 }

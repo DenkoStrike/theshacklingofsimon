@@ -61,7 +61,7 @@ public class PlayerHeadAttackingState : IPlayerHeadState
             spriteAnimationName += "ShootingDown";
         }
 
-        _player.HeadSprite = SpriteFactory.Instance.CreateAnimatedSprite(spriteAnimationName, _stateDuration * 0.51f);
+        _player.SpritesManager.Head = SpriteFactory.Instance.CreateAnimatedSprite(spriteAnimationName, _stateDuration * 0.51f);
     }
 
     public void Exit()
@@ -77,11 +77,7 @@ public class PlayerHeadAttackingState : IPlayerHeadState
         _timer += (float)delta.ElapsedGameTime.TotalSeconds;
         if (_timer >= _stateDuration)
         {
-            _player.StateManager.ChangeHeadState(new PlayerHeadIdleState(_player, new Vector2(0, 1)));
-        }
-        else
-        {
-            _player.HeadSprite?.Update(delta);
+            _player.StatesManager.ChangeHeadState(new PlayerHeadIdleState(_player, new Vector2(0, 1)));
         }
     }
 

@@ -21,7 +21,7 @@ public class PlayerBodyIdleState : IPlayerBodyState
         _player.Velocity = Vector2.Zero;
 
         string spritePrefix = _player.GetSkin("Body");
-        _player.BodySprite = SpriteFactory.Instance.CreateStaticSprite(spritePrefix + "Idle");
+        _player.SpritesManager.Body = SpriteFactory.Instance.CreateStaticSprite(spritePrefix + "Idle");
     }
 
     public void Exit()
@@ -34,7 +34,6 @@ public class PlayerBodyIdleState : IPlayerBodyState
 
     public void Update(GameTime delta)
     {
-        _player.BodySprite?.Update(delta);
     }
 
     public void HandleMovement(Vector2 direction, float frameDuration)
@@ -42,7 +41,7 @@ public class PlayerBodyIdleState : IPlayerBodyState
         if (direction != Vector2.Zero)
         {
             _player.Velocity = direction;
-            _player.StateManager.ChangeBodyState(new PlayerBodyMovingState(_player, frameDuration));
+            _player.StatesManager.ChangeBodyState(new PlayerBodyMovingState(_player, frameDuration));
         }
     }
 }

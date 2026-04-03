@@ -36,10 +36,6 @@ public class PlayerHeadIdleState : IPlayerHeadState
 
     public void Update(GameTime delta)
     {
-        if (_player.HeadSprite != null)
-        {
-            _player.HeadSprite?.Update(delta);
-        }
     }
 
     public void HandlePrimaryAttack(Vector2 direction, float stateDuration)
@@ -47,7 +43,7 @@ public class PlayerHeadIdleState : IPlayerHeadState
         Vector2 cardinal = GetCardinalDirection(direction);
         if (cardinal != Vector2.Zero)
         {
-            _player.StateManager.ChangeHeadState(new PlayerHeadAttackingState(_player, _player.Inventory.CurrentPrimaryWeapon, cardinal, stateDuration));
+            _player.StatesManager.ChangeHeadState(new PlayerHeadAttackingState(_player, _player.Inventory.CurrentPrimaryWeapon, cardinal, stateDuration));
         }
     }
 
@@ -56,7 +52,7 @@ public class PlayerHeadIdleState : IPlayerHeadState
         Vector2 cardinal = GetCardinalDirection(direction);
         if (cardinal != Vector2.Zero)
         {
-            _player.StateManager.ChangeHeadState(new PlayerHeadAttackingState(_player, _player.Inventory.CurrentSecondaryWeapon, cardinal, stateDuration));
+            _player.StatesManager.ChangeHeadState(new PlayerHeadAttackingState(_player, _player.Inventory.CurrentSecondaryWeapon, cardinal, stateDuration));
         }
     }
     
@@ -83,7 +79,7 @@ public class PlayerHeadIdleState : IPlayerHeadState
 
         if (newAnimationName != _currentAnimation)
         {
-            _player.HeadSprite = SpriteFactory.Instance.CreateStaticSprite(newAnimationName);
+            _player.SpritesManager.Head = SpriteFactory.Instance.CreateStaticSprite(newAnimationName);
             _currentAnimation = newAnimationName;
         }
     }
