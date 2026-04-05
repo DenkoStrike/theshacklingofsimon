@@ -12,6 +12,8 @@ public abstract class BaseWeapon : IWeapon
 {
     public string Name { get; protected set; }
     public string Description { get; protected set; }
+    public float BaseCooldown { get; protected set; }
+    public int BaseDamage { get; protected set; }
 
     protected IProjectile Prototype;
      

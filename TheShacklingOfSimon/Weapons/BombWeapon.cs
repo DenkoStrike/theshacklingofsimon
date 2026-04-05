@@ -12,6 +12,8 @@ public class BombWeapon : BaseWeapon, ISecondaryWeapon
     {
         Name = "Bomb";
         Description = "Drops a bomb that explodes.";
+        BaseCooldown = 1.25f;
+        BaseDamage = 3;
         Prototype = prototype;
     }
 }

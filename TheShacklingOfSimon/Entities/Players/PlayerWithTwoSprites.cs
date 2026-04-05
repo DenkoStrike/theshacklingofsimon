@@ -46,7 +46,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     {
         base.TakeDamage(damage);
         InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
-        
+      
+
         StatesManager.HandleDamageInterrupt(Health <= 0);
     }
 
@@ -61,8 +62,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
 
         // Handle user input
         StatesManager.Body.HandleMovement(InputBuffer.ConsumeMovement(), SpritesManager.MovementFrameDuration);
-        StatesManager.Head.HandlePrimaryAttack(InputBuffer.ConsumePrimaryAttack(), EffectStats[StatType.PrimaryCooldown]);
-        StatesManager.Head.HandleSecondaryAttack(InputBuffer.ConsumeSecondaryAttack(), EffectStats[StatType.SecondaryCooldown]);
+        StatesManager.Head.HandlePrimaryAttack(InputBuffer.ConsumePrimaryAttack(), Inventory.CurrentPrimaryWeapon.BaseCooldown + EffectStats[StatType.PrimaryCooldown]);
+        StatesManager.Head.HandleSecondaryAttack(InputBuffer.ConsumeSecondaryAttack(), Inventory.CurrentSecondaryWeapon.BaseCooldown + EffectStats[StatType.SecondaryCooldown]);
         
         // Update position and velocity
         float dt = (float)delta.ElapsedGameTime.TotalSeconds;
