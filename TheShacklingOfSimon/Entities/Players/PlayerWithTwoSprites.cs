@@ -46,7 +46,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     {
         base.TakeDamage(damage);
         InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
-        
+      
+
         StatesManager.HandleDamageInterrupt(Health <= 0);
     }
 
