@@ -24,35 +24,40 @@ namespace TheShacklingOfSimon.UI
 
 
 
-    
+        
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_player == null) return;
+            
+            DrawHearts(spriteBatch);
+            
+        }
 
+        private void DrawHearts(SpriteBatch spriteBatch)
+        {
             int maxHeartSlots = _player.MaxHealth / 2;
             float scale = 4f;
-            int spacing = 48; 
+            int spacing = 48;
 
             for (int i = 0; i < maxHeartSlots; i++)
             {
                 Vector2 pos = new Vector2(0 + (i * spacing), 20);
 
-                
+
                 int heartSlot = (i * 2) + 1;
 
                 if (_player.Health >= heartSlot + 1)
                 {
-                    
+
                     _heartFilledSprite.Draw(spriteBatch, pos, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
                 }
                 else if (_player.Health == heartSlot)
                 {
-                   
+
                     _heartHalfSprite.Draw(spriteBatch, pos, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
                 }
                 else
                 {
-                    
+
                     _heartEmptySprite.Draw(spriteBatch, pos, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
                 }
             }

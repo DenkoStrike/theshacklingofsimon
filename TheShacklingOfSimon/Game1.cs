@@ -140,6 +140,8 @@ public class Game1 : Game
         SpriteFactory.Instance.LoadTexture(Content, "images/DoorLockedUp.json", "images/DoorLockedUp");
         SpriteFactory.Instance.LoadTexture(Content, "images/DoorUnlockedUp.json", "images/DoorUnlockedUp");
         SpriteFactory.Instance.LoadTexture(Content, "images/HeartsUI.json", "images/HeartsUI");
+        SpriteFactory.Instance.LoadTexture(Content, "images/fire_mind_tears.json", "images/fire_mind_tears");
+        SpriteFactory.Instance.LoadTexture(Content, "images/metallic_tears.json", "images/metallic_tears");
     }
 
     private RoomFactory CreateRoomFactory()
