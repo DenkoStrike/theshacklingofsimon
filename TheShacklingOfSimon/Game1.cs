@@ -185,7 +185,7 @@ public class Game1 : Game
                 SpriteFactory.Instance.CreateAnimatedSprite("PlayerHeadShootingDown", 0.1f),
                 new ProjectileStats(1, 0.0f, ProjectileOwner.Player)));
 
-        ISecondaryWeapon playerFireballWeapon = new FireballWeapon(
+        IPrimaryWeapon playerFireballWeapon = new FireballWeapon(
             new FireballProjectile(
                 Vector2.Zero,
                 new Vector2(0, 1),
@@ -199,7 +199,6 @@ public class Game1 : Game
 
         _player.Inventory.Add(playerFireballWeapon);
 
-        // I hook these here so player-fired projectiles go to both collision and rendering.
         playerBasicWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
         playerBombWeapon.OnProjectileFired += _collisionManager.AddDynamicEntity;
 

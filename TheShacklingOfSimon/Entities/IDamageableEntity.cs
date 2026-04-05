@@ -34,6 +34,11 @@ public interface IDamageableEntity : IEntity
     /// <summary>
     /// Sets the value of an enumerated stat of <c>this</c>.
     /// </summary>
+    /// <remarks>
+    /// Do not call this method on stats that have already been influenced by
+    /// an object of type IStatusEffect. This will result in internal data corruption
+    /// and may lead to unexpected behavior.
+    /// </remarks>
     /// <param name="stat">The enumerated stat type to modify.</param>
     /// <param name="value">The value to assign to the specified stat.</param>
     void SetStat(StatType stat, float value);

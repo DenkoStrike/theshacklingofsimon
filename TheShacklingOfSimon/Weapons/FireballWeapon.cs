@@ -6,12 +6,15 @@ using TheShacklingOfSimon.Entities.Projectiles;
 
 namespace TheShacklingOfSimon.Weapons;
 
-public class FireballWeapon : BaseWeapon, ISecondaryWeapon
+// Temporarily a primary weapon for sprint 4?
+public class FireballWeapon : BaseWeapon, IPrimaryWeapon
 {
 	public FireballWeapon(IProjectile prototype)
 	{
 		Name = "Fireball Weapon";
 		Description = "Fires a fireball projectile.";
+		BaseCooldown = 0.67f;
+		BaseDamage = 2;
 		Prototype = prototype;
 	}
 }
