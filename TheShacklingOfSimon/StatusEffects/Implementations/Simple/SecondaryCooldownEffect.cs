@@ -9,11 +9,24 @@ namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
 public class SecondaryCooldownEffect : SimpleStatusEffect
 {
-    public SecondaryCooldownEffect(IDamageableEntity owner, float strength, float duration) 
-        : base(owner, strength, duration)
+    /// <summary>
+    /// Represents a status effect that additively modifies the secondary weapon cooldown of the given object
+    /// of type <c>IDamageableEntity</c>. The effect modifies the coolodwn for a specified duration and with a
+    /// specific strength.
+    /// </summary>
+    /// <remarks>
+    /// Note that <c>this</c> does not manually implement the cooldown logic.
+    /// It simply adjusts the underlying stat of <c>owner</c>.
+    /// </remarks>
+    /// <param name="name">The name of the effect.</param>
+    /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is applied.</param>
+    /// <param name="strength">The amount of cooldown reduction to be added or removed.</param>
+    /// <param name="duration">The duration of the effect in seconds.</param>
+    public SecondaryCooldownEffect(string name, IDamageableEntity owner, float strength, float duration)
+        : base(name, owner, strength, duration)
     {
     }
-    
+
     public override void OnApply()
     {
         Timer = 0.0f;

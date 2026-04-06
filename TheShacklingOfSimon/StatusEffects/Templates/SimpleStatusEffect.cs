@@ -9,6 +9,7 @@ namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
 public abstract class SimpleStatusEffect : IStatusEffect
 {
+    public string Name { get; protected set; }
     public bool IsFinished { get; private set; }
     public IDamageableEntity Owner { get; private set; }
     
@@ -17,8 +18,9 @@ public abstract class SimpleStatusEffect : IStatusEffect
     protected float Timer;
     protected float Difference;
 
-    protected SimpleStatusEffect(IDamageableEntity owner, float strength, float duration)
+    protected SimpleStatusEffect(string name, IDamageableEntity owner, float strength, float duration)
     {
+        Name = name;
         IsFinished = false;
         Owner = owner;
         Strength = strength;

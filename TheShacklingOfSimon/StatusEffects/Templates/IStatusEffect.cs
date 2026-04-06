@@ -9,6 +9,7 @@ namespace TheShacklingOfSimon.StatusEffects;
 
 public interface IStatusEffect
 {
+    string Name { get; }
     bool IsFinished { get; }
     IDamageableEntity Owner { get; }
     

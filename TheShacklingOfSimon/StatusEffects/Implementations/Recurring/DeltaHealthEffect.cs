@@ -6,8 +6,8 @@ namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
 public class DeltaHealthEffect : RecurringStatusEffect
 {
-    public DeltaHealthEffect(IDamageableEntity owner, float tickStrength, float duration, float numTicks) 
-        : base(owner, tickStrength, duration, numTicks)
+    public DeltaHealthEffect(string name, IDamageableEntity owner, float tickStrength, float duration, float numTicks) 
+        : base(name, owner, tickStrength, duration, numTicks)
     {
     }
 

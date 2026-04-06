@@ -13,12 +13,14 @@ public class DamageMultiplierEffect : SimpleStatusEffect
     /// Represents a status effect that additively modifies the damage multiplier of an object of
     /// type IDamageableEntity. This effect increases the damage multiplier of the targeted entity
     /// for a specified duration.
+    /// </summary>
+    /// <param name="name">The name of the effect.</param>"
     /// <param name="owner">The object of type IDamageableEntity to which the effect is applied.</param>
     /// <param name="strength">The amount of damage multiplier to be added or removed.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
-    /// </summary>
-    public DamageMultiplierEffect(IDamageableEntity owner, float strength, float duration) 
-        : base(owner, strength, duration)
+    /// 
+    public DamageMultiplierEffect(string name, IDamageableEntity owner, float strength, float duration) 
+        : base(name, owner, strength, duration)
     {
     }
 

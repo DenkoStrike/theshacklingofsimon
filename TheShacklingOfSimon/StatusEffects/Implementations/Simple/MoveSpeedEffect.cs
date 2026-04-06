@@ -11,14 +11,15 @@ public class MoveSpeedEffect : SimpleStatusEffect
 {
 
     /// <summary>
-    /// Represents a status effect that additively modifies the movement speed of an object
-    /// of type <c>IDamageableEntity</c> for a specific duration.
-    /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is to be applied.</param>
-    /// <param name="strength">The amount of movement speed to be added or removed.</param>
-    /// <param name="duration">The duration of the effect in seconds.</param>
+    /// Represents a status effect that additively modifies the movement speed of the given
+    /// object of type <c>IDamageableEntity</c> for a specific duration.
     /// </summary>
-    public MoveSpeedEffect(IDamageableEntity owner, float strength, float duration) 
-        : base(owner, strength, duration)
+    /// <param name="name">The name of the effect</param>"
+    /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is to be applied</param>
+    /// <param name="strength">The amount of movement speed to be added or removed</param>
+    /// <param name="duration">The duration of the effect in seconds</param>
+    public MoveSpeedEffect(string name, IDamageableEntity owner, float strength, float duration) 
+        : base(name, owner, strength, duration)
     {
     }
 

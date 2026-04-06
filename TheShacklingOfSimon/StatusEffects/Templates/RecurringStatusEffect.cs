@@ -5,6 +5,7 @@ namespace TheShacklingOfSimon.StatusEffects;
 
 public abstract class RecurringStatusEffect : IStatusEffect
 {
+    public string Name { get; protected set; }
     public bool IsFinished { get; private set; }
     public IDamageableEntity Owner { get; private set; }
     
@@ -16,8 +17,9 @@ public abstract class RecurringStatusEffect : IStatusEffect
     protected float PreviousApplicationTime;
     protected float TickDuration;
 
-    protected RecurringStatusEffect(IDamageableEntity owner, float strength, float duration, float numTicks)
+    protected RecurringStatusEffect(string name, IDamageableEntity owner, float strength, float duration, float numTicks)
     {
+        Name = name;
         IsFinished = false;
         Owner = owner;
         Strength = strength;

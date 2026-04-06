@@ -50,10 +50,10 @@ public class AdrenalineItem : IItem
         _fireRateMultiplier = fireRateMultiplier;
         _projSpeedMultiplier = projSpeedMultiplier;
         
-        _speedBuff = new MoveSpeedEffect(Player, _moveSpeedMultiplier, _durationSeconds);
-        _primaryCooldownBuff = new PrimaryCooldownEffect(Player, _fireRateMultiplier, _durationSeconds);
-        _secondaryCooldownBuff = new SecondaryCooldownEffect(Player, _fireRateMultiplier, _durationSeconds);
-        _projectileSpeedBuff = new ProjectileSpeedEffect(Player, _projSpeedMultiplier, _durationSeconds);
+        _speedBuff = new MoveSpeedEffect("Speed up", Player, _moveSpeedMultiplier, _durationSeconds);
+        _primaryCooldownBuff = new PrimaryCooldownEffect("Primary attack speed up", Player, _fireRateMultiplier, _durationSeconds);
+        _secondaryCooldownBuff = new SecondaryCooldownEffect("Secondary attack speed up", Player, _fireRateMultiplier, _durationSeconds);
+        _projectileSpeedBuff = new ProjectileSpeedEffect("Projectile speed up", Player, _projSpeedMultiplier, _durationSeconds);
 
         Name = "Adrenaline";
         Description = "Massive speed, fire-rate, and projectile speed boost for a short time.";

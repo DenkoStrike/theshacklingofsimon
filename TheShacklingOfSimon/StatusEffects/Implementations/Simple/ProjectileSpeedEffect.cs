@@ -9,11 +9,23 @@ namespace TheShacklingOfSimon.StatusEffects.Implementations;
 
 public class ProjectileSpeedEffect : SimpleStatusEffect
 {
-    public ProjectileSpeedEffect(IDamageableEntity owner, float strength, float duration) 
-        : base(owner, strength, duration)
+    /// <summary>
+    /// Represents a status effect that additively modifies the speed of projectiles for the given object of
+    /// type <c>IDamageableEntity</c>. The effect modifies the speed of projectiles by a specified strength
+    /// and for a specific duration.
+    /// </summary>
+    /// <remarks>
+    /// Simply changes the underlying stat of <c>owner</c>.
+    /// </remarks>
+    /// <param name="name">The name of the effect.</param>
+    /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is applied.</param>
+    /// <param name="strength">The amount of projectile speed to be added or removed.</param>
+    /// <param name="duration">The duration of the effect in seconds.</param>
+    public ProjectileSpeedEffect(string name, IDamageableEntity owner, float strength, float duration)
+        : base(name, owner, strength, duration)
     {
     }
-    
+
     public override void OnApply()
     {
         Timer = 0.0f;

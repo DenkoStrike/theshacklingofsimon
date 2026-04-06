@@ -11,15 +11,17 @@ public class MaxHealthEffect : SimpleStatusEffect
 {
     /// <summary>
     /// Represents a status effect that additively modifies the maximum health of
-    /// an object of type <c>IDamageableEntity</c>. The effect modifies the maximum
+    /// the given object of type <c>IDamageableEntity</c>. The effect modifies the maximum
     /// health for a specified duration and with a specific strength.
+    /// </summary>
+    /// <param name="name">The name of the effect.</param>"
     /// <param name="owner">The object of type <c>IDamageableEntity</c> to which
     /// the effect is applied.</param>
     /// <param name="strength">The amount of health to be added or removed.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
-    /// </summary>
-    public MaxHealthEffect(IDamageableEntity owner, float strength, float duration) 
-        : base(owner, strength, duration)
+    /// 
+    public MaxHealthEffect(string name, IDamageableEntity owner, float strength, float duration) 
+        : base(name, owner, strength, duration)
     {
     }
     
