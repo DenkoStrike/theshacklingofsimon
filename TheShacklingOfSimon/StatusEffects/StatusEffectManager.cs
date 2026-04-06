@@ -13,6 +13,9 @@ public class StatusEffectManager
 {
     private readonly Dictionary<EffectType, IStatusEffect> _activeEffects;
 
+    // Read-only public accessors (for GUI, etc.)
+    public IEnumerable<IStatusEffect> ActiveEffects => _activeEffects.Values;
+    
     public StatusEffectManager()
     {
         _activeEffects = new Dictionary<EffectType, IStatusEffect>();

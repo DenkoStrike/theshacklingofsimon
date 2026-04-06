@@ -1,7 +1,10 @@
 #region
 
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players.States;
+using TheShacklingOfSimon.StatusEffects;
 
 #endregion
 
@@ -44,4 +47,10 @@ public interface IPlayer : IDamageableEntity
     /// <exception cref="ArgumentException">Thrown when the provided <paramref name="newState"/>
     /// is not of an appropriate subinterface type.</exception>
     void ChangeState(IPlayerState newState);
+    
+    /// <summary>
+    /// Retrieves a list of all active status effects <c>this</c> is currently affected by.
+    /// </summary>
+    /// <returns>An object of type <c>IEnumerable</c> collection of objects of type <c>IStatusEffect</c></returns>
+    IEnumerable<IStatusEffect> GetActiveEffects();
 }

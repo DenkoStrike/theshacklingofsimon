@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies;
@@ -22,9 +23,11 @@ namespace TheShacklingOfSimon.Entities.Players;
 public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
 {
     public PlayerInventory Inventory { get; private set; }
+    public PlayerInputBuffer InputBuffer { get; private set; }
+    
+    // Public but not in the interface for internal use
     public PlayerTwoStatesManager StatesManager { get; private set; }
     public PlayerTwoSpritesManager SpritesManager { get; private set; }
-    public PlayerInputBuffer InputBuffer { get; private set; }
     
     // Renaming for clarity
     IPlayerState IPlayer.CurrentState => StatesManager.Body;
@@ -111,6 +114,11 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     public void SetSkin(string category, string skinPrefix)
     {
         SpritesManager.SetSkin(category, skinPrefix);
+    }
+    
+    public IEnumerable<IStatusEffect> GetActiveEffects()
+    {
+        return EffectManager.ActiveEffects;
     }
 
     // More explicit interface implementation for renaming purposes
