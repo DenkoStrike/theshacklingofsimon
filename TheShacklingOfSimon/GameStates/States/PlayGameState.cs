@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Collisions;
@@ -26,6 +27,8 @@ public class PlayGameState : IGameState
     private readonly IPlayer _player;
     private readonly ProjectileManager _projectileManager;
     private readonly CollisionManager _collisionManager;
+    
+    private readonly Action _resetGame;
 
     public PlayGameState(
         GameStateManager stateManager,
@@ -37,7 +40,8 @@ public class PlayGameState : IGameState
         PickupManager pickupManager,
         IPlayer player,
         ProjectileManager projectileManager,
-        CollisionManager collisionManager)
+        CollisionManager collisionManager,
+        Action resetGame)
     {
         _stateManager = stateManager;
         _inputManager = inputManager;
@@ -49,12 +53,14 @@ public class PlayGameState : IGameState
         _player = player;
         _projectileManager = projectileManager;
         _collisionManager = collisionManager;
+        _resetGame = resetGame;
     }
 
     public void Enter()
     {
-        // Whenever this state becomes active, we reload gameplay controls.
         _inputManager.LoadGameplayControls(RequestPause);
+
+        _player.OnDeath += AddPlayerDeadState;
     }
 
     public void Exit()
@@ -89,5 +95,20 @@ public class PlayGameState : IGameState
                 _font,
                 _graphicsDevice,
                 _game.Exit));
+    }
+
+    private void AddPlayerDeadState()
+    {
+        _stateManager.AddState(
+            new PlayerDeadGameState(
+                _stateManager,
+                _inputManager,
+                _font,
+                _graphicsDevice,
+                _player,
+                _resetGame,
+                _game.Exit
+                )
+            );
     }
 }

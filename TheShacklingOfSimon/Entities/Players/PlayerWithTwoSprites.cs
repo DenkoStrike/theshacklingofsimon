@@ -52,7 +52,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         
         StatesManager.HandleDamageInterrupt(Health <= 0);
 
-        if (Health <= 0)
+        if (!IsActive)
         {
             OnDeath?.Invoke();
         }

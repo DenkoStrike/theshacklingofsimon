@@ -213,8 +213,15 @@ public class InputManager
         // TODO: Add mouse controls with custom dimensions for clickable GUI elements
     }
 
-    public void RebindKey(KeyboardButton oldKey, KeyboardButton newKey, InputState state, ICommand cmd)
+    public void LoadDeadStateControls(Action onRestartRequested, Action onQuitRequested)
     {
-        // TODO: Implement this method
+        ClearAllControls();
+        
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.R),
+            new GenericActionCommand(onRestartRequested));
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.Q),
+            new GenericActionCommand(onQuitRequested));
     }
 }

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -269,11 +270,13 @@ public class Game1 : Game
                 GraphicsDevice,
                 this,
                 _roomManager,
-                // _itemManager,
                 _pickupManager,
                 _player,
                 _projectileManager,
-                _collisionManager));
+                _collisionManager,
+                Reset
+                )
+            );
     }
 
     private Vector2 GetScreenCenter()
