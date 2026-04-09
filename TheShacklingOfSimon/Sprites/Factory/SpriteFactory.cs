@@ -201,7 +201,7 @@ public class SpriteFactory
     }
 
     /// Creates a text sprite using the specified font and text content.
-    /// <param name="fontFileName">
+    /// <param name="fontName">
     /// The name of the font to be used for rendering the text.
     /// </param>
     /// <param name="text">
@@ -216,10 +216,10 @@ public class SpriteFactory
     /// using the provided font. Returns <c>null</c> if the font is not found
     /// in the factory's font storage.
     /// </returns>
-    public ISprite CreateTextSprite(string fontFileName, string text)
+    public ISprite CreateTextSprite(string fontName, string text)
     {
         ISprite sprite = null;
-        bool fontExists = _fontStorage.TryGetValue(fontFileName, out var font);
+        bool fontExists = _fontStorage.TryGetValue(fontName, out var font);
 
         if (fontExists)
         {
@@ -227,7 +227,7 @@ public class SpriteFactory
         }
         else
         {
-            Console.WriteLine("WARNING: SpriteFactory could not find font " + fontFileName + "in SpriteFactory.Instance.CreateTextSprite(string fontFileName, string text)");
+            Console.WriteLine("WARNING: SpriteFactory could not find font " + fontName + "in SpriteFactory.Instance.CreateTextSprite(string fontFileName, string text)");
         }
 
         return sprite;
