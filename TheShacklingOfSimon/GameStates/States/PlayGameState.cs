@@ -18,7 +18,6 @@ public class PlayGameState : IGameState
 {
     private readonly GameStateManager _stateManager;
     private readonly InputManager _inputManager;
-    private readonly SpriteFont _font;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly Game1 _game;
 
@@ -33,7 +32,6 @@ public class PlayGameState : IGameState
     public PlayGameState(
         GameStateManager stateManager,
         InputManager inputManager,
-        SpriteFont font,
         GraphicsDevice graphicsDevice,
         Game1 game,
         RoomManager roomManager,
@@ -45,7 +43,6 @@ public class PlayGameState : IGameState
     {
         _stateManager = stateManager;
         _inputManager = inputManager;
-        _font = font;
         _graphicsDevice = graphicsDevice;
         _game = game;
         _roomManager = roomManager;
@@ -92,7 +89,6 @@ public class PlayGameState : IGameState
             new PauseGameState(
                 _stateManager,
                 _inputManager,
-                _font,
                 _graphicsDevice,
                 _game.Exit));
     }
@@ -103,7 +99,6 @@ public class PlayGameState : IGameState
             new PlayerDeadGameState(
                 _stateManager,
                 _inputManager,
-                _font,
                 _graphicsDevice,
                 _player,
                 _resetGame,

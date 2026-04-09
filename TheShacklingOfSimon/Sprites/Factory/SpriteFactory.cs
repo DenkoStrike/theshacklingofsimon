@@ -143,10 +143,21 @@ public class SpriteFactory
         }
         else
         {
-            Console.WriteLine("WARNING: SpriteFactory could not find font " + fontFileName);
+            Console.WriteLine("WARNING: SpriteFactory could not find font " + fontFileName + "in SpriteFactory.Instance.CreateTextSprite(string fontFileName, string text)");
         }
 
         return sprite;
+    }
+
+    public SpriteFont GetFont(string fontName)
+    {
+        SpriteFont font = null;
+        _fontStorage.TryGetValue(fontName, out font);
+        if (font == null)
+        {
+            Console.WriteLine("WARNING: SpriteFactory could not find font " + fontName + "in SpriteFactory.Instance.GetFont(string fontName)");
+        }
+        return font;
     }
 
     private string SanitizeFilePath(string filePath)

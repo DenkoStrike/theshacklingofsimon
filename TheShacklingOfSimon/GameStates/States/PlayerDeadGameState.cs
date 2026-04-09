@@ -10,7 +10,6 @@ public class PlayerDeadGameState : IGameState
 {
     private readonly GameStateManager _stateManager;
     private readonly InputManager _inputManager;
-    private readonly SpriteFont _font;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly IPlayer _player;
     
@@ -19,12 +18,16 @@ public class PlayerDeadGameState : IGameState
     
     private Texture2D _overlayTexture;
 
-    public PlayerDeadGameState(GameStateManager stateManager, InputManager inputManager, SpriteFont font,
-        GraphicsDevice graphicsDevice, IPlayer player, Action restartGame, Action quitGame)
+    public PlayerDeadGameState(
+        GameStateManager stateManager, 
+        InputManager inputManager,
+        GraphicsDevice graphicsDevice, 
+        IPlayer player, 
+        Action restartGame, 
+        Action quitGame)
     {
         _stateManager = stateManager;
         _inputManager = inputManager;
-        _font = font;
         _graphicsDevice = graphicsDevice;
         _player = player;
         _restartGame = () =>

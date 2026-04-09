@@ -38,14 +38,12 @@ public class Game1 : Game
     private readonly List<IEntity> _persistentDynamicEntities = new();
 
     private SpriteBatch _spriteBatch;
-    private SpriteFont _font;
 
     private IController<KeyboardInput> _keyboardController;
     private IController<MouseInput> _mouseController;
     private IGamepadController _gamepadController;
 
     private RoomManager _roomManager;
-    // private ItemManager _itemManager;
     private PickupManager _pickupManager;
     private InputManager _inputManager;
 
@@ -79,13 +77,12 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _font = Content.Load<SpriteFont>("File");
-
+        
+        LoadFonts();
         LoadSpriteAssets();
 
         _projectileManager = new ProjectileManager();
         _collisionManager = new CollisionManager();
-        
 
         RoomFactory roomFactory = CreateRoomFactory();
         CreateRoomManager(roomFactory);
@@ -123,6 +120,13 @@ public class Game1 : Game
         base.Draw(delta);
     }
 
+    private void LoadFonts()
+    {
+        SpriteFactory.Instance.LoadFont(Content, "fonts/spritefont/Roboto", "Roboto");
+        SpriteFactory.Instance.LoadFont(Content, "fonts/spritefont/Arial", "Arial");
+        SpriteFactory.Instance.LoadFont(Content, "fonts/spritefont/OptimusPrinceps", "OptimusPrinceps");
+    }
+    
     private void LoadSpriteAssets()
     {
         SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
@@ -266,7 +270,6 @@ public class Game1 : Game
             new PlayGameState(
                 _gameStateManager,
                 _inputManager,
-                _font,
                 GraphicsDevice,
                 this,
                 _roomManager,

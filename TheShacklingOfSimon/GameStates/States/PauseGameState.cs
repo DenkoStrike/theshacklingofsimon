@@ -4,6 +4,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Sprites.Factory;
 
 #endregion
 
@@ -13,7 +14,6 @@ public class PauseGameState : IGameState
 {
     private readonly GameStateManager _stateManager;
     private readonly InputManager _inputManager;
-    private readonly SpriteFont _font;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly Action _quitGame;
 
@@ -22,13 +22,11 @@ public class PauseGameState : IGameState
     public PauseGameState(
         GameStateManager stateManager,
         InputManager inputManager,
-        SpriteFont font,
         GraphicsDevice graphicsDevice,
         Action quitGame)
     {
         _stateManager = stateManager;
         _inputManager = inputManager;
-        _font = font;
         _graphicsDevice = graphicsDevice;
         _quitGame = quitGame;
     }
@@ -64,9 +62,11 @@ public class PauseGameState : IGameState
 
         string pauseText = "PAUSED";
         string helpText = "Esc = Resume    Q = Quit";
+        
+        SpriteFont font = SpriteFactory.Instance.GetFont("Arial");
 
-        Vector2 pauseSize = _font.MeasureString(pauseText);
-        Vector2 helpSize = _font.MeasureString(helpText);
+        Vector2 pauseSize = font.MeasureString(pauseText);
+        Vector2 helpSize = font.MeasureString(helpText);
 
         Vector2 pausePos = new Vector2(
             (screen.Width - pauseSize.X) * 0.5f,
@@ -76,7 +76,7 @@ public class PauseGameState : IGameState
             (screen.Width - helpSize.X) * 0.5f,
             pausePos.Y + pauseSize.Y + 16f);
 
-        spriteBatch.DrawString(_font, pauseText, pausePos, Color.White);
-        spriteBatch.DrawString(_font, helpText, helpPos, Color.White);
+        spriteBatch.DrawString(font, pauseText, pausePos, Color.White);
+        spriteBatch.DrawString(font, helpText, helpPos, Color.White);
     }
 }

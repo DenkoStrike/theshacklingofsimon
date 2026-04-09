@@ -85,7 +85,6 @@
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Content\bin\DesktopGL\Content\" />
       <Folder Include="Entities\Enemies\" />
     </ItemGroup>
     <ItemGroup>
