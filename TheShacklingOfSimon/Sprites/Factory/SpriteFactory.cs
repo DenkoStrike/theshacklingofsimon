@@ -17,7 +17,7 @@ namespace TheShacklingOfSimon.Sprites.Factory;
 public class SpriteFactory
 {
     /*
-     * Singleton "antipattern" to prevent client classes from instantiating
+     * Singleton factory to prevent client classes from instantiating
      * an instance of this.
      * Without this pattern it will be a huge performance penalty.
      *      i.e., every Entity instantiates an instance.
@@ -48,12 +48,7 @@ public class SpriteFactory
         }
         _textureStorage.Add(spriteName, texture);
         
-        // Replace all slashes from input with the correct OS-specific separators
-        string normalizedPath = jsonPathName
-            .Replace('/', Path.DirectorySeparatorChar)
-            .Replace('\\', Path.DirectorySeparatorChar);
-        
-        string jsonPath = Path.Combine(content.RootDirectory, normalizedPath);
+        string jsonPath = Path.Combine(content.RootDirectory, SanitizeFilePath(jsonPathName));
         if (!File.Exists(jsonPath))
         {
             // Prevent "ghost" instances
@@ -89,13 +84,15 @@ public class SpriteFactory
         }
     }
 
-    public void LoadFont(ContentManager content, string fontFileName)
+    public void LoadFont(ContentManager content, string fontFileName, string fontName)
     {
-        if (_fontStorage.ContainsKey(fontFileName))
+        if (_fontStorage.ContainsKey(fontName))
         {
             throw new ArgumentException("Key-value pair already exists for " + fontFileName + ".");
         }
-        _fontStorage.Add(fontFileName, content.Load<SpriteFont>(fontFileName));
+        
+        SpriteFont font = content.Load<SpriteFont>(SanitizeFilePath(fontFileName));
+        _fontStorage.Add(fontName, font);
     }
 
     public ISprite CreateAnimatedSprite(string spriteName, float animationSpeed)
@@ -144,7 +141,19 @@ public class SpriteFactory
         {
             sprite = new TextSprite(font, text);
         }
+        else
+        {
+            Console.WriteLine("WARNING: SpriteFactory could not find font " + fontFileName);
+        }
 
         return sprite;
+    }
+
+    private string SanitizeFilePath(string filePath)
+    {
+        // Replace all slashes from input with the correct OS-specific separators
+        return filePath
+            .Replace('/', Path.DirectorySeparatorChar)
+            .Replace('\\', Path.DirectorySeparatorChar);
     }
 }

@@ -59,14 +59,12 @@ public class PlayGameState : IGameState
     public void Enter()
     {
         _inputManager.LoadGameplayControls(RequestPause);
-
-        // Prevent multiple subscriptions causing multiple dead states on the stack
-        _player.OnDeath -= AddPlayerDeadState;
         _player.OnDeath += AddPlayerDeadState;
     }
 
     public void Exit()
     {
+        _player.OnDeath -= AddPlayerDeadState;
     }
 
     public void Update(GameTime delta)
