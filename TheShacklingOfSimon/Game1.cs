@@ -148,6 +148,9 @@ public class Game1 : Game
         SpriteFactory.Instance.LoadTexture(Content, "images/fire_mind_tears.json", "images/fire_mind_tears");
         SpriteFactory.Instance.LoadTexture(Content, "images/metallic_tears.json", "images/metallic_tears");
         SpriteFactory.Instance.LoadTexture(Content, "images/BombImg.json", "images/BombImg");
+        
+        // 1x1 white pixel used for background stuff
+        SpriteFactory.Instance.LoadTexture(Content, "1x1white.json", "1x1white");
     }
 
     private RoomFactory CreateRoomFactory()

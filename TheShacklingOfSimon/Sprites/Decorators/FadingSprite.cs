@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,11 +8,13 @@ public class FadingSprite : ISprite
 {
     private readonly ISprite _baseSprite;
     private float _currentAlpha;
+    private float _endAlpha;
     private float _fadeSpeed;
 
-    public FadingSprite(ISprite baseSprite, float startAlpha, float fadeSpeed)
+    public FadingSprite(ISprite baseSprite, float startAlpha, float endAlpha, float fadeSpeed)
     {
         _baseSprite = baseSprite;
+        _endAlpha = MathHelper.Clamp(endAlpha, 0f, 1f);
         _currentAlpha = MathHelper.Clamp(startAlpha, 0f, 1f);
         _fadeSpeed = fadeSpeed;
     }
@@ -42,7 +45,7 @@ public class FadingSprite : ISprite
     public void Update(GameTime delta)
     {
         _currentAlpha += _fadeSpeed * (float)delta.ElapsedGameTime.TotalSeconds;
-        _currentAlpha = MathHelper.Clamp(_currentAlpha, 0f, 1f);
+        _currentAlpha = MathHelper.Clamp(_currentAlpha, 0f, _endAlpha);
         _baseSprite.Update(delta);
     }
 }

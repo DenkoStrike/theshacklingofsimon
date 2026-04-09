@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.GameStates.States;
 
@@ -15,8 +17,8 @@ public class PlayerDeadGameState : IGameState
     
     private readonly Action _restartGame;
     private readonly Action _quitGame;
-    
-    private Texture2D _overlayTexture;
+
+    private ISprite _backgroundSprite;
 
     public PlayerDeadGameState(
         GameStateManager stateManager, 
@@ -36,17 +38,13 @@ public class PlayerDeadGameState : IGameState
             _stateManager.RemoveState();
         };
         _quitGame = quitGame;
+
+        _backgroundSprite = SpriteFactory.Instance.CreateStaticSprite("1x1white").WithFade(0.0f, 0.55f, 0.25f);
     }
     
     public void Enter()
     {
         _inputManager.LoadDeadStateControls(_restartGame, _quitGame);
-        
-        if (_overlayTexture == null)
-        {
-            _overlayTexture = new Texture2D(_graphicsDevice, 1, 1);
-            _overlayTexture.SetData(new[] { Color.White });
-        }
     }
 
     public void Exit()
@@ -58,11 +56,12 @@ public class PlayerDeadGameState : IGameState
     {
         // For animation
         _player.Update(delta);
+        _backgroundSprite.Update(delta);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
         Rectangle screen = _graphicsDevice.Viewport.Bounds;
-        spriteBatch.Draw(_overlayTexture, screen, Color.Black * 0.55f);
+        _backgroundSprite.Draw(spriteBatch, screen, Color.Black);
     }
 }
