@@ -15,8 +15,8 @@ public class StaticSprite : ISprite
 
     public StaticSprite(Texture2D texture, Rectangle sourceRectangle)
     {
-        this._texture = texture;
-        this._sourceRectangle = sourceRectangle;
+        _texture = texture;
+        _sourceRectangle = sourceRectangle;
     }
 
     public void Draw(SpriteBatch spriteBatch, Vector2 pos, Color color)
@@ -37,5 +37,10 @@ public class StaticSprite : ISprite
     public void Update(GameTime delta)
     {
         // No-op
+    }
+
+    public Vector2 GetDimensions()
+    {
+        return new Vector2(_sourceRectangle.Width, _sourceRectangle.Height);
     }
 }

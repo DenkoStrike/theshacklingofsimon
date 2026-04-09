@@ -55,4 +55,9 @@ public class TextSprite : ISprite
     {
         // No-op
     }
+    
+    public Vector2 GetDimensions()
+    {
+        return _font.MeasureString(_text);
+    }
 }

@@ -49,4 +49,6 @@ public interface ISprite
     /// </summary>
     /// <param name="delta">The elapsed game time since the last update</param>
     public void Update(GameTime delta);
+
+    public Vector2 GetDimensions();
 }

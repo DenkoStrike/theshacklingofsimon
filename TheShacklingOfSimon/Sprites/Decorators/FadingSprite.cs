@@ -49,7 +49,19 @@ public class FadingSprite : ISprite
     public void Update(GameTime delta)
     {
         _currentAlpha += _fadeSpeed * (float)delta.ElapsedGameTime.TotalSeconds;
-        _currentAlpha = MathHelper.Clamp(_currentAlpha, 0f, _endAlpha);
+
+        if (_fadeSpeed > 0 && _currentAlpha > _endAlpha ||
+            _fadeSpeed < 0 && _currentAlpha < _endAlpha)
+        {
+            _currentAlpha = _endAlpha;
+        }
+        
+        _currentAlpha = MathHelper.Clamp(_currentAlpha, 0f, 1f);
         _baseSprite.Update(delta);
+    }
+    
+    public Vector2 GetDimensions()
+    {
+        return _baseSprite.GetDimensions();
     }
 }

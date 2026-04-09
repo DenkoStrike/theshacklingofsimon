@@ -49,5 +49,14 @@ public class DelayedSprite : ISprite
     public void Update(GameTime delta)
     {
         _timer += (float) delta.ElapsedGameTime.TotalSeconds;
+        if (_timer >= _delay)
+        {
+            _baseSprite.Update(delta);
+        }
+    }
+
+    public Vector2 GetDimensions()
+    {
+        return _baseSprite.GetDimensions();
     }
 }

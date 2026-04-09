@@ -55,4 +55,9 @@ public class AnimatedSprite : ISprite
             }
         }
     }
+    
+    public Vector2 GetDimensions()
+    {
+        return new Vector2(_sourceRectangle[_currentFrame].Width, _sourceRectangle[_currentFrame].Height);
+    }
 }
