@@ -86,6 +86,13 @@ public class Inventory
         return _items.Contains(item);
     }
 
+    public void Clear()
+    {
+        _weapons.Clear();
+        _items.Clear();
+        NotifyInventoryChanged();
+    }
+
     protected void NotifyInventoryChanged()
     {
         OnInventoryChanged?.Invoke();

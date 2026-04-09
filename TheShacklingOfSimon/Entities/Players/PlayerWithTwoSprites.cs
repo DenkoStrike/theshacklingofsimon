@@ -49,10 +49,14 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     {
         if (!base.TakeDamage(damage)) return false;
         InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
-      
-
+        
         StatesManager.HandleDamageInterrupt(Health <= 0);
 
+        if (Health <= 0)
+        {
+            OnDeath?.Invoke();
+        }
+        
         return true;
     }
 
@@ -106,7 +110,6 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     // Passthrough for potential skin modification by IItem-implementing classes
     public string GetSkin(string category)
     {
-        
         return SpritesManager.GetSkin(category);
     }
     
@@ -120,6 +123,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
     {
         return EffectManager.ActiveEffects;
     }
+
+    public event Action OnDeath;
 
     // More explicit interface implementation for renaming purposes
     void IPlayer.ChangeState(IPlayerState newState)
@@ -168,8 +173,15 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         EffectStats.Add(StatType.PrimaryCooldown, config.PrimaryCooldown);
         EffectStats.Add(StatType.SecondaryCooldown, config.SecondaryCooldown);
         
-        InputBuffer = new PlayerInputBuffer();
-        Inventory = new PlayerInventory();
+        // Only create these the first time Initialize()
+        // is called (during instantiation of *this*)
+        // Prevents issues with Reset()
+        InputBuffer ??= new PlayerInputBuffer();
+        InputBuffer.Clear();
+        Inventory ??= new PlayerInventory();
+        Inventory.Clear();
+        
+        // These, however, can be safely replaced; they are internal
         SpritesManager = new PlayerTwoSpritesManager(this);
         StatesManager = new PlayerTwoStatesManager(this, SpritesManager);
     }

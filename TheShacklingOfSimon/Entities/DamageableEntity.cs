@@ -75,6 +75,7 @@ public abstract class DamageableEntity : IDamageableEntity
     
     public virtual bool TakeDamage(int amt)
     {
+        if (!IsActive) return false;
         if (InvulnerabilityTimer > 0) return false;
         
         InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];

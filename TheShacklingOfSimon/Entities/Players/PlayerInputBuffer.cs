@@ -69,4 +69,11 @@ public class PlayerInputBuffer
         SecondaryAttack = Vector2.Zero;
         return result;
     }
+
+    public void Clear()
+    {
+        PrimaryAttack = Vector2.Zero;
+        SecondaryAttack = Vector2.Zero;
+        Movement = Vector2.Zero;
+    }
 }
