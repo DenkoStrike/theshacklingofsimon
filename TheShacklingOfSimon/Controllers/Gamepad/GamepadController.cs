@@ -92,6 +92,7 @@ public class GamepadController : IGamepadController
             )
             {
                 command.Execute();
+                OnInputDetected?.Invoke(InputSchema.Gamepad);
             }
 
             _previousButtonStates[input.Button] = currentState;
@@ -135,9 +136,12 @@ public class GamepadController : IGamepadController
             )
             {
                 command.Execute();
+                OnInputDetected?.Invoke(InputSchema.Gamepad);
             }
 
             _previousJoystickStates[input] = isInRegion;
         }
     }
+
+    public event Action<InputSchema> OnInputDetected;
 }

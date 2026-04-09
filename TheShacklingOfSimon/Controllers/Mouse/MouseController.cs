@@ -76,6 +76,7 @@ public class MouseController : IController<MouseInput>
             )
             {
                 command.Execute();
+                OnInputDetected?.Invoke(InputSchema.KeyboardMouse);
             }
         }
 
@@ -85,4 +86,6 @@ public class MouseController : IController<MouseInput>
             _prevStates[btn] = _mouseService.GetButtonState(btn);
         }
     }
+    
+    public event Action<InputSchema> OnInputDetected;
 }

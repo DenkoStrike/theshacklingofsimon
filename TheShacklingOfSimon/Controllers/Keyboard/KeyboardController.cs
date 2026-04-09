@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TheShacklingOfSimon.Commands;
@@ -82,9 +83,12 @@ public class KeyboardController : IController<KeyboardInput>
             )
             {
                 command.Execute();
+                OnInputDetected?.Invoke(InputSchema.KeyboardMouse);
             }
 
             _previousStates[input.Button] = currentState;
         }
     }
+    
+    public event Action<InputSchema> OnInputDetected;
 }

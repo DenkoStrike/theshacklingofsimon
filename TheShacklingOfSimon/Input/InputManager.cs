@@ -13,6 +13,7 @@ using TheShacklingOfSimon.Controllers.Keyboard;
 using TheShacklingOfSimon.Controllers.Mouse;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.Input.Gamepad;
 using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Mouse;
 using TheShacklingOfSimon.Items.Passive_Items;
@@ -25,18 +26,15 @@ namespace TheShacklingOfSimon.Input;
 
 public class InputManager
 {
+    public InputSchema ActiveSchema { get; private set; }
+    
     private readonly IController<KeyboardInput> _keyboardController;
     private readonly IController<MouseInput> _mouseController;
     private readonly IGamepadController _gamepadController;
-
-    /*
-     * Dependencies for creating commands.
-     * I keep these here so the states do not have to know how every command is built.
-     */
+    
     private readonly IPlayer _player;
     private readonly Game1 _game;
     private readonly RoomManager _roomManager;
-    // private readonly ItemManager _itemManager;
     private readonly PickupManager _pickupManager;
 
     /*
@@ -51,7 +49,6 @@ public class InputManager
         IPlayer player,
         Game1 game,
         RoomManager roomManager,
-        // ItemManager itemManager,
         PickupManager pickupManager,
         Action onResetRequest)
     {
@@ -61,9 +58,12 @@ public class InputManager
         _player = player;
         _game = game;
         _roomManager = roomManager;
-        // _itemManager = itemManager;
         _pickupManager = pickupManager;
         _onResetRequest = onResetRequest;
+        
+        _keyboardController.OnInputDetected += HandleInputDetected;
+        _mouseController.OnInputDetected += HandleInputDetected;
+        _gamepadController.OnInputDetected += HandleInputDetected;
     }
 
     public void ClearAllControls()
@@ -192,16 +192,140 @@ public class InputManager
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape),
             new GenericActionCommand(onPauseRequested)
-            );
+        );
 
-        // TODO: Add gamepad controls
+        
+        /*
+         * Gamepad controls
+         */
+        // Movement
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Left, 
+                new JoystickInputRegion(
+                    new Vector2(0, 1), 120f, 0.1f), 
+                InputState.Pressed
+            ),
+            new MoveUpCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Left, 
+                new JoystickInputRegion(
+                    new Vector2(-1, 0), 120f, 0.1f), 
+                InputState.Pressed
+            ),
+            new MoveLeftCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Left, 
+                new JoystickInputRegion(
+                    new Vector2(1, 0), 120f, 0.1f), 
+                InputState.Pressed
+            ),
+            new MoveRightCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Left, 
+                new JoystickInputRegion(
+                    new Vector2(0, -1), 120f, 0.1f), 
+                InputState.Pressed
+            ),
+            new MoveDownCommand(_player)
+        );
+        
+        // Attacking
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Right, 
+                new JoystickInputRegion(
+                    new Vector2(0, 1), 90f, 0.1f), 
+                InputState.Pressed
+            ),
+            new PrimaryAttackUpCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Right, 
+                new JoystickInputRegion(
+                    new Vector2(0, -1), 90f, 0.1f), 
+                InputState.Pressed
+            ),
+            new PrimaryAttackDownCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Right, 
+                new JoystickInputRegion(
+                    new Vector2(-1, 0), 90f, 0.1f), 
+                InputState.Pressed
+            ),
+            new PrimaryAttackLeftCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadJoystickInput(
+                GamepadStick.Right, 
+                new JoystickInputRegion(
+                    new Vector2(1, 0), 90f, 0.1f), 
+                InputState.Pressed
+            ),
+            new PrimaryAttackRightCommand(_player)
+        );
+        
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.B
+            ),
+            new SecondaryAttackDownCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.LeftShoulder
+            ),
+            new SecondaryAttackDownCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.LeftTrigger
+            ),
+            new SecondaryAttackDownCommand(_player)
+        );
+        
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.A
+            ),
+            new UseItemCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.RightShoulder
+            ),
+            new UseItemCommand(_player)
+        );
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.RightTrigger
+            ),
+            new UseItemCommand(_player)
+        );
+        
+        // Pausing
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.JustPressed, GamepadButton.Start
+            ),
+            new GenericActionCommand(onPauseRequested)
+        );
+        
     }
 
     public void LoadPauseControls(Action onResumeRequested, Action onQuitRequested)
     {
         ClearAllControls();
-
-        // keep pause menu controls minimal on purpose.
+        
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape),
             new GenericActionCommand(onResumeRequested));
@@ -210,7 +334,27 @@ public class InputManager
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Q),
             new GenericActionCommand(onQuitRequested));
         
-        // TODO: Add mouse controls with custom dimensions for clickable GUI elements
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.A),
+            new GenericActionCommand(onResumeRequested));
+        
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.Start),
+            new GenericActionCommand(onQuitRequested));
+
+        // Temporary test controls for sprite switching
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.LeftTrigger
+            ),
+            new SecondaryAttackDownCommand(_player)
+        );
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.Pressed, KeyboardButton.E),
+            new SecondaryAttackDownCommand(_player)
+        );
+        
+        // TODO: Add mouse controls with custom dimensions for clickable GUI elements (inventory)
     }
 
     public void LoadDeadStateControls(Action onRestartRequested, Action onQuitRequested)
@@ -223,5 +367,31 @@ public class InputManager
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Q),
             new GenericActionCommand(onQuitRequested));
+        
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.A),
+            new GenericActionCommand(onRestartRequested));
+        
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.Start),
+            new GenericActionCommand(onQuitRequested));
+        
+        // Temporary test controls for sprite switching
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(
+                InputState.Pressed, GamepadButton.LeftTrigger
+            ),
+            new SecondaryAttackDownCommand(_player)
+        );
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.Pressed, KeyboardButton.E),
+            new SecondaryAttackDownCommand(_player)
+        );
+    }
+
+    private void HandleInputDetected(InputSchema schema)
+    {
+        if (ActiveSchema == schema) return;
+        ActiveSchema = schema;
     }
 }

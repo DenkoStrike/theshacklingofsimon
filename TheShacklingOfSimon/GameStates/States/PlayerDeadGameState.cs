@@ -14,7 +14,6 @@ namespace TheShacklingOfSimon.GameStates.States;
 
 public class PlayerDeadGameState : IGameState
 {
-    private readonly GameStateManager _stateManager;
     private readonly InputManager _inputManager;
     private readonly GraphicsDevice _graphicsDevice;
     private readonly IPlayer _player;
@@ -24,7 +23,8 @@ public class PlayerDeadGameState : IGameState
 
     private readonly ISprite _backgroundSprite;
     private readonly ISprite _gameOverSprite;
-    private readonly ISprite _controlsSprite;
+    private readonly ISprite _keyboardControlsSprite;
+    private readonly ISprite _gamepadControlsSprite;
 
     public PlayerDeadGameState(
         GameStateManager stateManager, 
@@ -34,14 +34,13 @@ public class PlayerDeadGameState : IGameState
         Action restartGame, 
         Action quitGame)
     {
-        _stateManager = stateManager;
         _inputManager = inputManager;
         _graphicsDevice = graphicsDevice;
         _player = player;
         _restartGame = () =>
         {
             restartGame?.Invoke();
-            _stateManager.RemoveState();
+            stateManager.RemoveState();
         };
         _quitGame = quitGame;
 
@@ -51,7 +50,10 @@ public class PlayerDeadGameState : IGameState
         _gameOverSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps", "YOU DIED")
             .WithFade(0.0f, 0.8f, 0.125f)
             .WithDelay(4.5f);
-        _controlsSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps", "Press R to restart, Q to quit.")
+        _keyboardControlsSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps", "Press R to restart, Q to quit.")
+            .WithFade(0.0f, 0.8f, 0.125f)
+            .WithDelay(6.5f);
+        _gamepadControlsSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps", "Press A to restart, START to quit.")
             .WithFade(0.0f, 0.8f, 0.125f)
             .WithDelay(6.5f);
     }
@@ -74,16 +76,36 @@ public class PlayerDeadGameState : IGameState
         _player.Update(delta);
         _backgroundSprite.Update(delta);
         _gameOverSprite.Update(delta);
-        _controlsSprite.Update(delta);
+        _keyboardControlsSprite.Update(delta);
+        _gamepadControlsSprite.Update(delta);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
         Rectangle screen = _graphicsDevice.Viewport.Bounds;
-
+        ISprite controlsSprite;
+        switch (_inputManager.ActiveSchema)
+        {
+            case InputSchema.KeyboardMouse:
+            {
+                controlsSprite = _keyboardControlsSprite;
+                break;
+            }
+            case InputSchema.Gamepad:
+            {
+                controlsSprite = _gamepadControlsSprite;
+                break;
+            }
+            default:
+            {
+                controlsSprite = _keyboardControlsSprite;
+                break;
+            }
+        }
+        
         Vector2 gameOverSize = _gameOverSprite.GetDimensions();
-        Vector2 controlsSize = _controlsSprite.GetDimensions();
-
+        Vector2 controlsSize = controlsSprite.GetDimensions();
+        
         Vector2 gameOverPos = new Vector2(
             (screen.Width - gameOverSize.X) * 0.5f,
             (screen.Height - gameOverSize.Y) * 0.5f
@@ -95,6 +117,6 @@ public class PlayerDeadGameState : IGameState
         
         _backgroundSprite.Draw(spriteBatch, screen, Color.Black);
         _gameOverSprite.Draw(spriteBatch, gameOverPos, Color.Red);
-        _controlsSprite.Draw(spriteBatch, controlsPos, Color.Red);
+        controlsSprite.Draw(spriteBatch, controlsPos, Color.Red);
     }
 }

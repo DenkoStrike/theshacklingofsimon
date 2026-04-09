@@ -1,16 +1,11 @@
-﻿#region
-
-using TheShacklingOfSimon.Commands;
-
-#endregion
+using System;
+using TheShacklingOfSimon.Input;
 
 namespace TheShacklingOfSimon.Controllers;
 
-public interface IController<T>
+public interface IController 
 {
-    void ClearCommands();
     void Update();
-    void RegisterCommand(T input, ICommand command);
-    void UnregisterCommand(T input);
+    void ClearCommands();
+    event Action<InputSchema> OnInputDetected;
 }
- 
