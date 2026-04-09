@@ -35,10 +35,28 @@ public class SpriteFactory
         _fontStorage = new Dictionary<string, SpriteFont>();
         _rectangleData = new Dictionary<string, Rectangle[]>();
     }
-    
-    /*
-     * Loads a sprite sheet png and corresponding JSON into memory.
-     */
+
+    /// Loads a texture into the sprite factory and associates it with
+    /// the specified sprite name, alongside JSON frame data.
+    /// <param name="content">
+    /// The object of type <c>ContentManager</c> used to load the
+    /// sprite texture.
+    /// </param>
+    /// <param name="jsonPathName">
+    /// The relative path, starting at the Content folder root, to the
+    /// JSON file containing the sprite JSON metadata. 
+    /// </param>
+    /// <param name="spriteName">
+    /// The unique identifier or name to be associated with the sprite and
+    /// its texture.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if a texture with the given sprite name already exists
+    /// in the texture storage.
+    /// </exception>
+    /// <exception cref="FileNotFoundException">
+    /// Thrown if the specified JSON file does not exist at the resolved path.
+    /// </exception>
     public void LoadTexture(ContentManager content, string jsonPathName, string spriteName)
     {
         Texture2D texture = content.Load<Texture2D>(spriteName);
@@ -84,6 +102,24 @@ public class SpriteFactory
         }
     }
 
+    /// Loads a font into the sprite factory and associates it with
+    /// the specified font name.
+    /// <param name="content">
+    /// The object of type <c>ContentManager</c> used to load the
+    /// font resource.
+    /// </param>
+    /// <param name="fontFileName">
+    /// The relative path, starting at the Content folder root, to the
+    /// font file to be loaded.
+    /// </param>
+    /// <param name="fontName">
+    /// The unique identifier or name to be associated with the
+    /// loaded font.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if a font with the given font name already exists
+    /// in the font storage.
+    /// </exception>
     public void LoadFont(ContentManager content, string fontFileName, string fontName)
     {
         if (_fontStorage.ContainsKey(fontName))
@@ -95,6 +131,25 @@ public class SpriteFactory
         _fontStorage.Add(fontName, font);
     }
 
+    /// Creates an animated sprite based on the provided sprite name and
+    /// animation speed.
+    /// <param name="spriteName">
+    /// The unique identifier or name used to locate the texture and
+    /// animation frame data stored within the factory.
+    /// </param>
+    /// <param name="animationSpeed">
+    /// The speed of the animation specified as frames per second.
+    /// Higher values will make the animation play faster, while
+    /// lower values will slow it down.
+    /// </param>
+    /// <remarks>
+    /// The requested sprite must have previously been loaded into <c>this</c>
+    /// using <c>LoadTexture(...)</c>.
+    /// </remarks>
+    /// <returns>
+    /// An object implementing the <c>ISprite</c> interface, representing
+    /// the animated sprite, or <c>null</c> if the sprite could not be created.
+    /// </returns>
     public ISprite CreateAnimatedSprite(string spriteName, float animationSpeed)
     {
         ISprite sprite = null;
@@ -111,7 +166,20 @@ public class SpriteFactory
         }
         return sprite;
     }
-    
+
+    /// Creates a static sprite, using the provided sprite name to locate the previously
+    /// loaded texture and JSON frame data.
+    /// <param name="spriteName">
+    /// The unique name of the sprite to create, which must be previously loaded into <c>this</c>.
+    /// </param>
+    /// <remarks>
+    /// The requested sprite must have previously been loaded into <c>this</c>
+    /// using <c>LoadTexture(...)</c>.
+    /// </remarks>
+    /// <returns>
+    /// An instance of <c>ISprite</c> representing the static sprite, or <c>null</c> if
+    /// no matching texture or rectangle data is found for the provided name.
+    /// </returns>
     public ISprite CreateStaticSprite(string spriteName)
     {
         ISprite sprite = null;
@@ -131,7 +199,23 @@ public class SpriteFactory
         }
         return sprite;
     }
-    
+
+    /// Creates a text sprite using the specified font and text content.
+    /// <param name="fontFileName">
+    /// The name of the font to be used for rendering the text.
+    /// </param>
+    /// <param name="text">
+    /// The text content to be displayed by the sprite.
+    /// </param>
+    /// <remarks>
+    /// The requested sprite must have previously been loaded into <c>this</c>
+    /// using <c>LoadFont(...)</c>.
+    /// </remarks>
+    /// <returns>
+    /// A text sprite implementing <c>ISprite</c> that renders the specified text
+    /// using the provided font. Returns <c>null</c> if the font is not found
+    /// in the factory's font storage.
+    /// </returns>
     public ISprite CreateTextSprite(string fontFileName, string text)
     {
         ISprite sprite = null;
@@ -149,6 +233,18 @@ public class SpriteFactory
         return sprite;
     }
 
+    /// Retrieves a font from the font storage by the specified font name.
+    /// <param name="fontName">
+    /// The unique identifier or name of the font to retrieve from the font storage.
+    /// </param>
+    /// <remarks>
+    /// The requested font must have previously been loaded into <c>this</c>
+    /// using <c>LoadFont(...)</c>.
+    /// </remarks>
+    /// <returns>
+    /// The <c>SpriteFont</c> object associated with the specified font name,
+    /// or <c>null</c> if no font with the given name exists in the font storage.
+    /// </returns>
     public SpriteFont GetFont(string fontName)
     {
         SpriteFont font = null;
@@ -159,7 +255,7 @@ public class SpriteFactory
         }
         return font;
     }
-
+    
     private string SanitizeFilePath(string filePath)
     {
         // Replace all slashes from input with the correct OS-specific separators
