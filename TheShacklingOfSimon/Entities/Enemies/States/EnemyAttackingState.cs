@@ -2,8 +2,8 @@
 
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.Weapons;
 using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.Weapons;
 
 #endregion
 

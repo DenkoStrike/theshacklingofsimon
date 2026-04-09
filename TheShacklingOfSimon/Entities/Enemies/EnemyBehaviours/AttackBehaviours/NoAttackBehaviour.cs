@@ -5,7 +5,7 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 #endregion
 
-namespace TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours;
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.AttackBehaviours;
 
 public class NoAttackBehaviour : IAttackBehaviour
 {

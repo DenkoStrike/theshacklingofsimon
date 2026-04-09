@@ -1,8 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.StatusEffects.Templates;
+﻿#region
 
-namespace TheShacklingOfSimon.StatusEffects;
+using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Entities;
+
+#endregion
+
+namespace TheShacklingOfSimon.StatusEffects.Templates;
 
 public abstract class RecurringStatusEffect : IStatusEffect
 {

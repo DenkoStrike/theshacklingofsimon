@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
-using static System.Formats.Asn1.AsnWriter;
+
+#endregion
 
 namespace TheShacklingOfSimon.UI
 {

@@ -6,7 +6,7 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 
-namespace TheShacklingOfSimon.StatusEffects.Implementations;
+namespace TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 
 public class DamageMultiplierEffect : SimpleStatusEffect
 {

@@ -7,7 +7,6 @@ using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
-using static System.Formats.Asn1.AsnWriter;
 
 #endregion
 

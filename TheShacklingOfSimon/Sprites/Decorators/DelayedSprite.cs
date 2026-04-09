@@ -1,7 +1,12 @@
+#region
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.Sprites.Products;
+#endregion
+
+namespace TheShacklingOfSimon.Sprites.Decorators;
 
 public class DelayedSprite : ISprite
 {

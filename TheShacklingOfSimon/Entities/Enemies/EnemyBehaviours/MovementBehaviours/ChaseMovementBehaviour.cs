@@ -5,7 +5,7 @@ using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 
 #endregion
 
-namespace TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours;
+namespace TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.MovementBehaviours;
 
 public class ChaseMovementBehavior : IMovementBehavior
 {

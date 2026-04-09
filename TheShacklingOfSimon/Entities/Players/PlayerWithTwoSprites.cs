@@ -9,12 +9,11 @@ using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players.Config;
 using TheShacklingOfSimon.Entities.Players.Drawing;
 using TheShacklingOfSimon.Entities.Players.States;
-using TheShacklingOfSimon.Entities.Players.States.Body;
-using TheShacklingOfSimon.Entities.Players.States.Head;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.LevelHandler.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
 using TheShacklingOfSimon.StatusEffects;
+using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 

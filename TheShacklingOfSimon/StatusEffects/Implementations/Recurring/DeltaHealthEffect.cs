@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.StatusEffects.Templates;
 
-namespace TheShacklingOfSimon.StatusEffects.Implementations;
+#endregion
+
+namespace TheShacklingOfSimon.StatusEffects.Implementations.Recurring;
 
 public class DeltaHealthEffect : RecurringStatusEffect
 {

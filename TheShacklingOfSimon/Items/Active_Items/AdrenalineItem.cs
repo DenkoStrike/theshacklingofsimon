@@ -2,8 +2,7 @@
 
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.StatusEffects;
-using TheShacklingOfSimon.StatusEffects.Implementations;
+using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion

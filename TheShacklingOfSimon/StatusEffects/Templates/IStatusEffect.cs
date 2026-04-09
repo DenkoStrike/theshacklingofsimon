@@ -2,11 +2,10 @@
 
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 
-namespace TheShacklingOfSimon.StatusEffects;
+namespace TheShacklingOfSimon.StatusEffects.Templates;
 
 public interface IStatusEffect
 {

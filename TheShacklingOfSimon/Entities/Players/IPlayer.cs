@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players.States;
-using TheShacklingOfSimon.StatusEffects;
+using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 

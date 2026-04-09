@@ -1,7 +1,7 @@
 #region
 
-using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours;
-using TheShacklingOfSimon.Entities.Enemies.States;
+using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.AttackBehaviours;
+using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.MovementBehaviours;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Weapons;
 using Vector2 = Microsoft.Xna.Framework.Vector2;

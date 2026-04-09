@@ -1,4 +1,9 @@
+#region
+
+using TheShacklingOfSimon.Sprites.Decorators;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.Sprites.Factory;
 

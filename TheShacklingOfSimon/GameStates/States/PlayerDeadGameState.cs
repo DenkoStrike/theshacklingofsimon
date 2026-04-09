@@ -1,3 +1,5 @@
+#region
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -5,6 +7,8 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.GameStates.States;
 
