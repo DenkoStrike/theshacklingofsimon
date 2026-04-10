@@ -1,13 +1,13 @@
 {
   "sprites": [
     {
-      "name": "BlackMaw_Idle",
+      "name": "AngelicBaby_Idle",
       "frames": [
         { "X": 3,   "Y": 102,   "W": 51, "H": 36 }
       ]
     },
     {
-      "name": "BlackMaw_Walk",
+      "name": "AngelicBaby_Walk",
       "frames": [
         { "X": 2,  "Y": 6,   "W": 53, "H": 35 },
         { "X": 67, "Y": 6,   "W": 52, "H": 35 },
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "name": "BlackMaw_Attack",
+      "name": "AngelicBaby_Attack",
       "frames": [
         { "X": 65,  "Y": 51,   "W": 59, "H": 41 },
         { "X": 68,   "Y": 103,   "W": 52, "H": 34 },
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "name": "BlackMaw_Hurt",
+      "name": "AngelicBaby_Hurt",
       "frames": [
         { "X": 65,  "Y": 51,   "W": 59, "H": 41 },
         { "X": 3,  "Y": 102,   "W": 51, "H": 36 },
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "name": "BlackMaw_Death",
+      "name": "AngelicBaby_Death",
       "frames": [
         { "X": 65,  "Y": 51,   "W": 59, "H": 41 },
         { "X": 3,   "Y": 102,   "W": 51, "H": 36 },

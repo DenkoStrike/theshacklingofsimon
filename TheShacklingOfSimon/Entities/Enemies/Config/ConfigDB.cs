@@ -22,7 +22,7 @@ public static class ConfigDB
         ["SpiderEnemy"] = new EnemyConfig
         {
             MoveSpeed = 25f,
-            AttackCooldown = 1.5f,
+            AttackCooldown = 3f,
             AttackRange = 8f,
             ContactDamage = 1f,
             MaxHealth = 2,

@@ -13,6 +13,42 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin 1x1white.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:1x1white.png
+
+#begin AdultLeech.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:AdultLeech.png
+
+#begin AngelicBaby.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:AngelicBaby.png
+
 #begin BlackMaw.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -25,12 +61,12 @@
 /processorParam:TextureFormat=Color
 /build:BlackMaw.png
 
-#begin fonts/spritefont/Roboto.spritefont
+#begin fonts/spritefont/Arial.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/spritefont/Roboto.spritefont
+/build:fonts/spritefont/Arial.spritefont
 
 #begin fonts/spritefont/OptimusPrinceps.spritefont
 /importer:FontDescriptionImporter
@@ -39,12 +75,12 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/spritefont/OptimusPrinceps.spritefont
 
-#begin fonts/spritefont/Arial.spritefont
+#begin fonts/spritefont/Roboto.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/spritefont/Arial.spritefont
+/build:fonts/spritefont/Roboto.spritefont
 
 #begin images/8Ball.json
 /copy:images/8Ball.json
@@ -60,18 +96,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/8Ball.png
-
-#begin 1x1white.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:1x1white.png
 
 #begin images/BombImg.png
 /importer:TextureImporter
