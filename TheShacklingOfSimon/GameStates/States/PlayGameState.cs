@@ -9,7 +9,7 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Level_Handling;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 using TheShacklingOfSimon.Sounds;
 
 #endregion

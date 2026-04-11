@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass
 {
     // Sparse tilemap: only stores non-floor tiles (walls, hazards, obstacles, doors, etc.)
     public sealed class TileMap

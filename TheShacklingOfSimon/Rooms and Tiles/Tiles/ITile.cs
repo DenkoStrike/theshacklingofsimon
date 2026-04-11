@@ -4,7 +4,7 @@ using TheShacklingOfSimon.Entities;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles
 {
     // Tile-specific collision flags on top of standard IEntity stuff
     public interface ITile : IEntity

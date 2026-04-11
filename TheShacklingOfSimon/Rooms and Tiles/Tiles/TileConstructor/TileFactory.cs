@@ -3,14 +3,14 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border;
-using TheShacklingOfSimon.LevelHandler.Tiles.Obstacles;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Obstacles;
 using TheShacklingOfSimon.Sprites.Factory;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor
 {
     // Centralizes mapping from TileType -> concrete tile + sprite.
     public sealed class TileFactory

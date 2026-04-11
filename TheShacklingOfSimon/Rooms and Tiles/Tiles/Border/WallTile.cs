@@ -3,12 +3,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.Border
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border
 {
     /// Invisible, indestructible wall used for borders. Blocks everything.
     public sealed class WallTile : Tile

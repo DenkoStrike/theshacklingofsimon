@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass
 {
     // Room grid dimensions and shared constants.
     // Interior is the playable 13x7 area. The full grid includes a 1-tile wall border.

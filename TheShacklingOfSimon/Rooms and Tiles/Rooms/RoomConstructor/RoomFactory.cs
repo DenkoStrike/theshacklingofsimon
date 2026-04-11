@@ -7,17 +7,16 @@ using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Entities.Enemies.Managers;
-using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
-using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Weapons;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
 {
     public sealed class RoomFactory
     {

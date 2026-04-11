@@ -1,4 +1,4 @@
-﻿namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
+﻿namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor
 {
     // Type-safe identifiers for tiles that can appear in room files.
     public enum TileType

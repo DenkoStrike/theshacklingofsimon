@@ -17,7 +17,7 @@ using TheShacklingOfSimon.Input.Gamepad;
 using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Mouse;
 using TheShacklingOfSimon.Items.Passive_Items;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 using TheShacklingOfSimon.Sprites.Factory;
 
 #endregion

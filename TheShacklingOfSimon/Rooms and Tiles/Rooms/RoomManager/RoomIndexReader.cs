@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Xna.Framework.Content;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager
 {
     public sealed class RoomIndexReader
     {

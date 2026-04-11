@@ -1,10 +1,10 @@
 ﻿#region
 
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
 {
     // keep unlock rules in their own strategy objects so DoorTile does not
     // need if/else chains for every special case later.

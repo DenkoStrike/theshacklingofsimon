@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.Obstacles
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Obstacles
 {
     public sealed class HoleTile : Tile
     {

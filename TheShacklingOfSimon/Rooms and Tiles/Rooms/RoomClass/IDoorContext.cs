@@ -1,4 +1,4 @@
-﻿namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
+﻿namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass
 {
     // This keeps door logic from depending on the full Room class implementation.
     public interface IDoorContext

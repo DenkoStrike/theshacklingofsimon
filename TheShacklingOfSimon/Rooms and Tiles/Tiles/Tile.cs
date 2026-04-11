@@ -8,13 +8,13 @@ using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles
 {
     // Base class for all interactive tiles (rocks, holes, spikes, etc.)
     public abstract class Tile : ITile

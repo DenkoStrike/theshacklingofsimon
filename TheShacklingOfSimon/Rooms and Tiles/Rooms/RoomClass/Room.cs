@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
-using TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass
 {
     public sealed class Room : IDoorContext
     {

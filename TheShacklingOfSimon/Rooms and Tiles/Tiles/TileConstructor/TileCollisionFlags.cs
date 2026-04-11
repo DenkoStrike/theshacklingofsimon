@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor
 {
     // I group the tile blocking rules together so each tile does not repeat 3 separate properties.
     [Flags]

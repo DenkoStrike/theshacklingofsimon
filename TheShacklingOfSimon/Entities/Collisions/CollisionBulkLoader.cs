@@ -1,8 +1,8 @@
 ﻿#region
 
 using System.Collections.Generic;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
 
 #endregion
 

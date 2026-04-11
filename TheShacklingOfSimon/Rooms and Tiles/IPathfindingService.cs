@@ -2,11 +2,11 @@
 
 using System;
 using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler;
+namespace TheShacklingOfSimon.Rooms_and_Tiles;
 
 public interface IPathfindingService
 {

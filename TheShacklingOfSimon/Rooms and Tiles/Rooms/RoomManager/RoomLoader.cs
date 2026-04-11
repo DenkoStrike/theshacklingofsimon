@@ -2,12 +2,12 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomManager
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager
 {
     // I split room creation/loading out of RoomManager so RoomManager can focus on navigation/state.
     public sealed class RoomLoader

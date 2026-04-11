@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.LevelHandler.Tiles;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion

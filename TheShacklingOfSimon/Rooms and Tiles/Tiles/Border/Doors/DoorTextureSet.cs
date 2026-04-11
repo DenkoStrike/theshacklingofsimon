@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
 {
     // I keep both upright door textures together and let DoorTile rotate them by side.
     public sealed class DoorTextureSet

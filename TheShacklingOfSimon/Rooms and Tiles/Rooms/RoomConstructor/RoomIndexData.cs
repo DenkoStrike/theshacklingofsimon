@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomConstructor
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
 {
     public sealed class RoomIndexData
     {

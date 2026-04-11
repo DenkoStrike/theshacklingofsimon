@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomClass;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Tiles.Border.Doors
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
 {
     public sealed class DoorTile : Tile
     {

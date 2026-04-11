@@ -1,4 +1,4 @@
-﻿namespace TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor
+﻿namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor
 {
     // Tile can be affected by an explosion (bomb)
     public interface IBombableTile

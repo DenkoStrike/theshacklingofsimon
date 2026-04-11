@@ -5,7 +5,7 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.GameStates;
 using TheShacklingOfSimon.GameStates.States;
 using TheShacklingOfSimon.Input;
-using TheShacklingOfSimon.LevelHandler.Rooms.RoomManager;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 
 namespace TheShacklingOfSimon.Level_Handling.Implementations;
 

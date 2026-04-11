@@ -3,12 +3,12 @@
 using System.Collections.Generic;
 using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Items;
-using TheShacklingOfSimon.LevelHandler.Tiles.TileConstructor;
+using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
 using TheShacklingOfSimon.Weapons;
 
 #endregion
 
-namespace TheShacklingOfSimon.LevelHandler.Rooms.RoomClass
+namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass
 {
     public sealed class RoomFileData
     {
