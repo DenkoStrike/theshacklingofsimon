@@ -84,17 +84,29 @@ public class SoundFactory
 
     /// Retrieves all sounds from loaded sound storage.
     /// <returns>
-    /// A <c>List<SoundEffect></c> object containing all
-    /// <c>SoundEffect</c> objects in sound storage
+    /// A <c>Disctionary<string, SoundEffect></c> object
+    /// containing all <c>string</c> and <c>SoundEffect</c>
+    /// key/value objects in sound storage
     /// </returns>
-    public List<SoundEffect> GetAllSFX()
+    public Dictionary<string, SoundEffect> GetAllSFX()
     {
-        List<SoundEffect> sounds = new List<SoundEffect>();
+        Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
         foreach(KeyValuePair<string, SoundEffect> x in _sfxStorage)
         {
-            sounds.Add(x.Value);
+            sounds.Add(x.Key, x.Value);
         }
         return sounds;
+    }
+
+    public Song GetSong(string Key)
+    {
+        Song song = null;
+        _songStorage.TryGetValue(Key, out song);
+        if (song == null)
+        {
+            Console.WriteLine("WARNING: SoundFactory could not find font " + Key + "in SoundFactory.Instance.GetSong(string Key)");
+        }
+        return song;
     }
     
     private string SanitizeFilePath(string filePath)
