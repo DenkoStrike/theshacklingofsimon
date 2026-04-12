@@ -192,6 +192,49 @@ namespace TheShacklingOfSimon.UI
             return visibleRooms;
         }
 
+        private static void GetVisibleBounds(HashSet<string> visibleRooms, out Point minVisible, out Point maxVisible, Dictionary<string, Point>? positions = null)
+        {
+            minVisible = new Point(int.MaxValue, int.MaxValue);
+            maxVisible = new Point(int.MinValue, int.MinValue);
+
+            if (positions == null)
+            {
+                return;
+            }
+
+            foreach (string roomId in visibleRooms)
+            {
+                if (!positions.TryGetValue(roomId, out Point position))
+                {
+                    continue;
+                }
+
+                minVisible.X = Math.Min(minVisible.X, position.X);
+                minVisible.Y = Math.Min(minVisible.Y, position.Y);
+                maxVisible.X = Math.Max(maxVisible.X, position.X);
+                maxVisible.Y = Math.Max(maxVisible.Y, position.Y);
+            }
+        }
+
+        private void GetVisibleBounds(HashSet<string> visibleRooms, out Point minVisible, out Point maxVisible)
+        {
+            minVisible = new Point(int.MaxValue, int.MaxValue);
+            maxVisible = new Point(int.MinValue, int.MinValue);
+
+            foreach (string roomId in visibleRooms)
+            {
+                if (!roomPositions.TryGetValue(roomId, out Point position))
+                {
+                    continue;
+                }
+
+                minVisible.X = Math.Min(minVisible.X, position.X);
+                minVisible.Y = Math.Min(minVisible.Y, position.Y);
+                maxVisible.X = Math.Max(maxVisible.X, position.X);
+                maxVisible.Y = Math.Max(maxVisible.Y, position.Y);
+            }
+        }
+
         private static Rectangle BuildPanelBounds(Viewport viewport, Point minVisible, Point maxVisible)
         {
             int widthInCells = (maxVisible.X - minVisible.X) + 1;
@@ -229,25 +272,6 @@ namespace TheShacklingOfSimon.UI
             spriteBatch.Draw(pixel, new Rectangle(rectangle.Left, rectangle.Bottom - thickness, rectangle.Width, thickness), color);
             spriteBatch.Draw(pixel, new Rectangle(rectangle.Left, rectangle.Top, thickness, rectangle.Height), color);
             spriteBatch.Draw(pixel, new Rectangle(rectangle.Right - thickness, rectangle.Top, thickness, rectangle.Height), color);
-        }
-
-        private void GetVisibleBounds(HashSet<string> visibleRooms, out Point minVisible, out Point maxVisible)
-        {
-            minVisible = new Point(int.MaxValue, int.MaxValue);
-            maxVisible = new Point(int.MinValue, int.MinValue);
-
-            foreach (string roomId in visibleRooms)
-            {
-                if (!roomPositions.TryGetValue(roomId, out Point position))
-                {
-                    continue;
-                }
-
-                minVisible.X = Math.Min(minVisible.X, position.X);
-                minVisible.Y = Math.Min(minVisible.Y, position.Y);
-                maxVisible.X = Math.Max(maxVisible.X, position.X);
-                maxVisible.Y = Math.Max(maxVisible.Y, position.Y);
-            }
         }
 
         public void Reset()

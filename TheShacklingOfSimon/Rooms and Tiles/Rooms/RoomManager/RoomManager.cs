@@ -48,7 +48,6 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager
         // I make this nullable so pendingSwitch can cleanly be "none".
         private PendingRoomSwitch? pendingSwitch;
 
-        // A list of all the room id's for the current level
         private readonly List<string> roomIds = new();
         private int currentIndex;
         private string startingRoomId;
@@ -161,6 +160,26 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager
             request.Player.SetPosition(CurrentRoom.TileMap.GridToWorld(request.SpawnGrid));
 
             pendingSwitch = null;
+        }
+
+        public void NextRoom()
+        {
+            if (roomIds.Count == 0) return;
+
+            currentIndex = (currentIndex + 1) % roomIds.Count;
+            CurrentRoom = Load(roomIds[currentIndex]);
+
+            RaiseRoomChanged();
+        }
+
+        public void PrevRoom()
+        {
+            if (roomIds.Count == 0) return;
+
+            currentIndex = (currentIndex - 1 + roomIds.Count) % roomIds.Count;
+            CurrentRoom = Load(roomIds[currentIndex]);
+
+            RaiseRoomChanged();
         }
 
         private void RaiseRoomChanged()
