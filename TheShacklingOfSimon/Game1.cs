@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
@@ -88,6 +89,8 @@ public class Game1 : Game
         LoadFonts();
         LoadSpriteAssets();
         LoadSounds();
+        LoadMusic();
+        PlayMusic("sounds/music/basement");
 
         RoomFactory roomFactory = CreateRoomFactory();
         CreateRoomManager(roomFactory);
@@ -185,6 +188,17 @@ public class Game1 : Game
 
         SoundFactory.Instance.LoadSFX(Content, "sounds/projectiles/splatter00");
         SoundFactory.Instance.LoadSFX(Content, "sounds/projectiles/stoneshoot2");
+    }
+
+    private void LoadMusic()
+    {
+        SoundFactory.Instance.LoadSong(Content, "sounds/music/basement");
+    }
+
+    private void PlayMusic(string songName)
+    {
+        Song song = SoundFactory.Instance.GetSong(songName);
+        MediaPlayer.Play(song);
     }
 
     private RoomFactory CreateRoomFactory()
@@ -288,10 +302,10 @@ public class Game1 : Game
 
     private void CreateSoundManager()
     {
-        List<SoundEffect> sounds = SoundFactory.Instance.GetAllSFX();
-        foreach(SoundEffect x in sounds)
+        Dictionary<string, SoundEffect> sounds = SoundFactory.Instance.GetAllSFX();
+        foreach(KeyValuePair<string, SoundEffect> x in sounds)
         {
-            _soundManager.AddSFX(x);
+            _soundManager.AddSFX(x.Key, x.Value);
         }
     }
 
