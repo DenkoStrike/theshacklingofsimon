@@ -89,7 +89,7 @@ public class SoundFactory
     /// </returns>
     public List<SoundEffect> GetAllSFX()
     {
-        List<SoundEffect> sounds = null;
+        List<SoundEffect> sounds = new List<SoundEffect>();
         foreach(KeyValuePair<string, SoundEffect> x in _sfxStorage)
         {
             sounds.Add(x.Value);
