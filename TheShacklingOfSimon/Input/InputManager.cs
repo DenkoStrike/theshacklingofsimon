@@ -6,7 +6,6 @@ using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Commands.PlayerAttack;
 using TheShacklingOfSimon.Commands.PlayerInventoryManagement;
 using TheShacklingOfSimon.Commands.PlayerMovement;
-using TheShacklingOfSimon.Commands.Room_Commands;
 using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
@@ -171,22 +170,6 @@ public class InputManager
             new GenericActionCommand(_onResetRequest)
         );
 
-        // Mouse controls sprint3
-        _mouseController.RegisterCommand(
-            new MouseInput(
-                new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-                InputState.JustPressed,
-                MouseButton.Right),
-            new PreviousRoomCommand(_roomManager)
-        );
-
-        _mouseController.RegisterCommand(
-            new MouseInput(
-                new MouseInputRegion(0, 0, screenDimensions.Width, screenDimensions.Height),
-                InputState.JustPressed,
-                MouseButton.Left),
-            new NextRoomCommand(_roomManager)
-        );
 
         // we only let Escape pause during gameplay for now.
         _keyboardController.RegisterCommand(
