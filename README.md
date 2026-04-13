@@ -24,10 +24,10 @@ A/Right Shoulder/Right Trigger to use the equipped active item<br>
 START (or + on Nintendo controllers) to pause the game<br>
 
 Temporary controls for sprint 4:<br>
-D-pad UP to equip the next active item<br>
-D-pad DOWN to equip the previous active item<br>
-D-pad LEFT to equip the next primary weapon<br>
-D-pad RIGHT to equip the next secondary weapon<br>
+D-Pad UP to equip the next active item<br>
+D-Pad DOWN to equip the previous active item<br>
+D-Pad LEFT to equip the next primary weapon<br>
+D-Pad RIGHT to equip the next secondary weapon<br>
 BACK (or - on Nintendo controllers) to reset player<br><br>
 
 
