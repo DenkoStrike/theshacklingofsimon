@@ -25,7 +25,7 @@ public class SpeedItem : PassiveItem, IInventoryItem
     {
         Name = name;
         Description = description;
-        _amt = amt * Entity.GetStat(StatType.MoveSpeed);
+        _amt = amt;
         _duration = duration;
     }
     
@@ -35,7 +35,7 @@ public class SpeedItem : PassiveItem, IInventoryItem
             Name, 
             EffectType.MoveSpeed, 
             Entity, 
-            _amt, 
+            Entity.GetStat(StatType.MoveSpeed) * _amt, 
             _duration
         );
         Entity.EffectManager.AddEffect(effect);

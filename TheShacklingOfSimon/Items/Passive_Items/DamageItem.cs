@@ -25,7 +25,7 @@ public class DamageItem : PassiveItem, IInventoryItem
     {
         Name = name;
         Description = description;
-        _amt = amt * Entity.GetStat(StatType.DamageMultiplier);
+        _amt = amt;
         _duration = duration;
     }
     public override void ApplyEffect()
@@ -34,7 +34,7 @@ public class DamageItem : PassiveItem, IInventoryItem
             Name, 
             EffectType.DamageMultiplier, 
             Entity, 
-            _amt, 
+            _amt * Entity.GetStat(StatType.DamageMultiplier), 
             _duration
         );
         Entity.EffectManager.AddEffect(effect);

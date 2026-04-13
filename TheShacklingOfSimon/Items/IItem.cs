@@ -9,7 +9,14 @@ public interface IItem
 {
     string Name { get; }
     string Description { get; }
-    IDamageableEntity Entity { get; }
+    IDamageableEntity Entity { get; set; }
     
+    /// <summary>
+    /// Applies the item's effect to <c>this.Entity</c>.
+    /// </summary>
+    /// <remarks>
+    /// Ensure that <c>this.Entity</c> is the desired target before calling this method.
+    /// Otherwise, unexpected behavior may occur.
+    /// </remarks>
     void ApplyEffect();
 }

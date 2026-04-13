@@ -143,7 +143,7 @@ public class Game1 : Game
     
     private void LoadSpriteAssets()
     {
-        SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player");
+        SpriteFactory.Instance.LoadTexture(Content, "PlayerDefaultSprite.json", "player-full");
         SpriteFactory.Instance.LoadTexture(Content, "SpiderEnemy.json", "SpiderEnemy");
         SpriteFactory.Instance.LoadTexture(Content, "BlackMaw.json", "BlackMaw");
         SpriteFactory.Instance.LoadTexture(Content, "AngelicBaby.json", "AngelicBaby");

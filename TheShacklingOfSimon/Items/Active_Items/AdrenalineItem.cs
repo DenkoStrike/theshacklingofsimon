@@ -16,18 +16,17 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
     // sound effects should be internal to the class
     private string sfx;
     private float _timer;
-    private bool _buffActive;
-    
     private readonly float _cooldownDuration;
+    private bool _buffActive;
 
-    private readonly IStatusEffect _speedEffect;
-    private readonly IStatusEffect _primaryCooldownEffect;
-    private readonly IStatusEffect _secondaryCooldownEffect;
-    private readonly IStatusEffect _projectileSpeedEffect;
+    private float _buffDuration;
+    private float _moveSpeedMultiplier;
+    private float _fireRateMultiplier;
+    private float _projSpeedMultiplier;
 
     public AdrenalineItem(
         IDamageableEntity entity,
-        float duration = 4.0f,
+        float buffDuration = 4.0f,
         float cooldownDuration = 5.0f,
         float moveSpeedMultiplier = 2f,
         float fireRateMultiplier = 0.50f,
@@ -41,35 +40,10 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
         sfx = SoundManager.Instance.NameSFX("items","Powerup2");
         SoundManager.Instance.AddSFX(sfx);
         
-        // Status effect initialization
-        _speedEffect = new MoveSpeedEffect(
-            Name, 
-            EffectType.MoveSpeed, 
-            entity,
-            moveSpeedMultiplier * entity.GetStat(StatType.MoveSpeed), 
-            duration
-        );
-        _primaryCooldownEffect = new PrimaryCooldownEffect(
-            Name, 
-            EffectType.PrimaryCooldown, 
-            entity,
-            fireRateMultiplier * entity.GetStat(StatType.PrimaryCooldown), 
-            duration
-        );
-        _secondaryCooldownEffect = new SecondaryCooldownEffect(
-            Name, 
-            EffectType.SecondaryCooldown, 
-            entity,
-            fireRateMultiplier * entity.GetStat(StatType.SecondaryCooldown), 
-            duration
-        );
-        _projectileSpeedEffect = new ProjectileSpeedEffect(
-            Name, 
-            EffectType.ProjectileSpeedMultiplier, 
-            entity,
-            projSpeedMultiplier * entity.GetStat(StatType.ProjectileSpeedMultiplier), 
-            duration
-        );
+        _buffDuration = buffDuration;
+        _moveSpeedMultiplier = moveSpeedMultiplier;
+        _fireRateMultiplier = fireRateMultiplier;
+        _projSpeedMultiplier = projSpeedMultiplier;
     }
 
     public override void Update(GameTime gameTime)
@@ -86,13 +60,43 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
     public override void ApplyEffect()
     {
         if (_buffActive) return;
-        
         _buffActive = true;
         _timer = _cooldownDuration;
-        Entity.EffectManager.AddEffect(_speedEffect);
-        Entity.EffectManager.AddEffect(_primaryCooldownEffect);
-        Entity.EffectManager.AddEffect(_secondaryCooldownEffect);
-        Entity.EffectManager.AddEffect(_projectileSpeedEffect);
+        
+        // Create effects here to avoid issues with the effects being applied to the wrong entity
+        var speedEffect = new MoveSpeedEffect(
+            Name, 
+            EffectType.MoveSpeed, 
+            Entity,
+            _moveSpeedMultiplier * Entity.GetStat(StatType.MoveSpeed), 
+            _buffDuration
+        );
+        var primaryCooldownEffect = new PrimaryCooldownEffect(
+            Name, 
+            EffectType.PrimaryCooldown, 
+            Entity,
+            _fireRateMultiplier * Entity.GetStat(StatType.PrimaryCooldown), 
+            _buffDuration
+        );
+        var secondaryCooldownEffect = new SecondaryCooldownEffect(
+            Name, 
+            EffectType.SecondaryCooldown, 
+            Entity,
+            _fireRateMultiplier * Entity.GetStat(StatType.SecondaryCooldown), 
+            _buffDuration
+        );
+        var projectileSpeedEffect = new ProjectileSpeedEffect(
+            Name, 
+            EffectType.ProjectileSpeedMultiplier, 
+            Entity,
+            _projSpeedMultiplier * Entity.GetStat(StatType.ProjectileSpeedMultiplier), 
+            _buffDuration
+        );
+        
+        Entity.EffectManager.AddEffect(speedEffect);
+        Entity.EffectManager.AddEffect(primaryCooldownEffect);
+        Entity.EffectManager.AddEffect(secondaryCooldownEffect);
+        Entity.EffectManager.AddEffect(projectileSpeedEffect);
         SoundManager.Instance.PlaySFX(sfx);
     }
 

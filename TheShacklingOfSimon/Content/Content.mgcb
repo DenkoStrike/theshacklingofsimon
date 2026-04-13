@@ -264,7 +264,7 @@
 /processorParam:TextureFormat=Color
 /build:images/Spikes.png
 
-#begin player.png
+#begin player-full.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -274,7 +274,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:player.png
+/build:player-full.png
 
 #begin PlayerDefaultSprite.json
 /copy:PlayerDefaultSprite.json

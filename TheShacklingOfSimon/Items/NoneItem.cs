@@ -11,7 +11,7 @@ public class NoneItem : IItem
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public IDamageableEntity Entity { get; }
+    public IDamageableEntity Entity { get; set; }
     public ItemEffects Effects { get; }
 
     public NoneItem(IPlayer player)

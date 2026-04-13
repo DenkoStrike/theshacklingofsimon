@@ -32,7 +32,8 @@ public class InventoryPickup : BasePickup
     public override void OnCollision(IPlayer player)
     {
         if (Item == null) return;
-        if (player != Item.Entity) return;
+
+        Item.Entity = player;
 
         /*
          * Logic: inventory pickups are always added to the
@@ -44,5 +45,6 @@ public class InventoryPickup : BasePickup
             Item.ApplyEffect();
         }
         player.Inventory.Add(Item);
+        Discontinue();
     }
 }

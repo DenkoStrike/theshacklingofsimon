@@ -30,9 +30,11 @@ public class ConsumablePickup : BasePickup
     }
 
     public override void OnCollision(IPlayer player)
-    {
+    { 
         if (Item == null) return;
-        if (player != Item.Entity) return;
+
+        Item.Entity = player;
         Item.ApplyEffect();
+        Discontinue();
     }
 }

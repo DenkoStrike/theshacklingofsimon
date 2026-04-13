@@ -12,8 +12,7 @@ namespace TheShacklingOfSimon.Items.Passive_Items;
 
 public class ArmorItem : PassiveItem, IInventoryItem
 {
-    private readonly float _amtHealth;
-    private readonly float _amtInvul;
+    private readonly float _amt;
     private readonly float _duration;
     
     public ArmorItem(
@@ -26,8 +25,7 @@ public class ArmorItem : PassiveItem, IInventoryItem
     {
         Name = name;
         Description = description;
-        _amtHealth = amt * Entity.GetStat(StatType.MaxHealth);
-        _amtInvul = amt * Entity.GetStat(StatType.InvulnerabilityDuration);
+        _amt = amt;
         _duration = duration;
     }
     public override void ApplyEffect()
@@ -36,14 +34,14 @@ public class ArmorItem : PassiveItem, IInventoryItem
             Name, 
             EffectType.MaxHealth, 
             Entity, 
-            _amtHealth, 
+            _amt * Entity.GetStat(StatType.MaxHealth),
             _duration
         );
         IStatusEffect invulnerabilityDurationEffect = new InvulnerabilityDurationEffect(
             Name, 
             EffectType.InvulnerabilityDuration, 
             Entity, 
-            _amtInvul, 
+            _amt * Entity.GetStat(StatType.InvulnerabilityDuration), 
             _duration
         );
         

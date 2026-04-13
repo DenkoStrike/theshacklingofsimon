@@ -56,7 +56,6 @@ public class EnemyDeadState : IEnemyState
 
     private void TrySpawnDrop()
     {
-        Console.WriteLine("Spawning drop for type" + _enemy.EnemyDrop);
         if (_enemy.EnemyDrop != null)
         {
             _enemy.SpawnPickup(_enemy.EnemyDrop, _enemy.Position);

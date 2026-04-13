@@ -14,7 +14,7 @@ public class TeleportItem : IItem
 {
     public string Name { get; }
     public string Description { get; }
-    public IDamageableEntity Entity { get; }
+    public IDamageableEntity Entity { get; set; }
     public ItemEffects Effects { get; } // unused for teleport, but required by the interface
     public string SFX { get; }
 
