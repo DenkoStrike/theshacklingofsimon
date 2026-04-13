@@ -35,23 +35,6 @@ public class PickupManager
         }
     }
 
-    public void Update(GameTime gameTime)
-    {
-        foreach (IPickup pickup in _pickups)
-        {
-            pickup.Update(gameTime);
-        }
-        _pickups.RemoveAll(p => !p.IsActive);
-    }
-
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        foreach (IPickup pickup in _pickups)
-        {
-            pickup?.Draw(spriteBatch);
-        }
-    }
-
     public void Clear()
     {
         _pickups.Clear();

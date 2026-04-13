@@ -253,7 +253,7 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
                         }
                     }
 
-                    Console.WriteLine("Pickup instantiated: " + p.GetType().Name + " at " + pos + "");
+                    // Console.WriteLine("Pickup instantiated: " + p.GetType().Name + " at " + pos + ""); // debug
                     OnItemDropped?.Invoke(p);
                 };
                 

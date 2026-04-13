@@ -102,10 +102,8 @@ public class PlayGameState : IGameState
             UpdateFade(dt);
             return;
         }
-
-        _projectileManager.Update(delta);
+        
         _roomManager.Update(delta);
-        _pickupManager.Update(delta);
         _player.Update(delta);
 
         _collisionManager.Update(delta);
@@ -122,8 +120,6 @@ public class PlayGameState : IGameState
     public void Draw(SpriteBatch spriteBatch)
     {
         _roomManager.Draw(spriteBatch);
-        _pickupManager.Draw(spriteBatch);
-        _projectileManager.Draw(spriteBatch);
         _player.Draw(spriteBatch);
 
         if (_fadeAlpha > 0f)

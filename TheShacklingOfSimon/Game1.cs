@@ -309,6 +309,9 @@ public class Game1 : Game
         _collisionBulkLoader.RegisterRoomCollidables(_roomManager.CurrentRoom);
 
         _pickupManager.OnPickupAdded += _collisionManager.AddStaticEntity;
+        
+        _pickupManager.OnPickupAdded += pickup => _roomManager.CurrentRoom?.AddEntity(pickup);
+        _projectileManager.OnProjectileAdded += proj => _roomManager.CurrentRoom?.AddEntity(proj);
     }
 
     private void CreateGameStates()

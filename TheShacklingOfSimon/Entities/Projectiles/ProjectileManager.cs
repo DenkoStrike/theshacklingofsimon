@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,30 +21,13 @@ public class ProjectileManager
 	public void AddProjectile(IProjectile projectile)
 	{
 		_projectiles.Add(projectile);
-	}
-
-	public void Update(GameTime gameTime)
-	{
-		foreach (var p in _projectiles)
-		{
-			if (p.IsActive)
-				p.Update(gameTime);
-		}
-
-		_projectiles.RemoveAll(p => !p.IsActive);
+		OnProjectileAdded?.Invoke(projectile);
 	}
 
     public void Clear()
     {
         _projectiles.Clear();
     }
-
-    public void Draw(SpriteBatch spriteBatch)
-	{
-		foreach (var p in _projectiles)
-		{
-			if (p.IsActive)
-				p.Draw(spriteBatch);
-		}
-	}
+    
+    public event Action<IProjectile> OnProjectileAdded;
 }

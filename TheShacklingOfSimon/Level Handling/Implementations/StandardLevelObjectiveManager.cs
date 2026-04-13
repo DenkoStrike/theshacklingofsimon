@@ -65,16 +65,20 @@ public class StandardLevelObjectiveManager : ILevelObjectiveManager
         // Player win condition
         Room currentRoom = _roomManager.CurrentRoom;
         if (currentRoom != null && currentRoom.IsBossRoom && !currentRoom.HasActiveEnemies())
-        OnTransitionRequested?.Invoke(
-            new WinGameState(
-                _stateManager, 
-                _inputManager, 
-                _graphicsDevice, 
-                _player, 
-                _resetGame, 
-                _quitGame
-            )
-        );
+        {
+            _gameOverTriggered = true;
+            OnTransitionRequested?.Invoke(
+                new WinGameState(
+                    _stateManager, 
+                    _inputManager, 
+                    _graphicsDevice, 
+                    _player, 
+                    _resetGame, 
+                    _quitGame
+                )
+            ); 
+        }
+        
     }
 
     public void Reset()
