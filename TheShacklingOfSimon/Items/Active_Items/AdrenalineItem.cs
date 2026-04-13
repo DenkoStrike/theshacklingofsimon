@@ -2,7 +2,6 @@
 
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 using TheShacklingOfSimon.StatusEffects.Templates;
 using TheShacklingOfSimon.Sounds;
@@ -12,7 +11,7 @@ using TheShacklingOfSimon.StatusEffects;
 
 namespace TheShacklingOfSimon.Items.Active_Items;
 
-public class AdrenalineItem : ActiveItem
+public class AdrenalineItem : ActiveItem, IInventoryItem
 {
     // sound effects should be internal to the class
     private string sfx;

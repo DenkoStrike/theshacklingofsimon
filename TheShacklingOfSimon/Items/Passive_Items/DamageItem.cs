@@ -10,7 +10,7 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 namespace TheShacklingOfSimon.Items.Passive_Items;
 
-public class DamageItem : PassiveItem
+public class DamageItem : PassiveItem, IInventoryItem
 {
     private readonly float _amt;
     private readonly float _duration;

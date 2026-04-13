@@ -10,8 +10,7 @@ public abstract class ActiveItem : IActiveItem
 {
     public string Name { get; protected set; }
     public string Description { get; protected set; }
-    
-    protected IDamageableEntity Entity;
+    public IDamageableEntity Entity { get; protected set; }
     
     public ActiveItem(IDamageableEntity entity)
     {

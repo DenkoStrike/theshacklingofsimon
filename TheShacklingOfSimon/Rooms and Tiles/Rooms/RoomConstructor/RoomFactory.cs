@@ -9,6 +9,7 @@ using TheShacklingOfSimon.Entities.Enemies.EnemyTypes;
 using TheShacklingOfSimon.Entities.Enemies.Managers;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Projectiles;
+using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
@@ -229,8 +230,27 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
                 enemy.OnProjectileCreated += proj => OnProjectileCreated?.Invoke(proj);
                 enemy.OnItemDropped += (item, pos) =>
                 {
-                    // Temporary sprite until we decide on how to instantiate pickups dynamically
-                    IPickup p = new Pickup(pos, item, SpriteFactory.Instance.CreateStaticSprite("images/8Ball"));
+                    // Temporary type-of logic and sprite until we decide on how to instantiate pickups dynamically
+                    IPickup p;
+                    switch (item)
+                    {
+                        case IInventoryItem inventoryItem:
+                        {
+                            p = new InventoryPickup(pos, SpriteFactory.Instance.CreateStaticSprite("images/8Ball"),
+                                inventoryItem);
+                            break;
+                        }
+                        case IConsumableItem consumableItem:
+                        {
+                            p = new ConsumablePickup(pos, SpriteFactory.Instance.CreateStaticSprite("images/Red_Heart"),
+                                consumableItem);
+                            break;
+                        }
+                        default:
+                        {
+                            throw new InvalidOperationException($"Unknown item type: {item.GetType()}");
+                        }
+                    }
                     OnItemDropped?.Invoke(p);
                 };
                 

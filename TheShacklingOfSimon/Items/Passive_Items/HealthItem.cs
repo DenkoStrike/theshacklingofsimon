@@ -3,7 +3,7 @@ using TheShacklingOfSimon.Entities;
 
 namespace TheShacklingOfSimon.Items.Passive_Items;
 
-public class HealingItem : PassiveItem
+public class HealingItem : PassiveItem, IConsumableItem
 {
     private readonly int _amt;
     

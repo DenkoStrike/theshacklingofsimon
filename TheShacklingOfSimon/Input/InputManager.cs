@@ -153,19 +153,6 @@ public class InputManager
             new UseItemCommand(_player)
             );
 
-        // Temporary for sprint 3
-        _keyboardController.RegisterCommand(
-            new KeyboardInput(InputState.JustPressed, KeyboardButton.F),
-            new SpawnPickupCommand(
-                () => new Pickup(
-                    new Vector2(screenDimensions.Width * 0.5f, screenDimensions.Height * 0.5f),
-                    new SpeedItem(_player),
-                    SpriteFactory.Instance.CreateStaticSprite("images/8Ball")
-                ),
-                _pickupManager
-            )
-        );
-
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.Pressed, KeyboardButton.R),
             new GenericActionCommand(_onResetRequest)

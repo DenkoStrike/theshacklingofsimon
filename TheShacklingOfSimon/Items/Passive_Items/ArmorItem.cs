@@ -10,7 +10,7 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 namespace TheShacklingOfSimon.Items.Passive_Items;
 
-public class ArmorItem : PassiveItem
+public class ArmorItem : PassiveItem, IInventoryItem
 {
     private readonly float _amtHealth;
     private readonly float _amtInvul;

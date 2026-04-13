@@ -1,0 +1,48 @@
+﻿using Microsoft.Xna.Framework;
+using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.Items;
+using TheShacklingOfSimon.Sprites.Products;
+
+namespace TheShacklingOfSimon.Entities.Pickup;
+
+public class InventoryPickup : BasePickup
+{
+    private IInventoryItem _item;
+    
+    public override IItem Item
+    {
+        get {
+            return _item;
+        }
+
+        protected set
+        {
+            if (value == null) return;
+            if (value is not IInventoryItem castedItem) return;
+            _item = castedItem;
+        }
+    }
+    
+    public InventoryPickup(Vector2 position, ISprite sprite, IInventoryItem item) 
+        : base(position, sprite)
+    {
+        Item = item;
+    }
+
+    public override void OnCollision(IPlayer player)
+    {
+        if (Item == null) return;
+        if (player != Item.Entity) return;
+
+        /*
+         * Logic: inventory pickups are always added to the
+         * inventory, and if the item is a passive item,
+         * it should be automatically applied to the player.
+         */
+        if (Item is IPassiveItem)
+        {
+            Item.ApplyEffect();
+        }
+        player.Inventory.Add(Item);
+    }
+}
