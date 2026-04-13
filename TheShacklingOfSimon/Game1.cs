@@ -85,6 +85,7 @@ public class Game1 : Game
         _projectileManager = new ProjectileManager();
         _collisionManager = new CollisionManager();
         _soundManager = new SoundManager();
+        _pickupManager = new PickupManager();
         
         LoadFonts();
         LoadSpriteAssets();
@@ -94,10 +95,13 @@ public class Game1 : Game
 
         RoomFactory roomFactory = CreateRoomFactory();
         CreateRoomManager(roomFactory);
+        
+        // _roomManager holds a reference to roomFactory, so this is safe
+        roomFactory.OnItemDropped += _pickupManager.AddPickup;
+        
         CreatePlayer();
         CreatePlayerWeapons();
         CreatePlayerItems();
-        CreateItemAndPickupManagers();
         CreateInputManager();
         ConfigureCollisionAndProjectileHooks();
         CreateGameStates();
@@ -280,11 +284,6 @@ public class Game1 : Game
     {
         _player.Inventory.Add(new TeleportItem(_player, pos => true));
         _player.Inventory.Add(new AdrenalineItem(_player));
-    }
-
-    private void CreateItemAndPickupManagers()
-    {
-        _pickupManager = new PickupManager();
     }
 
     private void CreateInputManager()

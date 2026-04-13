@@ -42,7 +42,7 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
     protected IMovementBehavior _movementBehaviour;
 
     public event Action<IProjectile> OnProjectileCreated;
-    public event Action<IItem, Vector2> OnPickupCreated;
+    public event Action<IItem, Vector2> OnItemDropped;
 
     protected BaseEnemy(Vector2 startPosition, IWeapon weapon, string name)
     {
@@ -190,7 +190,7 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
 
     public void SpawnPickup(IItem item, Vector2 position)
     {
-        OnPickupCreated?.Invoke(item, position);
+        OnItemDropped?.Invoke(item, position);
     }
 
     // Collision handling

@@ -31,7 +31,7 @@ public interface IEnemy : IDamageableEntity
 
     IWeapon Weapon { get; }
     public event Action<IProjectile> OnProjectileCreated;
-    public event Action<IItem, Vector2> OnPickupCreated;
+    public event Action<IItem, Vector2> OnItemDropped;
 
     void SetWeapon(IWeapon weapon);
     void MarkForRemoval();
