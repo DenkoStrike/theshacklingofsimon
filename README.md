@@ -31,6 +31,10 @@ D-Pad RIGHT to equip the next secondary weapon<br>
 BACK (or - on Nintendo controllers) to reset player<br><br>
 
 
+Temporary mouse controls:<br>
+Left click to move "foward" one room<br>
+Right click to move "backward" one room<br><br>
+
 
 KNOWN ISSUES:<br>
 Projectiles carry over to the next room when the player moves to the next room<br>
