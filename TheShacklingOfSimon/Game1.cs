@@ -125,7 +125,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         _gameStateManager.Draw(_spriteBatch);
-        HUD.Draw(_spriteBatch);
+        //HUD.Draw(_spriteBatch);
         _spriteBatch.End();
        
 
@@ -337,6 +337,7 @@ public class Game1 : Game
                 _player,
                 _projectileManager,
                 _collisionManager,
+                HUD,
                 Reset
                 )
             );

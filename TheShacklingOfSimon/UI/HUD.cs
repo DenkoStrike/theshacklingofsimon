@@ -13,7 +13,7 @@ using TheShacklingOfSimon.Sprites.Products;
 
 namespace TheShacklingOfSimon.UI
 {
-    internal sealed class HUD
+   public class HUD
     {
         private const int BossHealthBarWidth = 50;
         private const int BossHealthBarHeight = 10;
