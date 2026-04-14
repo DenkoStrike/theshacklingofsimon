@@ -42,7 +42,7 @@ public static class ConfigDBEnemy
             ContactDamage = 1f,
             MaxHealth = 4,
             InvulnerabilityDuration = 0.25f,
-            DropItemType = EnemyDropType.None
+            DropItemType = EnemyDropType.Coin
         },
 
         ["AdultLeech"] = new EnemyConfig
@@ -54,7 +54,7 @@ public static class ConfigDBEnemy
             ContactDamage = 3f,
             MaxHealth = 10,
             InvulnerabilityDuration = 0.25f,
-            DropItemType = EnemyDropType.None
+            DropItemType = EnemyDropType.Key
         }
     };
 }

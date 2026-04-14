@@ -83,6 +83,8 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
             EnemyDropType.None => null,
             EnemyDropType.Health => new HealingItem(this),
             EnemyDropType.Speed => new SpeedItem(this),
+            EnemyDropType.Coin => new CoinItem(this),
+            EnemyDropType.Key => new KeyItem(this),
             _ => null
         };
 

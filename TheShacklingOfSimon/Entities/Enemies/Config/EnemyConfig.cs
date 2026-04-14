@@ -9,7 +9,9 @@ public enum EnemyDropType
 {
     None,
     Health,
-    Speed
+    Speed,
+    Coin,
+    Key
 }
 
 public class EnemyConfig
