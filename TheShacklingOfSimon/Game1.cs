@@ -157,6 +157,8 @@ public class Game1 : Game
 
         SpriteFactory.Instance.LoadTexture(Content, "images/8Ball.json", "images/8Ball");
         SpriteFactory.Instance.LoadTexture(Content, "images/Red_Heart.json", "images/Red_Heart");
+        SpriteFactory.Instance.LoadTexture(Content, "images/Coin.json", "images/Coin");
+        SpriteFactory.Instance.LoadTexture(Content, "images/key.json", "images/key");
 
         // These are the upright door sprites. The door tile rotates them by side.
         SpriteFactory.Instance.LoadTexture(Content, "images/DoorLockedUp.json", "images/DoorLockedUp");

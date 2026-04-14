@@ -125,7 +125,8 @@ namespace TheShacklingOfSimon.UI
 
         private void DrawPickupIndicators(SpriteBatch spriteBatch)
         {
-            
+          
+
             for (int i = 0; i < _player.Inventory.NumCoins; i++)
             {
                 _Coin.Draw(spriteBatch, new Vector2(20+(i*42.5f), 160), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 1f);
