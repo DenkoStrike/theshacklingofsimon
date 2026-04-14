@@ -11,6 +11,7 @@ public static class ConfigDBEnemy
     {
         ["BlackMaw"] = new EnemyConfig
         {
+            IsBoss = false,
             MoveSpeed = 17f,
             AttackCooldown = 3f,
             AttackRange = 10f,
@@ -22,6 +23,7 @@ public static class ConfigDBEnemy
 
         ["SpiderEnemy"] = new EnemyConfig
         {
+            IsBoss = false,
             MoveSpeed = 25f,
             AttackCooldown = 3f,
             AttackRange = 8f,
@@ -33,7 +35,8 @@ public static class ConfigDBEnemy
 
         ["AngelicBaby"] = new EnemyConfig
         {
-            MoveSpeed = 40f,
+            IsBoss = false,
+            MoveSpeed = 30f,
             AttackCooldown = 6f,
             AttackRange = 8f,
             ContactDamage = 1f,
@@ -44,11 +47,12 @@ public static class ConfigDBEnemy
 
         ["AdultLeech"] = new EnemyConfig
         {
-            MoveSpeed = 10f,
+            IsBoss = true,
+            MoveSpeed = 60f,
             AttackCooldown = 4f,
             AttackRange = 10f,
-            ContactDamage = 2f,
-            MaxHealth = 4,
+            ContactDamage = 3f,
+            MaxHealth = 8,
             InvulnerabilityDuration = 0.25f,
             DropItemType = EnemyDropType.None
         }
