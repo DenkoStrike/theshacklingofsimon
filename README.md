@@ -37,7 +37,6 @@ Right click to move "backward" one room<br><br>
 
 
 KNOWN ISSUES:<br>
-Projectiles carry over to the next room when the player moves to the next room<br>
 Player head sprite is slightly off center sometimes<br>
 There is jittering when any dynamic entity continuously moves into a blocking tile<br><br>
 
