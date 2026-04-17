@@ -36,8 +36,7 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
 
         Name = "Adrenaline";
         Description = "Massive speed, fire-rate, and projectile speed boost for a short time.";
-        _sfx = SoundManager.Instance.NameSFX("items","Powerup2");
-        SoundManager.Instance.AddSFX(_sfx);
+        sfx = SoundManager.Instance.AddSFX("items","Powerup2");
         
         _buffDuration = buffDuration;
         _moveSpeedMultiplier = moveSpeedMultiplier;
