@@ -2,10 +2,10 @@
 
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
-using TheShacklingOfSimon.StatusEffects.Templates;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.StatusEffects;
+using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
+using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 
@@ -13,16 +13,15 @@ namespace TheShacklingOfSimon.Items.Active_Items;
 
 public class AdrenalineItem : ActiveItem, IInventoryItem
 {
-    // sound effects should be internal to the class
-    private string sfx;
+    private readonly string _sfx;
     private float _timer;
     private readonly float _cooldownDuration;
     private bool _buffActive;
 
-    private float _buffDuration;
-    private float _moveSpeedMultiplier;
-    private float _fireRateMultiplier;
-    private float _projSpeedMultiplier;
+    private readonly float _buffDuration;
+    private readonly float _moveSpeedMultiplier;
+    private readonly float _fireRateMultiplier;
+    private readonly float _projSpeedMultiplier;
 
     public AdrenalineItem(
         IDamageableEntity entity,
@@ -96,12 +95,8 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
         Entity.EffectManager.AddEffect(primaryCooldownEffect);
         Entity.EffectManager.AddEffect(secondaryCooldownEffect);
         Entity.EffectManager.AddEffect(projectileSpeedEffect);
-        SoundManager.Instance.PlaySFX(sfx);
+        SoundManager.Instance.PlaySFX(_sfx);
 
         return true;
-    }
-
-    public override void ClearEffect()
-    {
     }
 }

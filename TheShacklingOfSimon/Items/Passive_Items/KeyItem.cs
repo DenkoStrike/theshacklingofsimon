@@ -3,6 +3,7 @@ using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Sounds;
 
+
 namespace TheShacklingOfSimon.Items.Passive_Items;
 
 public class KeyItem : PassiveItem, IConsumableItem

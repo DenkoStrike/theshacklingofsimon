@@ -10,7 +10,6 @@ using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
-using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
@@ -77,11 +76,9 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles
             if (other == null || !IsActive) return;
             other.OnCollision(this);
         }
-
-        // pulled the repeated MTV push-out code here so solid tiles do not copy it everywhere.
+        
         protected void ResolveEntityCollision(IEntity entity)
         {
-
             Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(entity.Hitbox, this.Hitbox);
             if (mtv.LengthSquared() < 0.0001f) return;
 

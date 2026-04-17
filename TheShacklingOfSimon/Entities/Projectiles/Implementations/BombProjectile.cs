@@ -12,10 +12,12 @@ using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 
-namespace TheShacklingOfSimon.Entities.Projectiles;
+namespace TheShacklingOfSimon.Entities.Projectiles.Implementations;
 
 public class BombProjectile : ProjectileBase
 {
+    private readonly string _sfx;
+    
     private float fuseTimer = 0f;
     private float fuseDuration = 2.0f;
 
@@ -66,14 +68,14 @@ public class BombProjectile : ProjectileBase
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (!IsActive)
-            return;
+        if (!IsActive) return;
 
         if (!hasExploded)
         {
             // Draw bomb sprite
             Sprite?.Draw(spriteBatch, Position, Color.Gray);
         }
+        
         else
         {
             // Draw red explosion square
@@ -104,7 +106,7 @@ public class BombProjectile : ProjectileBase
     {
         if (hasExploded)
         {
-            enemy.TakeDamage(this.Stats.Damage);   
+            enemy.TakeDamage(Stats.Damage);   
         }
     }
 
@@ -112,21 +114,20 @@ public class BombProjectile : ProjectileBase
     {
         if (hasExploded)
         {
-            player.TakeDamage(this.Stats.Damage);   
+            player.TakeDamage(Stats.Damage);   
         }
     }
 
     private void Explode()
     {
         hasExploded = true;
-
-        // Expand hitbox for explosion damage
         Hitbox = new Rectangle(
             (int)(Position.X - explosionSize / 2),
             (int)(Position.Y - explosionSize / 2),
             (int)explosionSize,
             (int)explosionSize
         );
-        SoundManager.Instance.PlaySFX(SFX);
+        
+        SoundManager.Instance.PlaySFX(_sfx);
     }
 }

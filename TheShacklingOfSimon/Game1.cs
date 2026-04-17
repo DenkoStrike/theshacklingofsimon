@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using TheShacklingOfSimon.Controllers;
@@ -14,6 +13,7 @@ using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
+using TheShacklingOfSimon.Entities.Projectiles.Implementations;
 using TheShacklingOfSimon.GameStates;
 using TheShacklingOfSimon.GameStates.States;
 using TheShacklingOfSimon.Input;

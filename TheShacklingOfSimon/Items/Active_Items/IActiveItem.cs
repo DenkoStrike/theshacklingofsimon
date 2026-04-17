@@ -1,6 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
 
-namespace TheShacklingOfSimon.Items;
+using Microsoft.Xna.Framework;
+
+#endregion
+
+namespace TheShacklingOfSimon.Items.Active_Items;
 
 /// <summary>
 /// Extended interface for active items with additional

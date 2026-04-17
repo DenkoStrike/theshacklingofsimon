@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region
+
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Sounds;
+
+#endregion
 
 namespace TheShacklingOfSimon.Items.Passive_Items;
 

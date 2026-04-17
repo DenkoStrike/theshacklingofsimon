@@ -1,6 +1,10 @@
+#region
+
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Sounds;
+
+#endregion
 
 namespace TheShacklingOfSimon.Items.Passive_Items;
 

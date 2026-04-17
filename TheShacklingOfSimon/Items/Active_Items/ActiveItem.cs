@@ -18,7 +18,11 @@ public abstract class ActiveItem : IActiveItem
     }
     
     public abstract bool ApplyEffect();
-    public abstract void ClearEffect();
+
+    public virtual void ClearEffect()
+    {
+    }
+    
     public abstract void Update(GameTime delta);
 
 }
