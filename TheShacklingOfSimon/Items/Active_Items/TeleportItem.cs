@@ -39,8 +39,7 @@ public class TeleportItem : ActiveItem, IInventoryItem
         Name = "Blink";
         Description = "Teleports you a short distance forward.";
 
-        _sfx = SoundManager.Instance.NameSFX("items","warp");
-        SoundManager.Instance.AddSFX(_sfx);
+        SFX = SoundManager.Instance.AddSFX("items","warp");
     }
     
     public override void Update(GameTime gameTime)

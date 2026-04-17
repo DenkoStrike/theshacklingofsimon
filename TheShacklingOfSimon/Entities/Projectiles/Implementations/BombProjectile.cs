@@ -43,8 +43,7 @@ public class BombProjectile : ProjectileBase
         
         IsActive = true;
         Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 16, 16);
-        _sfx = SoundManager.Instance.NameSFX("items", "rocketexplode04");
-        SoundManager.Instance.AddSFX(_sfx);
+        SFX = SoundManager.Instance.AddSFX("items", "rocketexplode04");
     }
 
     public override IProjectile Clone(Vector2 startPos, Vector2 direction, ISprite sprite, ProjectileStats stats)

@@ -1,6 +1,7 @@
 ﻿#region
 
 using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Sounds;
 
 #endregion
 
@@ -19,6 +20,7 @@ public class HealingItem : PassiveItem, IConsumableItem
     {
         Name = name;
         Description = description;
+        SFX = SoundManager.Instance.AddSFX("isaac","1up");
         _amt = amt;
     }
     
@@ -26,6 +28,7 @@ public class HealingItem : PassiveItem, IConsumableItem
     {
         if (Entity.Health >= Entity.MaxHealth) return false;
         Entity.Heal(_amt);
+        SoundManager.Instance.PlaySFX(SFX);
         return true;
     }
 }
