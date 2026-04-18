@@ -195,6 +195,7 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
             return doorData.UnlockType switch
             {
                 DoorUnlockType.AlwaysUnlocked => new AlwaysUnlockedDoorCondition(),
+                DoorUnlockType.KeyRequired => new KeyRequiredDoorCondition(),
                 DoorUnlockType.Custom => new CustomDoorCondition(),
                 _ => new ClearEnemiesDoorCondition()
             };

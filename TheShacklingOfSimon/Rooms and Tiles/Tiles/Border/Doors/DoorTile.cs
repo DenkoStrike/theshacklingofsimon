@@ -23,8 +23,6 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
         private IRoomNavigator roomNavigator;
         private IDoorContext roomContext;
 
-        // override these directly because doors are one of the few tiles whose blocking
-        // behavior changes at runtime depending on lock state.
         public override bool BlocksGround => IsLocked;
         public override bool BlocksFly => IsLocked;
         public override bool BlocksProjectiles => true;
@@ -75,8 +73,6 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
 
         public override void Update(GameTime delta)
         {
-            // intentionally do nothing here.
-            // Door lock state is derived from the room context instead of stored manually.
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -91,7 +87,7 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
                 texture.Width * 0.5f,
                 texture.Height * 0.5f);
 
-            float uniformScale = (RoomConstants.TileSize  *1.38f) / (float)Math.Max(texture.Width, texture.Height);
+            float uniformScale = (RoomConstants.TileSize * 1.38f) / (float)Math.Max(texture.Width, texture.Height);
 
             spriteBatch.Draw(
                 texture,
@@ -114,16 +110,18 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
 
             if (IsLocked)
             {
-                Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(player.Hitbox, this.Hitbox);
-                if (mtv.LengthSquared() < 0.0001f) return;
+                bool unlockedNow = unlockCondition != null && unlockCondition.TryUnlock(player, roomContext);
 
-                // Handles position, velocity, and hitbox
-                player.SetPosition(player.Position + mtv);
-                return;
+                if (!unlockedNow)
+                {
+                    Vector2 mtv = CollisionDetector.CalculateMinimumTranslationVector(player.Hitbox, this.Hitbox);
+                    if (mtv.LengthSquared() < 0.0001f) return;
+
+                    player.SetPosition(player.Position + mtv);
+                    return;
+                }
             }
 
-            //Debug.WriteLine(
-            //    $"TOUCH DOOR side={Side} -> {ToRoom} spawn={SpawnGrid} locked={IsLocked}");
             roomNavigator.RequestRoomSwitch(ToRoom, SpawnGrid, player);
         }
 

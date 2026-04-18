@@ -81,7 +81,7 @@
                     "y": 1
                 }
             },
-            "unlockType": "ClearEnemies"
+            "unlockType": "KeyRequired"
         }
     ]
 }
