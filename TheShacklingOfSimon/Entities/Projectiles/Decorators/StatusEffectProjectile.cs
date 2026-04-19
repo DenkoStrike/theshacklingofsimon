@@ -66,20 +66,27 @@ public class StatusEffectProjectile : IProjectile
 
     public void OnCollision(IEntity other)
     {
-        if (other is IDamageableEntity damageable)
-        {
-            damageable.EffectManager.AddEffect(_statusEffectPrototype.Clone(damageable));
-        }
+        if (other == null || !IsActive) return;
         other.OnCollision(this);
     }
 
     public void OnCollision(IPlayer player)
     {
+        if (Stats.OwnerType == ProjectileOwner.Player) return;
+        if (player is IDamageableEntity damageable)
+        {
+            damageable.EffectManager.AddEffect(_statusEffectPrototype.Clone(damageable));
+        }
         _baseProjectile.OnCollision(player);
     }
 
     public void OnCollision(IEnemy enemy)
     {
+        if (Stats.OwnerType == ProjectileOwner.Enemy) return;
+        if (enemy is IDamageableEntity damageable)
+        {
+            damageable.EffectManager.AddEffect(_statusEffectPrototype.Clone(damageable));
+        }
         _baseProjectile.OnCollision(enemy);
     }
 

@@ -18,9 +18,10 @@ public abstract class RecurringStatusEffect : IStatusEffect
     protected float Duration { get; set; }
     protected float NumTicks { get; set; }
     
-    protected float Timer;
     protected float PreviousApplicationTime;
     protected float TickDuration;
+    
+    private float _timer;
 
     protected RecurringStatusEffect(string name, EffectType type, IDamageableEntity owner, float strength, float duration, float numTicks)
     {
@@ -45,10 +46,10 @@ public abstract class RecurringStatusEffect : IStatusEffect
     public virtual void Update(GameTime delta)
     {
         float diff = (float) delta.ElapsedGameTime.TotalSeconds;
-        Timer += diff;
+        _timer += diff;
         PreviousApplicationTime += diff;
         
-        if (Timer >= Duration)
+        if (_timer >= Duration)
         {
             IsFinished = true;
         }

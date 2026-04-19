@@ -280,8 +280,8 @@ public class Game1 : Game
             new DeltaHealthEffect(
                 "On Fire!",
                 EffectType.OnFire,
-                _player, // Dummy owner which is changed when projectile cloning happens
-                1f,
+                _player, // Dummy owner which is changed when status effect cloning happens
+                -1f,
                 3f,
                 2f
             )
