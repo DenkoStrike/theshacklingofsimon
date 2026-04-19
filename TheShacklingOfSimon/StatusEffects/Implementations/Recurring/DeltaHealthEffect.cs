@@ -40,4 +40,9 @@ public class DeltaHealthEffect : RecurringStatusEffect
         Strength += otherCasted.Strength;
         Duration = Math.Max(Duration, otherCasted.Duration);
     }
+
+    public override IStatusEffect Clone(IDamageableEntity newTarget)
+    {
+        return new DeltaHealthEffect(Name, Type, newTarget, Strength, Duration, NumTicks);
+    }
 }

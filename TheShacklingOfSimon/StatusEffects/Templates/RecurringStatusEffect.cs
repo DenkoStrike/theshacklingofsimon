@@ -36,12 +36,10 @@ public abstract class RecurringStatusEffect : IStatusEffect
 
     public virtual void OnApply()
     {
-        // Default implementation is a no-op
     }
 
     public virtual void OnRemove()
     {
-        // Default implementation is a no-op
     }
 
     public virtual void Update(GameTime delta)
@@ -59,4 +57,5 @@ public abstract class RecurringStatusEffect : IStatusEffect
     }
 
     public abstract void Merge(IStatusEffect other);
+    public abstract IStatusEffect Clone(IDamageableEntity newTarget);
 }
