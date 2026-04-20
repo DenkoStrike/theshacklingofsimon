@@ -1,16 +1,16 @@
 ﻿#region
 
+using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 
 #endregion
 
 namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
 {
-    // keep unlock rules in their own strategy objects so DoorTile does not
-    // need if/else chains for every special case later.
     public interface IDoorUnlockCondition
     {
         bool IsSatisfied(IDoorContext roomContext);
+        bool TryUnlock(IPlayer player, IDoorContext roomContext);
     }
 
     public sealed class ClearEnemiesDoorCondition : IDoorUnlockCondition
@@ -18,6 +18,11 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
         public bool IsSatisfied(IDoorContext roomContext)
         {
             return roomContext != null && !roomContext.HasActiveEnemies();
+        }
+
+        public bool TryUnlock(IPlayer player, IDoorContext roomContext)
+        {
+            return IsSatisfied(roomContext);
         }
     }
 
@@ -27,13 +32,43 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors
         {
             return true;
         }
+
+        public bool TryUnlock(IPlayer player, IDoorContext roomContext)
+        {
+            return true;
+        }
     }
 
-    // Placeholder for future custom conditions.
-    // For now this stays locked until I plug in extra logic
+    public sealed class KeyRequiredDoorCondition : IDoorUnlockCondition
+    {
+        private bool _isUnlocked;
+
+        public bool IsSatisfied(IDoorContext roomContext)
+        {
+            return _isUnlocked;
+        }
+
+        public bool TryUnlock(IPlayer player, IDoorContext roomContext)
+        {
+            if (_isUnlocked) return true;
+            if (player == null) return false;
+            if (player.Inventory == null) return false;
+            if (player.Inventory.NumKeys <= 0) return false;
+
+            player.Inventory.NumKeys -= 1;
+            _isUnlocked = true;
+            return true;
+        }
+    }
+
     public sealed class CustomDoorCondition : IDoorUnlockCondition
     {
         public bool IsSatisfied(IDoorContext roomContext)
+        {
+            return false;
+        }
+
+        public bool TryUnlock(IPlayer player, IDoorContext roomContext)
         {
             return false;
         }
