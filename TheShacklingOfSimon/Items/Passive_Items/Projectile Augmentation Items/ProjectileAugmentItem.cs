@@ -1,11 +1,12 @@
-﻿using TheShacklingOfSimon.Entities;
-using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.Entities.Projectiles.Augmentation;
-using TheShacklingOfSimon.Entities.Projectiles.Decorators;
-using TheShacklingOfSimon.StatusEffects.Templates;
+﻿#region
 
-namespace TheShacklingOfSimon.Items.Passive_Items.Tear_Augmentation;
+using TheShacklingOfSimon.Entities;
+using TheShacklingOfSimon.Entities.Players;
+using TheShacklingOfSimon.Entities.Projectiles.Augmentation;
+
+#endregion
+
+namespace TheShacklingOfSimon.Items.Passive_Items.Projectile_Augmentation_Items;
 
 public class ProjectileAugmentItem : PassiveItem
 {

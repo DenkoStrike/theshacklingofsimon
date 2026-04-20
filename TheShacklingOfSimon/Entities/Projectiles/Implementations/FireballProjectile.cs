@@ -2,10 +2,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
-using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;
-using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
 

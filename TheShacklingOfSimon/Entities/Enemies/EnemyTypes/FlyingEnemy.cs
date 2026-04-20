@@ -1,7 +1,7 @@
 #region
 
-using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.AttackBehaviours;
 using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.MovementBehaviours;

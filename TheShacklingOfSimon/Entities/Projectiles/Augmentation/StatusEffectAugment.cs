@@ -1,5 +1,9 @@
+#region
+
 using TheShacklingOfSimon.Entities.Projectiles.Decorators;
 using TheShacklingOfSimon.StatusEffects.Templates;
+
+#endregion
 
 namespace TheShacklingOfSimon.Entities.Projectiles.Augmentation;
 

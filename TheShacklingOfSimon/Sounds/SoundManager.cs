@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 
@@ -41,14 +42,14 @@ public sealed class SoundManager
     {
         if (string.IsNullOrEmpty(sfx))
         {
-            System.Console.WriteLine("WARNING: PlaySFX called with null or empty string.");
+            Console.WriteLine("WARNING: PlaySFX called with null or empty string.");
             return;
         }
 
         SoundEffect effect = _soundEffects.GetValueOrDefault(sfx);
         if (effect == null)
         {
-            System.Console.WriteLine($"WARNING: No sound effect found for key: {sfx}");
+            Console.WriteLine($"WARNING: No sound effect found for key: {sfx}");
             return;
         }
 

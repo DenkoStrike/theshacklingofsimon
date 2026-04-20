@@ -268,7 +268,7 @@ public class Game1 : Game
         // projectile augmentation test
         StatusEffectAugment poisonAugment = new StatusEffectAugment(
             new DeltaHealthEffect(
-                "Poison", EffectType.Poison, _player, 1f, 3f, 3f
+                "Poison", EffectType.Poison, _player, -1f, 3f, 3f
             )
         );
         playerBasicWeapon.AddAugment(poisonAugment);

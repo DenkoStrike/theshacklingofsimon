@@ -4,7 +4,6 @@ using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Items;
-using TheShacklingOfSimon.Items.Passive_Items;
 using TheShacklingOfSimon.Items.Passive_Items.Consumables;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 using TheShacklingOfSimon.Sprites.Factory;
