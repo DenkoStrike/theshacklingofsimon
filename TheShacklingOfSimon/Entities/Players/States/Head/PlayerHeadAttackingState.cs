@@ -34,7 +34,7 @@ public class PlayerHeadAttackingState : IPlayerHeadState
         float projectilePositionX = _player.Hitbox.X + _player.Hitbox.Width / 2.0f;
         float projectilePositionY = _player.Hitbox.Y;
 
-        IProjectile projectile = _weapon.GetPrototype();
+        IProjectile projectile = _weapon.GetCurrentPrototype();
         _weapon.Fire(
             new Vector2(projectilePositionX, projectilePositionY),
             _direction, 

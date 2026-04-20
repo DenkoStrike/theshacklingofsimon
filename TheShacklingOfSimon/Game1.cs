@@ -13,6 +13,7 @@ using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
+using TheShacklingOfSimon.Entities.Projectiles.Augmentation;
 using TheShacklingOfSimon.Entities.Projectiles.Decorators;
 using TheShacklingOfSimon.Entities.Projectiles.Implementations;
 using TheShacklingOfSimon.GameStates;
@@ -263,6 +264,14 @@ public class Game1 : Game
                 new Vector2(0, 1),
                 SpriteFactory.Instance.CreateStaticSprite("BasicProjectile"),
                 new ProjectileStats(1, 200f, ProjectileOwner.Player)));
+        
+        // projectile augmentation test
+        StatusEffectAugment poisonAugment = new StatusEffectAugment(
+            new DeltaHealthEffect(
+                "Poison", EffectType.Poison, _player, 1f, 3f, 3f
+            )
+        );
+        playerBasicWeapon.AddAugment(poisonAugment);
 
         ISecondaryWeapon playerBombWeapon = new BombWeapon(
             new BombProjectile(
@@ -270,6 +279,8 @@ public class Game1 : Game
                 SpriteFactory.Instance.CreateAnimatedSprite("PlayerHeadShootingDown", 0.1f),
                 new ProjectileStats(1, 0.0f, ProjectileOwner.Player)));
 
+        // Fireball should arbitrarily always apply "On Fire!" status effect,
+        // so the weapon is instantiated with a decorator
         IProjectile fireballProjectile = new StatusEffectProjectileDecorator(
             new FireballProjectile(
                 Vector2.Zero,

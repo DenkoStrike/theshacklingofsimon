@@ -20,7 +20,7 @@ public abstract class BaseWeapon : IWeapon
 
     private IProjectile _baseProjectile;
     private IProjectile _prototype;
-    private readonly ISet<IProjectileAugment> _augments;
+    private readonly List<IProjectileAugment> _augments;
 
     protected BaseWeapon(
         string name, 
@@ -36,7 +36,7 @@ public abstract class BaseWeapon : IWeapon
         BaseDamage = baseDamage;
         _baseProjectile = baseProjectile;
         _prototype = baseProjectile;
-        _augments = new HashSet<IProjectileAugment>();
+        _augments = new List<IProjectileAugment>();
     }
     
     public virtual void Fire(Vector2 pos, Vector2 direction, ProjectileStats stats)
@@ -45,34 +45,42 @@ public abstract class BaseWeapon : IWeapon
         OnProjectileFired?.Invoke(firedProjectile);
     }
 
-    public virtual IProjectile GetPrototype()
+    public IProjectile GetCurrentPrototype()
     {
         return _prototype;
     }
     
-    public virtual void SetPrototype(IProjectile newPrototype)
+    public void SetBaseProjectile(IProjectile newBaseProjectile)
     {
-        if (newPrototype == null)
+        if (newBaseProjectile == null)
         {
-            Console.WriteLine("null newPrototype passed into SetPrototype(IProjectile newPrototype).");
+            Console.WriteLine("null for parameter newBaseProjectile passed into BaseWeapon.SetPrototype.");
             return;
         }
-        
-        _prototype = newPrototype;
+
+        _baseProjectile = newBaseProjectile;
     }
 
     public bool AddAugment(IProjectileAugment augment)
     {
         if (augment == null) return false;
-        return _augments.Add(augment);
+        _augments.Add(augment);
+        RebuildProjectile();
+        return true;
     }
 
     public bool RemoveAugment(IProjectileAugment augment)
     {
-        return _augments.Remove(augment);   
+        if (augment != null && _augments.Remove(augment))
+        {
+            RebuildProjectile();
+            return true;
+        }
+
+        return false;
     }
     
-    public void RebuildProjectile()
+    private void RebuildProjectile()
     {
         IProjectile current = _baseProjectile;
         foreach (var augment in _augments)
