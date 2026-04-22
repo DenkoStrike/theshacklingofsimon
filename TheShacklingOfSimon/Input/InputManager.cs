@@ -7,6 +7,7 @@ using TheShacklingOfSimon.Commands.PlayerAttack;
 using TheShacklingOfSimon.Commands.PlayerInventoryManagement;
 using TheShacklingOfSimon.Commands.PlayerMovement;
 using TheShacklingOfSimon.Commands.Room_Commands;
+using TheShacklingOfSimon.Commands.Temporary_Commands;
 using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
@@ -335,6 +336,12 @@ public class InputManager
                 InputState.JustPressed, GamepadButton.Back
             ),
             new GenericActionCommand(_onResetRequest)
+        );
+        
+        // TEMPORARY TESTING
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.P),
+            new AddStunEffectToPlayerCommand(_player)
         );
     }
 

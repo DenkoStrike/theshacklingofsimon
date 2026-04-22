@@ -19,7 +19,7 @@ public class StunEffect : ComplexStatusEffect
                 Name, 
                 EffectType.MoveSpeed, 
                 Owner, 
-                0f, 
+                -1f,
                 moveStunDuration
             )
         );

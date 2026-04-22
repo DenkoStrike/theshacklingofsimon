@@ -18,7 +18,8 @@ public class MoveSpeedMultiplicativeEffect : SimpleStatusEffect
         float newSpeed = currentSpeed + Strength;
 
         Difference = currentSpeed - newSpeed;
-        Owner.SetStat(StatType.MoveSpeed, newSpeed);
+        Owner.SetStat(StatType.MoveSpeedMultiplier, newSpeed);
+        Console.WriteLine($"Current speed: {currentSpeed}, new speed: {newSpeed}");
     }
 
     public override void OnRemove()
@@ -29,7 +30,7 @@ public class MoveSpeedMultiplicativeEffect : SimpleStatusEffect
     public override void Merge(IStatusEffect other)
     {
         if (other is not MoveSpeedMultiplicativeEffect castedOther) return;
-        Strength *= castedOther.Strength;
+        Strength += castedOther.Strength;
         Duration = Math.Max(Duration, castedOther.Duration);
     }
     

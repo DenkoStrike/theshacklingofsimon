@@ -18,6 +18,7 @@ public static class ConfigDBPlayer
             HitboxHeight = 20,
             InvulnerabilityDuration = 0.5f,
             MoveSpeed = 100f,
+            MoveSpeedMultiplier = 1f,
             DamageMultiplier = 1,
             ProjectileSpeedMultiplier = 1f,
             PrimaryCooldown = 0.0f,

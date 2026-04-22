@@ -37,6 +37,7 @@ public class PrimaryCooldownEffect : SimpleStatusEffect
         
         Difference = currentCooldown - newCooldown;
         Owner.SetStat(StatType.PrimaryCooldown, newCooldown);
+        Console.WriteLine($"Current cooldown: {currentCooldown}, new cooldown: {newCooldown}");
     }
 
     public override void OnRemove()

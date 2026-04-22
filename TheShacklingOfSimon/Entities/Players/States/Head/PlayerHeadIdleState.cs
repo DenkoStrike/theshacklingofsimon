@@ -16,8 +16,8 @@ public class PlayerHeadIdleState : IPlayerHeadState
 
     public PlayerHeadIdleState(PlayerWithTwoSprites player, Vector2 lookingDirection)
     {
-        this._player = player;
-        this._lookingDirection = GetCardinalDirection(lookingDirection);
+        _player = player;
+        _lookingDirection = GetCardinalDirection(lookingDirection);
     }
 
     public void Enter()

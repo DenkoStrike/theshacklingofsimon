@@ -41,10 +41,17 @@ public abstract class ComplexStatusEffect : IStatusEffect
 
     public virtual void Update(GameTime delta)
     {
+        bool allCompleted = true;
         foreach (var effect in ComponentEffects)
         {
             effect.Update(delta);
+            if (!effect.IsFinished)
+            {
+                allCompleted = false;
+            }
         }
+        
+        IsFinished = allCompleted;
     }
 
     public abstract void Merge(IStatusEffect other);

@@ -144,6 +144,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         EffectStats.Add(StatType.MaxHealth, config.MaxHealth);
         EffectStats.Add(StatType.InvulnerabilityDuration, config.InvulnerabilityDuration);
         EffectStats.Add(StatType.MoveSpeed, config.MoveSpeed);
+        EffectStats.Add(StatType.MoveSpeedMultiplier, config.MoveSpeedMultiplier);
         EffectStats.Add(StatType.DamageMultiplier, config.DamageMultiplier);
         EffectStats.Add(StatType.ProjectileSpeedMultiplier, config.ProjectileSpeedMultiplier);
         EffectStats.Add(StatType.PrimaryCooldown, config.PrimaryCooldown);

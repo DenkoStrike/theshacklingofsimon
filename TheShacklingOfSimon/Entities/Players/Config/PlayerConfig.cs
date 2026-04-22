@@ -14,6 +14,7 @@ public class PlayerConfig
     public int HitboxHeight { get; set; }
     public float InvulnerabilityDuration { get; set; }
     public float MoveSpeed { get; set; }
+    public float MoveSpeedMultiplier { get; set; }
     public int DamageMultiplier { get; set; }
     public float ProjectileSpeedMultiplier { get; set; }
     public float PrimaryCooldown { get; set; }
