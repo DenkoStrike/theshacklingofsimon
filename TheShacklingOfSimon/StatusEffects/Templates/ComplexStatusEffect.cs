@@ -1,13 +1,10 @@
-﻿#region
-
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities;
 
-#endregion
-
 namespace TheShacklingOfSimon.StatusEffects.Templates;
 
-public abstract class SimpleStatusEffect : IStatusEffect
+public abstract class ComplexStatusEffect : IStatusEffect
 {
     public string Name { get; protected set; }
     public EffectType Type { get; protected set; }
@@ -15,29 +12,38 @@ public abstract class SimpleStatusEffect : IStatusEffect
     public IDamageableEntity Owner { get; private set; }
     public float Duration { get; protected set; }
     
-    protected float Strength { get; set; }
-    protected float Timer;
-    protected float Difference;
+    protected List<IStatusEffect> ComponentEffects;
 
-    protected SimpleStatusEffect(string name, EffectType type, IDamageableEntity owner, float strength, float duration)
+    protected ComplexStatusEffect(string name, EffectType type, IDamageableEntity owner)
     {
         Name = name;
         Type = type;
         IsFinished = false;
         Owner = owner;
-        Strength = strength;
-        Duration = duration;
+        ComponentEffects = new List<IStatusEffect>();
     }
 
-    public abstract void OnApply();
-    public abstract void OnRemove();
+    public virtual void OnApply()
+    {
+        foreach (var effect in ComponentEffects)
+        {
+            effect.OnApply();
+        }
+    }
+
+    public virtual void OnRemove()
+    {
+        foreach (var effect in ComponentEffects)
+        {
+            effect.OnRemove();
+        }
+    }
 
     public virtual void Update(GameTime delta)
     {
-        Timer += (float) delta.ElapsedGameTime.TotalSeconds;
-        if (Timer >= Duration)
+        foreach (var effect in ComponentEffects)
         {
-            IsFinished = true;
+            effect.Update(delta);
         }
     }
 

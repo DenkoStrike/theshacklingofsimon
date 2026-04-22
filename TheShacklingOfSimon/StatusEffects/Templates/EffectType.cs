@@ -7,6 +7,7 @@ public enum EffectType
     InvulnerabilityDuration,
     MaxHealth,
     MoveSpeed,
+    MoveSpeedMultiplier,
     PrimaryCooldown,
     SecondaryCooldown,
     ProjectileSpeedMultiplier,
@@ -14,5 +15,9 @@ public enum EffectType
     // Recurring effects
     HealthRegen,
     Poison,
-    OnFire
+    OnFire,
+    
+    // Complex
+    Stun,
+    Confusion
 }

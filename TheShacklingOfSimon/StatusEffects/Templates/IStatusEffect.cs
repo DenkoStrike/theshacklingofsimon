@@ -13,6 +13,7 @@ public interface IStatusEffect
     EffectType Type { get; }
     bool IsFinished { get; }
     IDamageableEntity Owner { get; }
+    float Duration { get; }
 
     /// <summary>
     /// Executes logic for when a status effect is applied to its owner.
@@ -46,7 +47,7 @@ public interface IStatusEffect
 
     /// <summary>
     /// Creates a new instance of <c>this</c> that is linked with the specified target entity.
-    /// The cloned status effect is an independent copy of the original, bound to a different owner.
+    /// The cloned status effect is an independent, deep copy of the original, bound to a different owner.
     /// </summary>
     /// <param name="newTarget">The entity to associate the cloned status effect with.</param>
     /// <returns>A new instance of the status effect attached to the specified new target.</returns>

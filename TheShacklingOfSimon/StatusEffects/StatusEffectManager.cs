@@ -12,7 +12,7 @@ public class StatusEffectManager
 {
     private readonly Dictionary<EffectType, IStatusEffect> _activeEffects;
 
-    // Read-only public accessors (for GUI, etc.)
+    // Read-only public accessor (for GUI, etc.)
     public IEnumerable<IStatusEffect> ActiveEffects => _activeEffects.Values;
     
     public StatusEffectManager()
@@ -32,9 +32,9 @@ public class StatusEffectManager
         EffectType type = effect.Type;
         if (_activeEffects.ContainsKey(type))
         {
+            effect.OnRemove();
             // Delegate merge logic to the concrete implementation
             _activeEffects[type].Merge(effect);
-            effect.OnRemove();
         }
         else
         {

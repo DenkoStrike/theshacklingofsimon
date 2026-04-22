@@ -13,9 +13,9 @@ public abstract class RecurringStatusEffect : IStatusEffect
     public EffectType Type { get; protected set; }
     public bool IsFinished { get; private set; }
     public IDamageableEntity Owner { get; private set; }
+    public float Duration { get; protected set; }
     
     protected float Strength { get; set; }
-    protected float Duration { get; set; }
     protected float NumTicks { get; set; }
     
     protected float PreviousApplicationTime;

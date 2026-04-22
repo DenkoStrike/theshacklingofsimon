@@ -27,6 +27,7 @@ using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.StatusEffects.Implementations.Recurring;
+using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 using TheShacklingOfSimon.StatusEffects.Templates;
 using TheShacklingOfSimon.UI;
 using TheShacklingOfSimon.Weapons;
@@ -117,13 +118,10 @@ public class Game1 : Game
 
     protected override void Update(GameTime delta)
     {
-        // I update input before the active state so the current state's bindings fire first.
         _keyboardController.Update();
         _mouseController.Update();
         _gamepadController.Update();
-
         _gameStateManager.Update(delta);
-        //HUD.Update();
         base.Update(delta);
     }
 
@@ -133,9 +131,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         _gameStateManager.Draw(_spriteBatch);
-        //HUD.Draw(_spriteBatch);
         _spriteBatch.End();
-       
 
         base.Draw(delta);
     }
