@@ -106,12 +106,13 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
         Velocity = Vector2.Zero;
         IsActive = true;
         HitboxEnabled = true;
-        Hitbox = new Rectangle((int)startPosition.X, (int)startPosition.Y, 20, 20);
 
         Health = MaxHealth;
 
         CurrentState = new EnemyIdleState(this, Velocity);
         CurrentState.Enter();
+
+        Hitbox = GetSpriteHitbox(Position);
     }
 
     public void SetWeapon(IWeapon weapon)
@@ -220,7 +221,7 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
 
         if (HitboxEnabled)
         {
-            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 20, 20);
+            Hitbox = GetSpriteHitbox(Position);
         }
         else
         {
@@ -261,6 +262,23 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
             CurrentState = newState;
             CurrentState?.Enter();
         }
+    }
+
+    private Rectangle GetSpriteHitbox(Vector2 position)
+    {
+        Vector2 dimensions = GetSpriteDimensions();
+        int width = Math.Max(1, (int)Math.Ceiling(dimensions.X));
+        int height = Math.Max(1, (int)Math.Ceiling(dimensions.Y));
+
+        return new Rectangle((int)position.X, (int)position.Y, width, height);
+    }
+
+    private Vector2 GetSpriteDimensions()
+    {
+        if (Sprite == null)
+            return new Vector2(20, 20);
+
+        return Sprite.RemoveDecorator().GetDimensions();
     }
 
     public void MarkForRemoval() => IsActive = false;
