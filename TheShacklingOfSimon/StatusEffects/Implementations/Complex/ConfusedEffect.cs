@@ -1,50 +1,28 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 using TheShacklingOfSimon.StatusEffects.Templates;
 
-#endregion
-
 namespace TheShacklingOfSimon.StatusEffects.Implementations.Complex;
 
-public class StunEffect : ComplexStatusEffect
+public class ConfusedEffect : ComplexStatusEffect
 {
-    public StunEffect(string name, EffectType type, IDamageableEntity owner, float moveStunDuration, float disarmDuration) 
+    public ConfusedEffect(string name, EffectType type, IDamageableEntity owner, float confusedDuration)
         : base(name, type, owner)
     {
         ComponentEffects.Add(
             new MoveSpeedMultiplierEffect(
-                Name, 
-                EffectType.MoveSpeed, 
+                name, 
+                EffectType.MoveSpeedMultiplier, 
                 owner, 
-                owner.GetStat(StatType.MoveSpeedMultiplier) * -1f,
-                moveStunDuration
-            )
-        );
-        ComponentEffects.Add(
-            new PrimaryCooldownEffect(
-                Name,
-                EffectType.PrimaryCooldown,
-                Owner,
-                disarmDuration,
-                disarmDuration
-            )
-        );
-        ComponentEffects.Add(
-            new SecondaryCooldownEffect(
-                Name, 
-                EffectType.SecondaryCooldown, 
-                Owner, 
-                disarmDuration, 
-                disarmDuration
+                owner.GetStat(StatType.MoveSpeedMultiplier) * -1f * 2, 
+                confusedDuration
             )
         );
     }
 
     // Clone constructor
-    private StunEffect(string name, EffectType type, IDamageableEntity owner, List<IStatusEffect> components) 
+    private ConfusedEffect(string name, EffectType type, IDamageableEntity owner, List<IStatusEffect> components) 
         : base(name, type, owner)
     {
         // Assumes components is already a deep copy, not a reference
@@ -53,7 +31,7 @@ public class StunEffect : ComplexStatusEffect
 
     public override void Merge(IStatusEffect other)
     {
-        if (other is not StunEffect castedOther) return;
+        if (other is not ConfusedEffect castedOther) return;
         for (int i = 0; i < ComponentEffects.Count; i++)
         {
             if (i >= castedOther.ComponentEffects.Count) break; // safety, although likely unneeded.
@@ -68,7 +46,7 @@ public class StunEffect : ComplexStatusEffect
         {
             components.Add(effect.Clone(newTarget));
         }
-        
-        return new StunEffect(Name, Type, newTarget, components);
+
+        return new ConfusedEffect(Name, Type, newTarget, components);
     }
 }

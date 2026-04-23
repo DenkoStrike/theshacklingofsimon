@@ -62,7 +62,7 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
         _timer = _cooldownDuration;
         
         // Create effects here to avoid issues with the effects being applied to the wrong entity
-        var speedEffect = new MoveSpeedAdditiveEffect(
+        var speedEffect = new MoveSpeedEffect(
             Name, 
             EffectType.MoveSpeed, 
             Entity,

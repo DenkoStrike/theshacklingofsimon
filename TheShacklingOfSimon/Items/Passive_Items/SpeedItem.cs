@@ -30,7 +30,7 @@ public class SpeedItem : PassiveItem, IInventoryItem
     
     public override bool ApplyEffect()
     {
-        IStatusEffect effect = new MoveSpeedAdditiveEffect(
+        IStatusEffect effect = new MoveSpeedEffect(
             Name, 
             EffectType.MoveSpeed, 
             Entity, 

@@ -343,6 +343,10 @@ public class InputManager
             new KeyboardInput(InputState.JustPressed, KeyboardButton.P),
             new AddStunEffectToPlayerCommand(_player)
         );
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.M),
+            new AddConfusedEffectToPlayerCommand(_player)
+        );
     }
 
     public void LoadPauseControls(Action onResumeRequested, Action onQuitRequested)

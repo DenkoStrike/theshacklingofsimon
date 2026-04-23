@@ -4,9 +4,9 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 
-public class MoveSpeedMultiplicativeEffect : SimpleStatusEffect
+public class MoveSpeedMultiplierEffect : SimpleStatusEffect
 {
-    public MoveSpeedMultiplicativeEffect(string name, EffectType type, IDamageableEntity owner, float strength, float duration)
+    public MoveSpeedMultiplierEffect(string name, EffectType type, IDamageableEntity owner, float strength, float duration)
         : base(name, type, owner, strength, duration)
     {
     }
@@ -29,13 +29,13 @@ public class MoveSpeedMultiplicativeEffect : SimpleStatusEffect
 
     public override void Merge(IStatusEffect other)
     {
-        if (other is not MoveSpeedMultiplicativeEffect castedOther) return;
+        if (other is not MoveSpeedMultiplierEffect castedOther) return;
         Strength += castedOther.Strength;
         Duration = Math.Max(Duration, castedOther.Duration);
     }
     
     public override IStatusEffect Clone(IDamageableEntity newTarget)
     {
-        return new MoveSpeedMultiplicativeEffect(Name, Type, newTarget, Strength, Duration);
+        return new MoveSpeedMultiplierEffect(Name, Type, newTarget, Strength, Duration);
     }
 }

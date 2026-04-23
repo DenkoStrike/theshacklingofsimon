@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.StatusEffects;
@@ -40,8 +41,8 @@ public class PlayerBodyIdleState : IPlayerBodyState
     public void HandleMovement(Vector2 direction, float frameDuration)
     {
         if (direction.LengthSquared() < float.Epsilon 
-            && _player.GetStat(StatType.MoveSpeed) < float.Epsilon 
-            && _player.GetStat(StatType.MoveSpeedMultiplier) < float.Epsilon) 
+            && Math.Abs(_player.GetStat(StatType.MoveSpeed)) < float.Epsilon 
+            && Math.Abs(_player.GetStat(StatType.MoveSpeedMultiplier)) < float.Epsilon) 
             return;
         
         // Only transition to moving state if the player should actually be moving

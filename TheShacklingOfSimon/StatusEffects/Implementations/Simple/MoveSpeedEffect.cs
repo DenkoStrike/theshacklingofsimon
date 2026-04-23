@@ -8,7 +8,7 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 
-public class MoveSpeedAdditiveEffect : SimpleStatusEffect
+public class MoveSpeedEffect : SimpleStatusEffect
 {
 
     /// <summary>
@@ -20,7 +20,7 @@ public class MoveSpeedAdditiveEffect : SimpleStatusEffect
     /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is to be applied</param>
     /// <param name="strength">The amount of movement speed to be added or removed</param>
     /// <param name="duration">The duration of the effect in seconds</param>
-    public MoveSpeedAdditiveEffect(string name, EffectType type, IDamageableEntity owner, float strength, float duration) 
+    public MoveSpeedEffect(string name, EffectType type, IDamageableEntity owner, float strength, float duration) 
         : base(name, type, owner, strength, duration)
     {
     }
@@ -42,7 +42,7 @@ public class MoveSpeedAdditiveEffect : SimpleStatusEffect
     
     public override void Merge(IStatusEffect other)
     {
-        if (other is not MoveSpeedAdditiveEffect castedOther) return; 
+        if (other is not MoveSpeedEffect castedOther) return; 
 
         Strength += castedOther.Strength;
         Duration = Math.Max(Duration, castedOther.Duration);
@@ -50,6 +50,6 @@ public class MoveSpeedAdditiveEffect : SimpleStatusEffect
     
     public override IStatusEffect Clone(IDamageableEntity newTarget)
     {
-        return new MoveSpeedAdditiveEffect(Name, Type, newTarget, Strength, Duration);
+        return new MoveSpeedEffect(Name, Type, newTarget, Strength, Duration);
     }
 }
