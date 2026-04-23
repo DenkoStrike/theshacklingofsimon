@@ -1,8 +1,12 @@
 #region
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.StatusEffects.Implementations.Complex;
+using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 
@@ -40,7 +44,10 @@ public class PlayerHeadIdleState : IPlayerHeadState
     public void HandlePrimaryAttack(Vector2 direction, float stateDuration)
     {
         Vector2 cardinal = GetCardinalDirection(direction);
-        if (cardinal != Vector2.Zero)
+        bool stunned = _player.GetActiveEffects().Any(x => x is StunEffect);
+        
+        if (cardinal.LengthSquared() > float.Epsilon
+            && !stunned)
         {
             _player.StatesManager.ChangeHeadState(new PlayerHeadAttackingState(_player, _player.Inventory.CurrentPrimaryWeapon, cardinal, stateDuration));
         }
@@ -49,7 +56,10 @@ public class PlayerHeadIdleState : IPlayerHeadState
     public void HandleSecondaryAttack(Vector2 direction, float stateDuration)
     {
         Vector2 cardinal = GetCardinalDirection(direction);
-        if (cardinal != Vector2.Zero)
+        bool stunned = _player.GetActiveEffects().Any(x => x is StunEffect);
+        
+        if (cardinal.LengthSquared() > float.Epsilon
+            && !stunned)
         {
             _player.StatesManager.ChangeHeadState(new PlayerHeadAttackingState(_player, _player.Inventory.CurrentSecondaryWeapon, cardinal, stateDuration));
         }

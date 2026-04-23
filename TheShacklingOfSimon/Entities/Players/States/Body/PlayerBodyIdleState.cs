@@ -2,6 +2,7 @@
 
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Factory;
+using TheShacklingOfSimon.StatusEffects;
 
 #endregion
 
@@ -38,10 +39,13 @@ public class PlayerBodyIdleState : IPlayerBodyState
 
     public void HandleMovement(Vector2 direction, float frameDuration)
     {
-        if (direction != Vector2.Zero)
-        {
-            _player.Velocity = direction;
-            _player.StatesManager.ChangeBodyState(new PlayerBodyMovingState(_player, frameDuration));
-        }
+        if (direction.LengthSquared() < float.Epsilon 
+            && _player.GetStat(StatType.MoveSpeed) < float.Epsilon 
+            && _player.GetStat(StatType.MoveSpeedMultiplier) < float.Epsilon) 
+            return;
+        
+        // Only transition to moving state if the player should actually be moving
+        _player.Velocity = direction;
+        _player.StatesManager.ChangeBodyState(new PlayerBodyMovingState(_player, frameDuration));
     }
 }

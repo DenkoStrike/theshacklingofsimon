@@ -68,7 +68,13 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         base.Update(delta);
 
         // Handle user input
-        StatesManager.Body.HandleMovement(InputBuffer.ConsumeMovement(), SpritesManager.MovementFrameDuration);
+        Vector2 moveInput = InputBuffer.ConsumeMovement();
+        if (GetStat(StatType.MoveSpeedMultiplier)  <= float.Epsilon)
+        {
+            moveInput = Vector2.Zero;
+        }
+        StatesManager.Body.HandleMovement(moveInput, SpritesManager.MovementFrameDuration);
+        
         StatesManager.Head.HandlePrimaryAttack(InputBuffer.ConsumePrimaryAttack(), Inventory.CurrentPrimaryWeapon.BaseCooldown + EffectStats[StatType.PrimaryCooldown]);
         StatesManager.Head.HandleSecondaryAttack(InputBuffer.ConsumeSecondaryAttack(), Inventory.CurrentSecondaryWeapon.BaseCooldown + EffectStats[StatType.SecondaryCooldown]);
         
@@ -140,6 +146,7 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         Health = config.MaxHealth;
         MaxHealth = config.MaxHealth;
         
+        EffectManager.ClearAllEffects();
         EffectStats.Clear();
         EffectStats.Add(StatType.MaxHealth, config.MaxHealth);
         EffectStats.Add(StatType.InvulnerabilityDuration, config.InvulnerabilityDuration);

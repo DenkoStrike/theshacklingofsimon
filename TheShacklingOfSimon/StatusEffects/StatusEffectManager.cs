@@ -26,23 +26,25 @@ public class StatusEffectManager
     /// provided effect. If no effect of the same type exists, the provided effect
     /// is added as a new entry and reapplied.
     /// </summary>
-    /// <param name="effect">The status effect to be added or merged into the active effects list.</param>
-    public void AddEffect(IStatusEffect effect)
+    /// <param name="newEffect">The status effect to be added or merged into the active effects list.</param>
+    public void AddEffect(IStatusEffect newEffect)
     {
-        EffectType type = effect.Type;
+        EffectType type = newEffect.Type;
         if (_activeEffects.ContainsKey(type))
         {
-            effect.OnRemove();
+            var oldEffect = _activeEffects[type];
+            oldEffect.OnRemove();
+            
             // Delegate merge logic to the concrete implementation
-            _activeEffects[type].Merge(effect);
+            oldEffect.Merge(newEffect);
+            oldEffect.OnApply();
         }
         else
         {
             // New status effect can simply be added
-            _activeEffects.Add(type, effect);
+            _activeEffects.Add(type, newEffect);
+            newEffect.OnApply();
         }
-        
-        effect.OnApply();
     }
 
     public void Update(GameTime delta)

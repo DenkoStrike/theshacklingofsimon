@@ -69,6 +69,11 @@ public class PlayerBodyMovingState : IPlayerBodyState
         {
             newAnimationName += "WalkVertical";
         }
+        else
+        {
+            // Fallback to idle sprite
+            newAnimationName += "Idle";
+        }
 
         if (newAnimationName != _currentAnimation)
         {
