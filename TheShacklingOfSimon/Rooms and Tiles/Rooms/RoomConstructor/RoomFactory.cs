@@ -23,15 +23,14 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
 {
     public sealed class RoomFactory
     {
-        // we can set this once from Game1 after loading the two upright door textures.
+        // Set once from Game1 after loading the door textures.
         public DoorTextureSet DoorTextures { get; set; }
 
-        // Events for wiring managers
+        // Events for wiring managers.
         public Action<IProjectile> OnProjectileCreated { get; set; }
         public Action<IPickup> OnItemDropped { get; set; }
 
-        // I left this overridable so we can add special puzzle/boss/key door rules later
-        // without rewriting DoorTile.
+        // Lets special puzzle/boss/key door rules be added without rewriting DoorTile.
         public Func<DoorData, IDoorUnlockCondition> DoorConditionFactory { get; set; }
 
         // Assigned by Game1 after player creation and before RoomManager creation.
@@ -243,8 +242,8 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
 
                 if (enemy is BaseEnemy baseEnemy)
                 {
-                    // Enemy constructors treat Position as sprite top-left, but JSON positions
-                    // are grid cells. Center the enemy in the grid cell after construction.
+                    // JSON enemy positions represent grid cells, but enemy Position
+                    // is the sprite top-left, so center the sprite in the cell.
                     baseEnemy.CenterOnWorldPoint(cellCenter);
                     baseEnemy.SetTargetPlayer(player);
                     baseEnemy.SetPathfindingService(pathfindingService);
@@ -253,28 +252,8 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
                 enemy.OnProjectileCreated += proj => OnProjectileCreated?.Invoke(proj);
                 enemy.OnItemDropped += (item, pos) =>
                 {
-                    IPickup p;
-                    switch (item)
-                    {
-                        case IInventoryItem inventoryItem:
-                            p = new InventoryPickup(
-                                pos,
-                                SpriteFactory.Instance.CreateStaticSprite("images/8Ball"),
-                                inventoryItem);
-                            break;
-
-                        case IConsumableItem consumableItem:
-                            p = new ConsumablePickup(
-                                pos,
-                                SpriteFactory.Instance.CreateStaticSprite("images/Red_Heart"),
-                                consumableItem);
-                            break;
-
-                        default:
-                            throw new InvalidOperationException($"Unknown item type: {item.GetType()}");
-                    }
-
-                    OnItemDropped?.Invoke(p);
+                    IPickup pickup = pickupFactory.CreateDroppedPickup(item, pos);
+                    OnItemDropped?.Invoke(pickup);
                 };
 
                 entities.Add(enemy);
