@@ -41,7 +41,9 @@ namespace TheShacklingOfSimon.UI
         private readonly ISprite _pixelSprite;
         private ISprite _coinFont;
         private ISprite _keyFont;
-       
+
+        public bool IsFogOfWarActive { get; set; } = true;
+
         public HUD(IPlayer player, RoomManager roomManager, GraphicsDevice graphicsDevice)
         {
             _player = player;
@@ -68,7 +70,7 @@ namespace TheShacklingOfSimon.UI
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_player.Inventory.fogofwar==true) {
+            if (fogofwar==true) {
                 _fogofwar.Draw(spriteBatch, new Vector2((_player.Position.X - 512) + 25, (_player.Position.Y - 384) + (-110)), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
             }

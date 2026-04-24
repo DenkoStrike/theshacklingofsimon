@@ -163,7 +163,6 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         Inventory ??= new PlayerInventory();
 
         Inventory.Clear();
-        Inventory.fogofwar = false;
         
         // These, however, can be safely replaced; they are internal
         SpritesManager = new PlayerTwoSpritesManager(this);
