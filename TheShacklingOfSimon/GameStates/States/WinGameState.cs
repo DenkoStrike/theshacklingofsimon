@@ -68,6 +68,7 @@ public class WinGameState : IGameState
     
     public void Enter()
     {
+        _inputManager.ClearAllControls();
         _inputManager.LoadDeadStateControls(_restartGame, _quitGame);
     }
 

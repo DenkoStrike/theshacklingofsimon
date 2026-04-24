@@ -73,6 +73,7 @@ public class PlayerDeadGameState : IGameState
     
     public void Enter()
     {
+        _inputManager.ClearAllControls();
         _inputManager.LoadDeadStateControls(_restartGame, _quitGame);
         darkSouls = SoundManager.Instance.AddSFX("other", "dark-souls-you-died-sound-effect_hm5sYFG");
         darkSoulsPlayed = false;

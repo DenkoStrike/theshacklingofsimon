@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Commands.PlayerAttack;
@@ -75,9 +76,6 @@ public class InputManager
     public void LoadGameplayControls(Action onPauseRequested)
     {
         Rectangle screenDimensions = _game.GraphicsDevice.Viewport.Bounds;
-
-        ClearAllControls();
-
         // Movement controls (keyboard)
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.Pressed, KeyboardButton.W),
@@ -351,8 +349,6 @@ public class InputManager
 
     public void LoadPauseControls(Action onResumeRequested, Action onQuitRequested)
     {
-        ClearAllControls();
-        
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape),
             new GenericActionCommand(onResumeRequested));
@@ -380,14 +376,10 @@ public class InputManager
             new KeyboardInput(InputState.Pressed, KeyboardButton.E),
             new SecondaryAttackDownCommand(_player)
         );
-        
-        // TODO: Add mouse controls with custom dimensions for clickable GUI elements (inventory)
     }
 
     public void LoadDeadStateControls(Action onRestartRequested, Action onQuitRequested)
     {
-        ClearAllControls();
-        
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.R),
             new GenericActionCommand(onRestartRequested));
@@ -414,6 +406,25 @@ public class InputManager
             new KeyboardInput(InputState.Pressed, KeyboardButton.E),
             new SecondaryAttackDownCommand(_player)
         );
+    }
+
+    public void LoadDefaultSettingsControls(Action onQuitRequested)
+    {
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.Q),
+            new GenericActionCommand(onQuitRequested));
+        
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.Start),
+            new GenericActionCommand(onQuitRequested));
+    }
+
+    public void LoadGUIControls(Dictionary<MouseInput, Action> controlMapping)
+    {
+        foreach (var control in controlMapping)
+        {
+            _mouseController.RegisterCommand(control.Key, new GenericActionCommand(control.Value));
+        }
     }
 
     private void HandleInputDetected(InputSchema schema)
