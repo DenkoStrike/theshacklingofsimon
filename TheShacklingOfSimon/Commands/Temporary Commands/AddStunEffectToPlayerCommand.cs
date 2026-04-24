@@ -18,6 +18,6 @@ public class AddStunEffectToPlayerCommand : ICommand
 
     public void Execute()
     {
-        _player.EffectManager.AddEffect(_effectFactory.Invoke());
+        _player.EffectManager.AddTemporaryEffect(_effectFactory.Invoke());
     }
 }

@@ -17,10 +17,8 @@ public class CoinItem : PassiveItem, IConsumableItem
         string name = "Coin", 
         string description = "A shiny gold coin that can be used to buy stuff!", 
         int amt = 1) 
-        : base(entity)
+        : base(name, description, entity)
     {
-        Name = name;
-        Description = description;
         SFX = SoundManager.Instance.AddSFX("items","coinpickup");
         _amt = amt;
     }

@@ -12,7 +12,7 @@ public abstract class PassiveItem : IPassiveItem
     public string SFX { get; protected set; }
     public IDamageableEntity Entity { get; set; }
     
-    protected PassiveItem(IDamageableEntity entity)
+    protected PassiveItem(string name, string description, IDamageableEntity entity)
     {
         Entity = entity;
     }

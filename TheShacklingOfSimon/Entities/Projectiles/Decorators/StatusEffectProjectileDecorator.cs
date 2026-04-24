@@ -79,7 +79,7 @@ public class StatusEffectProjectileDecorator : IProjectile
         if (Stats.OwnerType == ProjectileOwner.Player) return;
         if (player is IDamageableEntity damageable)
         {
-            damageable.EffectManager.AddEffect(_statusEffectPrototype.Clone(damageable));
+            damageable.EffectManager.AddTemporaryEffect(_statusEffectPrototype.Clone(damageable));
         }
         _baseProjectile.OnCollision(player);
     }
@@ -89,7 +89,7 @@ public class StatusEffectProjectileDecorator : IProjectile
         if (Stats.OwnerType == ProjectileOwner.Enemy) return;
         if (enemy is IDamageableEntity damageable)
         {
-            damageable.EffectManager.AddEffect(_statusEffectPrototype.Clone(damageable));
+            damageable.EffectManager.AddTemporaryEffect(_statusEffectPrototype.Clone(damageable));
         }
         _baseProjectile.OnCollision(enemy);
     }

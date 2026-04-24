@@ -16,10 +16,8 @@ public class HealingItem : PassiveItem, IConsumableItem
         string name = "Healing Item", 
         string description = "Heals 1 health", 
         int amt = 1) 
-        : base(entity)
+        : base(name, description, entity)
     {
-        Name = name;
-        Description = description;
         SFX = SoundManager.Instance.AddSFX("isaac","1up");
         _amt = amt;
     }

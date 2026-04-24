@@ -7,12 +7,11 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 
-namespace TheShacklingOfSimon.Items.Passive_Items;
+namespace TheShacklingOfSimon.Items.Passive_Items.Inventory_Items;
 
 public class DamageItem : PassiveItem, IInventoryItem
 {
-    private readonly float _amt;
-    private readonly float _duration;
+    private readonly IStatusEffect _damageMultiplierEffect;
     
     public DamageItem(
         IDamageableEntity entity, 
@@ -20,22 +19,23 @@ public class DamageItem : PassiveItem, IInventoryItem
         string description = "Allows you to channel more power into shots", 
         float amt = 0.25f,
         float duration = float.MaxValue) 
-        : base(entity)
+        : base(name, description, entity)
     {
-        Name = name;
-        Description = description;
-        _amt = amt;
-        _duration = duration;
+        _damageMultiplierEffect = new DamageMultiplierEffect(
+            Name, 
+            Entity, 
+            amt * Entity.GetStat(StatType.DamageMultiplier), 
+            duration
+        );
     }
     public override bool ApplyEffect()
     {
-        IStatusEffect effect = new DamageMultiplierEffect(
-            Name, 
-            Entity, 
-            _amt * Entity.GetStat(StatType.DamageMultiplier), 
-            _duration
-        );
-        Entity.EffectManager.AddEffect(effect);
+        Entity.EffectManager.AddPermanentEffect(_damageMultiplierEffect);
         return true;
+    }
+    
+    public override void ClearEffect()
+    {
+        Entity.EffectManager.ClearPermanentEffect(_damageMultiplierEffect);
     }
 }

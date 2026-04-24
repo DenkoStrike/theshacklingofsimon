@@ -17,11 +17,8 @@ public class ProjectileAugmentItem : PassiveItem
         string name,
         string description,
         IProjectileAugment augmentationEffect)
-        : base(entity)
+        : base(name, description, entity)
     {
-        Entity = entity;
-        Name = name;
-        Description = description;
         _augmentationEffect = augmentationEffect;
     }
 

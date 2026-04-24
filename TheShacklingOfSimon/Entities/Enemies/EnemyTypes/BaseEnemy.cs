@@ -13,6 +13,7 @@ using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Items.Passive_Items;
 using TheShacklingOfSimon.Items.Passive_Items.Consumables;
+using TheShacklingOfSimon.Items.Passive_Items.Inventory_Items;
 using TheShacklingOfSimon.Rooms_and_Tiles;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Obstacles;

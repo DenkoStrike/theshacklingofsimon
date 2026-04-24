@@ -17,17 +17,14 @@ public class KeyItem : PassiveItem, IConsumableItem
         string name = "Key", 
         string description = "Unlocks a door", 
         int amt = 1) 
-        : base(entity)
+        : base(name, description, entity)
     {
-        Name = name;
-        Description = description;
         SFX = SoundManager.Instance.AddSFX("items", "keypickup");
         _amt = amt;
     }
     
     public override bool ApplyEffect()
     {
-        // Temporary cast
         if (Entity is not IPlayer player) return false;
         player.Inventory.NumKeys += _amt;
         SoundManager.Instance.PlaySFX(SFX);

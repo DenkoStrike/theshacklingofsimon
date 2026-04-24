@@ -87,10 +87,10 @@ public class AdrenalineItem : ActiveItem, IInventoryItem
             _buffDuration
         );
         
-        Entity.EffectManager.AddEffect(speedEffect);
-        Entity.EffectManager.AddEffect(primaryCooldownEffect);
-        Entity.EffectManager.AddEffect(secondaryCooldownEffect);
-        Entity.EffectManager.AddEffect(projectileSpeedEffect);
+        Entity.EffectManager.AddTemporaryEffect(speedEffect);
+        Entity.EffectManager.AddTemporaryEffect(primaryCooldownEffect);
+        Entity.EffectManager.AddTemporaryEffect(secondaryCooldownEffect);
+        Entity.EffectManager.AddTemporaryEffect(projectileSpeedEffect);
         SoundManager.Instance.PlaySFX(_sfx);
 
         return true;

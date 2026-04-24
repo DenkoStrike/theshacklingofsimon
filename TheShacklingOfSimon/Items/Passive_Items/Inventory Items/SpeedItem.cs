@@ -7,12 +7,11 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 #endregion
 
-namespace TheShacklingOfSimon.Items.Passive_Items;
+namespace TheShacklingOfSimon.Items.Passive_Items.Inventory_Items;
 
 public class SpeedItem : PassiveItem, IInventoryItem
 {
-    private readonly float _amt;
-    private readonly float _duration;
+    private readonly IStatusEffect _moveSpeedEffect;
     
     public SpeedItem(
         IDamageableEntity entity, 
@@ -20,23 +19,24 @@ public class SpeedItem : PassiveItem, IInventoryItem
         string description = "Increases speed by 25%", 
         float amt = 0.25f,
         float duration = float.MaxValue) 
-        : base(entity)
+        : base(name, description, entity)
     {
-        Name = name;
-        Description = description;
-        _amt = amt;
-        _duration = duration;
+        _moveSpeedEffect = new MoveSpeedEffect(
+            Name, 
+            Entity, 
+            amt * Entity.GetStat(StatType.MoveSpeed), 
+            duration
+        );
     }
     
     public override bool ApplyEffect()
     {
-        IStatusEffect effect = new MoveSpeedEffect(
-            Name, 
-            Entity, 
-            Entity.GetStat(StatType.MoveSpeed) * _amt, 
-            _duration
-        );
-        Entity.EffectManager.AddEffect(effect);
+        Entity.EffectManager.AddPermanentEffect(_moveSpeedEffect);
         return true;
+    }
+
+    public override void ClearEffect()
+    {
+        Entity.EffectManager.ClearPermanentEffect(_moveSpeedEffect);
     }
 }

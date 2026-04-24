@@ -10,29 +10,34 @@ namespace TheShacklingOfSimon.StatusEffects;
 
 public class StatusEffectManager
 {
-    private readonly Dictionary<EffectType, IStatusEffect> _activeEffects;
+    private readonly Dictionary<EffectType, IStatusEffect> _activeTemporaryEffects;
+    private readonly List<IStatusEffect> _activePermanentEffects;
 
-    // Read-only public accessor (for GUI, etc.)
-    public IEnumerable<IStatusEffect> ActiveEffects => _activeEffects.Values;
+    // Read-only public accessors (for GUI, etc.)
+    public IEnumerable<IStatusEffect> ActiveEffects => _activeTemporaryEffects.Values;
+    public IEnumerable<IStatusEffect> PermanentEffects => _activePermanentEffects;
     
     public StatusEffectManager()
     {
-        _activeEffects = new Dictionary<EffectType, IStatusEffect>();
+        _activeTemporaryEffects = new Dictionary<EffectType, IStatusEffect>();
+        _activePermanentEffects = new List<IStatusEffect>();
     }
 
     /// <summary>
-    /// Adds a status effect to the active effects list. If an effect of the same
-    /// type already exists in the list, the existing effect is merged with the
-    /// provided effect. If no effect of the same type exists, the provided effect
-    /// is added as a new entry and reapplied.
+    /// Adds a status effect to the active temporary effects list.
     /// </summary>
     /// <param name="newEffect">The status effect to be added or merged into the active effects list.</param>
-    public void AddEffect(IStatusEffect newEffect)
+    /// <remarks>
+    /// If an effect of the same type already exists in the internal representation, the new effect is merged with the
+    /// existent effect, then reapplied. If no effect of the same type exists, the provided effect
+    /// is added as a new entry to the internal representation and applied.
+    /// </remarks>
+    public void AddTemporaryEffect(IStatusEffect newEffect)
     {
         EffectType type = newEffect.Type;
-        if (_activeEffects.ContainsKey(type))
+        if (_activeTemporaryEffects.ContainsKey(type))
         {
-            var oldEffect = _activeEffects[type];
+            var oldEffect = _activeTemporaryEffects[type];
             oldEffect.OnRemove();
             
             // Delegate merge logic to the concrete implementation
@@ -42,17 +47,31 @@ public class StatusEffectManager
         else
         {
             // New status effect can simply be added
-            _activeEffects.Add(type, newEffect);
+            _activeTemporaryEffects.Add(type, newEffect);
             newEffect.OnApply();
         }
     }
 
+    /// <summary>
+    /// Adds a status effect to the list of active permanent effects.
+    /// </summary>
+    /// <param name="newEffect">The status effect to be added to the active permanent effects list.</param>
+    /// <remarks>
+    /// Permanent effects are stored separately from temporary effects and do not expire.
+    /// The provided effect is directly added to the internal representation with no merging logic applied.
+    /// </remarks>
+    public void AddPermanentEffect(IStatusEffect newEffect)
+    {
+        if (newEffect == null) return;
+        _activePermanentEffects.Add(newEffect);
+    }
+
     public void Update(GameTime delta)
     {
-        if (_activeEffects.Count <= 0) return;
+        if (_activeTemporaryEffects.Count <= 0) return;
 
         List<EffectType> markedForRemoval = new List<EffectType>();
-        foreach (var pair in _activeEffects)
+        foreach (var pair in _activeTemporaryEffects)
         {
             IStatusEffect effect = pair.Value;
             effect.Update(delta);
@@ -64,38 +83,49 @@ public class StatusEffectManager
 
         foreach (var type in markedForRemoval)
         {
-            _activeEffects[type].OnRemove();
-            _activeEffects.Remove(type);
+            _activeTemporaryEffects[type].OnRemove();
+            _activeTemporaryEffects.Remove(type);
         }
     }
 
     /// <summary>
-    /// Clears the specified status effect from the active effects list if it exists.
-    /// Supports removing "infinite" duration status effects (i.e., effects caused
-    /// by equipping an item).
-    /// 
+    /// Removes the specified status effect from the internal temporary effects representation, if it exists.
     /// </summary>
     /// <param name="effect">The status effect to be cleared.</param>
-    public void ClearEffect(IStatusEffect effect)
+    /// <returns>
+    /// True if the effect was successfully removed from the list; otherwise, false.
+    /// </returns>
+    public bool ClearTemporaryEffect(IStatusEffect effect)
     {
-        if (_activeEffects.ContainsValue(effect))
-        {
-            _activeEffects.Remove(effect.Type);
-        }
+        if (effect == null) return false;
+        return _activeTemporaryEffects.Remove(effect.Type);
     }
 
     /// <summary>
-    /// Removes all status effects from the active effects list. This action clears the
-    /// entire collection of effects, regardless of their type, duration, or source.
-    /// Performs any necessary cleanup by calling the appropriate removal logic for
-    /// each effect.
+    /// Removes the specified status effect from the internal permanent effects representation, if it exists.
     /// </summary>
+    /// <param name="effect">The status effect to be removed from the active permanent effects list.</param>
+    /// <returns>
+    /// True if the effect was successfully removed from the list; otherwise, false.
+    /// </returns>
+    public bool ClearPermanentEffect(IStatusEffect effect)
+    {
+        if (effect == null) return false;
+        return _activePermanentEffects.Remove(effect);
+    }
+
+    /// <summary>
+    /// Removes all status effects from the internal representations.
+    /// </summary>
+    /// <remarks>
+    /// This method also calls the <c>OnRemove()</c> method on each status effect in the internal representations.
+    /// </remarks>
     public void ClearAllEffects()
     {
-        foreach (var pair in _activeEffects)
+        foreach (var pair in _activeTemporaryEffects)
         {
             pair.Value.OnRemove();
         }
-        _activeEffects.Clear();
+        _activeTemporaryEffects.Clear();
     }
 }
