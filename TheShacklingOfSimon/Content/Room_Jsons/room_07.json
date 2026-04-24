@@ -5,32 +5,32 @@
         {
             "x": 2,
             "y": 3,
-            "type": "Hole"
+            "type": "Rock"
         },
         {
             "x": 3,
             "y": 3,
-            "type": "Hole"
+            "type": "Rock"
         },
         {
             "x": 4,
             "y": 3,
-            "type": "Hole"
+            "type": "Rock"
         },
         {
             "x": 8,
             "y": 3,
-            "type": "Hole"
+            "type": "Rock"
         },
         {
             "x": 9,
             "y": 3,
-            "type": "Hole"
+            "type": "Rock"
         },
         {
             "x": 10,
             "y": 3,
-            "type": "Hole"
+            "type": "Rock"
         },
         {
             "x": 5,
@@ -82,7 +82,7 @@
         {
             "type": "ProjectileEnemy",
             "x": 7,
-            "y": 2,
+            "y": 7,
             "name": "SpiderEnemy",
             "weapon": "BasicWeapon"
         }

@@ -62,7 +62,7 @@
         {
             "type": "ChaseEnemy",
             "x": 7,
-            "y": 6,
+            "y": 2,
             "name": "BlackMaw",
             "weapon": "NoneWeapon"
         }

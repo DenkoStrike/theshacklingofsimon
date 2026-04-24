@@ -70,10 +70,10 @@ namespace TheShacklingOfSimon.UI
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (fogofwar==true) {
-                _fogofwar.Draw(spriteBatch, new Vector2((_player.Position.X - 512) + 25, (_player.Position.Y - 384) + (-110)), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+           // if (fogofwar==true) {
+              //  _fogofwar.Draw(spriteBatch, new Vector2((_player.Position.X - 512) + 25, (_player.Position.Y - 384) + (-110)), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
-            }
+            //}
             DrawHearts(spriteBatch);
             DrawWeaponIndicator(spriteBatch);
             DrawPickupIndicators(spriteBatch);

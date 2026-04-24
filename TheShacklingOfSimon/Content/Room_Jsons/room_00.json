@@ -58,14 +58,14 @@
         {
             "type": "ProjectileEnemy",
             "x": 4,
-            "y": 6,
+            "y": 1,
             "name": "SpiderEnemy",
             "weapon": "BasicWeapon"
         },
         {
             "type": "ProjectileEnemy",
             "x": 10,
-            "y": 6,
+            "y": 1,
             "name": "SpiderEnemy",
             "weapon": "BasicWeapon"
         }
