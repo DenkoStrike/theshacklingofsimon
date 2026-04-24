@@ -1,9 +1,9 @@
 ﻿#region
 
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using System.Collections.Generic;
 using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
@@ -21,6 +21,7 @@ using TheShacklingOfSimon.GameStates.States;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Items.Active_Items;
 using TheShacklingOfSimon.Level_Handling.Implementations;
+using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
@@ -333,11 +334,16 @@ public class Game1 : Game
 
     private void CreatePlayerItems()
     {
-        TeleportItem teleportItem = new TeleportItem(_player, pos => true);
+        TeleportItem teleportItem = new TeleportItem(
+            _player,
+            () => _roomManager?.CurrentRoom?.TileMap
+        );
+
         _player.Inventory.Add(teleportItem);
         _player.Inventory.Add(new AdrenalineItem(_player));
         _player.Inventory.CurrentActiveItem = teleportItem;
     }
+
 
     private void CreateInputManager()
     {
