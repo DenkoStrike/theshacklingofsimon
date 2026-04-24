@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Items.Passive_Items.Consumables;
+using TheShacklingOfSimon.Items.Passive_Items.Inventory_Items;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 using TheShacklingOfSimon.Sprites.Factory;
 
@@ -22,35 +23,43 @@ public class PickupFactory
 
         Vector2 worldPos = tileMap.GridToWorld(new Point(data.X, data.Y));
 
-        string spriteName = string.IsNullOrWhiteSpace(data.Sprite)
-            ? GetDefaultSpriteName(data.ItemType)
-            : data.Sprite;
-
         IItem item = CreateItem(data, player);
 
-        if (data.Price > 0)
+        string spriteName = string.IsNullOrWhiteSpace(data.Sprite)
+            ? GetSpriteNameForItem(item)
+            : NormalizeSpriteName(data.Sprite, item);
+
+        return CreatePickupFromItem(worldPos, item, spriteName, data.Price);
+    }
+
+    public IPickup CreateDroppedPickup(IItem item, Vector2 worldPos)
+    {
+        if (item == null) throw new ArgumentNullException(nameof(item));
+
+        string spriteName = GetSpriteNameForItem(item);
+        return CreatePickupFromItem(worldPos, item, spriteName, 0);
+    }
+
+    private static IPickup CreatePickupFromItem(Vector2 worldPos, IItem item, string spriteName, int price)
+    {
+        if (item == null) throw new ArgumentNullException(nameof(item));
+
+        if (string.IsNullOrWhiteSpace(spriteName))
         {
-            return new ShopPickup(
-                worldPos,
-                SpriteFactory.Instance.CreateStaticSprite(spriteName),
-                item,
-                data.Price
-            );
+            spriteName = GetSpriteNameForItem(item);
+        }
+
+        var sprite = SpriteFactory.Instance.CreateStaticSprite(spriteName);
+
+        if (price > 0)
+        {
+            return new ShopPickup(worldPos, sprite, item, price);
         }
 
         return item switch
         {
-            IInventoryItem inventoryItem => new InventoryPickup(
-                worldPos,
-                SpriteFactory.Instance.CreateStaticSprite(spriteName),
-                inventoryItem
-            ),
-
-            IConsumableItem consumableItem => new ConsumablePickup(
-                worldPos,
-                SpriteFactory.Instance.CreateStaticSprite(spriteName),
-                consumableItem
-            ),
+            IInventoryItem inventoryItem => new InventoryPickup(worldPos, sprite, inventoryItem),
+            IConsumableItem consumableItem => new ConsumablePickup(worldPos, sprite, consumableItem),
 
             _ => throw new InvalidOperationException(
                 $"Unsupported pickup item runtime type: {item.GetType().Name}")
@@ -64,20 +73,51 @@ public class PickupFactory
             "Key" => new KeyItem(player, amt: data.Amount),
             "Coin" => new CoinItem(player, amt: data.Amount),
             "Heart" => new HealingItem(player),
+            "Speed" => new SpeedItem(player),
 
             _ => throw new InvalidOperationException(
                 $"Unknown pickup item type in room json: {data.ItemType}")
         };
     }
 
-    private static string GetDefaultSpriteName(string itemType)
+    private static string GetSpriteNameForItem(IItem item)
     {
-        return itemType switch
+        return item switch
         {
-            "Key" => "images/key",
-            "Coin" => "images/Coin",
-            "Heart" => "images/Red_Heart",
+            KeyItem => "key",
+            CoinItem => "Coin",
+            HealingItem => "images/Red_Heart",
+            SpeedItem => "images/8Ball",
+
             _ => "images/8Ball"
+        };
+    }
+
+    private static string NormalizeSpriteName(string spriteName, IItem item)
+    {
+        if (string.IsNullOrWhiteSpace(spriteName))
+        {
+            return GetSpriteNameForItem(item);
+        }
+
+        // The SpriteFactory looks up the sprite name from the JSON file,
+        // not always the image path. Coin.json uses "Coin" and key.json uses "key".
+        return spriteName switch
+        {
+            "images/key" => "key",
+            "images/Key" => "key",
+            "Key" => "key",
+
+            "images/Coin" => "Coin",
+            "images/coin" => "Coin",
+            "coin" => "Coin",
+
+            "Heart" => "images/Red_Heart",
+            "Red_Heart" => "images/Red_Heart",
+
+            "8Ball" => "images/8Ball",
+
+            _ => spriteName
         };
     }
 }

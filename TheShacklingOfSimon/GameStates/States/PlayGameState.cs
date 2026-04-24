@@ -78,6 +78,7 @@ public class PlayGameState : IGameState
 
     public void Enter()
     {
+        _inputManager.ClearAllControls();
         _inputManager.LoadGameplayControls(RequestPause);
         _objectiveManager.Reset();
         _objectiveManager.OnTransitionRequested += HandleTransition;

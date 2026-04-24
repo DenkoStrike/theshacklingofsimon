@@ -15,6 +15,8 @@ namespace TheShacklingOfSimon.Entities.Pickup;
 
 public abstract class BasePickup : IPickup
 {
+    private const int PickupSize = 16;
+
     public abstract IItem Item { get; protected set; }
     public Vector2 Position { get; protected set; }
     public Vector2 Velocity { get; set; }
@@ -27,8 +29,14 @@ public abstract class BasePickup : IPickup
         Position = position;
         Velocity = Vector2.Zero;
         IsActive = true;
-        Hitbox = new Rectangle((int)position.X, (int)position.Y, 16, 16);
         Sprite = sprite;
+
+        Hitbox = new Rectangle(
+            (int)position.X,
+            (int)position.Y,
+            PickupSize,
+            PickupSize
+        );
     }
 
     public void Update(GameTime delta)
@@ -38,7 +46,11 @@ public abstract class BasePickup : IPickup
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        Sprite?.Draw(spriteBatch, Position, Color.White);
+        if (!IsActive || Sprite == null) return;
+
+        // Draw the sprite scaled to the actual pickup hitbox/drop size.
+        // This prevents large sprites, like coins, from drawing at full texture size.
+        Sprite.Draw(spriteBatch, Hitbox, Color.White);
     }
 
     public void Discontinue()
@@ -49,7 +61,14 @@ public abstract class BasePickup : IPickup
     public void SetPosition(Vector2 position)
     {
         Position = position;
-        Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
+
+        Hitbox = new Rectangle(
+            (int)position.X,
+            (int)position.Y,
+            PickupSize,
+            PickupSize
+        );
+
         Velocity = Vector2.Zero;
     }
 

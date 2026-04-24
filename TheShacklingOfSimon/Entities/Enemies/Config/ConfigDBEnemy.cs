@@ -40,7 +40,7 @@ public static class ConfigDBEnemy
             AttackCooldown = 6f,
             AttackRange = 8f,
             ContactDamage = 1f,
-            MaxHealth = 4,
+            MaxHealth = 2,
             InvulnerabilityDuration = 0.25f,
             DropItemType = EnemyDropType.Key
         },
