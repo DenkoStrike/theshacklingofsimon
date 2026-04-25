@@ -81,4 +81,12 @@ public sealed class SoundManager
             sfx.Value.Stop(true);
         }
     }
+
+    public void VolumeSFX(float vol)
+    {
+        foreach(KeyValuePair<string, SoundEffectInstance> sfx in _soundEffects)
+        {
+            sfx.Value.Volume = vol;
+        }
+    }
 }

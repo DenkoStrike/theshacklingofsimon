@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Controllers.Mouse;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Mouse;
+using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
 
@@ -19,6 +20,8 @@ public class SettingsGameState : IGameState
 
     private readonly ISprite _backgroundSprite;
     private readonly ISprite _backSprite;
+    private readonly ISprite _muteSprite;
+
     // TODO: Add a volume control sprite here
 
     public SettingsGameState(GameStateManager stateManager, InputManager inputManager, GraphicsDevice graphicsDevice, Action quitGame)
@@ -31,7 +34,7 @@ public class SettingsGameState : IGameState
         _backgroundSprite = SpriteFactory.Instance.CreateStaticSprite("1x1white")
             .WithTint(Color.Black);
         _backSprite = SpriteFactory.Instance.CreateTextSprite("Upheaval32", "BACK");
-        // TODO: Add a volume control sprite here
+        _muteSprite = SpriteFactory.Instance.CreateTextSprite("Upheaval32", "MUTE");
     }
 
     public void Enter()
@@ -58,7 +61,23 @@ public class SettingsGameState : IGameState
             _stateManager.RemoveState
         );
         
+        Vector2 center = new Vector2(screen.Width / 2, screen.Height / 2);
+        Vector2 muteSize = _muteSprite.GetDimensions();
+        Vector2 mutePos = new Vector2(center.X - (muteSize.X / 2), center.Y);
         // TODO: Add mute button click control here
+        guiControls.Add(
+            new MouseInput(
+                new MouseInputRegion(
+                    mutePos.X,
+                    mutePos.Y,
+                    muteSize.X,
+                    muteSize.Y
+                ),
+                InputState.JustPressed,
+                MouseButton.Left
+            ),
+            SoundOptions.Instance.ToggleMute
+        );
         
         _inputManager.LoadGUIControls(guiControls);
     }
@@ -71,6 +90,7 @@ public class SettingsGameState : IGameState
     {
         _backgroundSprite.Update(delta);
         _backSprite.Update(delta);
+        _muteSprite.Update(delta);
         // TODO: Update volume control sprite here
     }
 
@@ -79,9 +99,14 @@ public class SettingsGameState : IGameState
         Rectangle screen = _graphicsDevice.Viewport.Bounds;
         Vector2 backSize = _backSprite.GetDimensions();
         Vector2 backPos = new Vector2(5, screen.Height - backSize.Y - 5);
+
+        Vector2 center = new Vector2(screen.Width / 2, screen.Height / 2);
+        Vector2 muteSize = _muteSprite.GetDimensions();
+        Vector2 mutePos = new Vector2(center.X - (muteSize.X / 2), center.Y);
         
         _backgroundSprite.Draw(spriteBatch, screen, Color.White);
         _backSprite.Draw(spriteBatch, backPos, Color.White);
+        _muteSprite.Draw(spriteBatch, mutePos, Color.White);
         // TODO: Draw volume control sprite here
     }
 }
