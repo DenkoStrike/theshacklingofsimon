@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using TheShacklingOfSimon.Controllers.Mouse;
 using TheShacklingOfSimon.Input;
@@ -29,6 +30,12 @@ public class PauseGameState : IGameState
     private readonly ISprite _settingsSprite;
     private readonly ISprite _quitSprite;
 
+    // Keeping these not readonly in case we want to move the positions
+    private Vector2 _pausedPos;
+    private Vector2 _resumePos;
+    private Vector2 _settingsPos;
+    private Vector2 _quitPos;
+
     public PauseGameState(
         GameStateManager stateManager,
         InputManager inputManager,
@@ -39,13 +46,66 @@ public class PauseGameState : IGameState
         _inputManager = inputManager;
         _graphicsDevice = graphicsDevice;
         _quitGame = quitGame;
-
+        
         _backgroundSprite = SpriteFactory.Instance.CreateStaticSprite("1x1white")
             .WithTint(Color.Black);
         _pauseSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps28", "PAUSED");
         _resumeSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps16", "RESUME");
         _settingsSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps16", "SETTINGS");
         _quitSprite = SpriteFactory.Instance.CreateTextSprite("OptimusPrinceps16", "QUIT");
+        
+        // Position calculations
+        Rectangle screen = _graphicsDevice.Viewport.Bounds;
+        Vector2 pauseSize = _pauseSprite.GetDimensions();
+        Vector2 resumeSize = _resumeSprite.GetDimensions();
+        Vector2 settingsSize = _settingsSprite.GetDimensions();
+        Vector2 quitSize = _quitSprite.GetDimensions();
+
+        _pausedPos = new Vector2(
+            (screen.Width - pauseSize.X) * 0.5f,
+            (screen.Height - pauseSize.Y) * 0.5f
+        );
+        _resumePos = new Vector2(
+            (screen.Width - resumeSize.X) * 0.5f,
+            (screen.Height - resumeSize.Y) * 0.5f + 40f
+        );
+        _settingsPos = new Vector2(
+            (screen.Width - settingsSize.X) * 0.5f,
+            (screen.Height - settingsSize.Y) * 0.5f + 80f
+        );
+        _quitPos = new Vector2(
+            (screen.Width - quitSize.X) * 0.5f,
+            (screen.Height - quitSize.Y) * 0.5f + 120f
+        );
+
+        // TODO: Replace direct usage of XNA Mouse.GetState()
+        _resumeSprite = _resumeSprite.WithHoverFunctionality(
+            () => {
+                Vector2 size = _resumeSprite.GetDimensions();
+                Rectangle bounds = new Rectangle((int)_resumePos.X, (int)_resumePos.Y, (int)size.X, (int)size.Y);
+                return bounds.Contains(Mouse.GetState().Position);
+            },
+            Color.Gray, 
+            Color.White
+        );
+        _settingsSprite = _settingsSprite.WithHoverFunctionality(
+            () => {
+                Vector2 size = _settingsSprite.GetDimensions();
+                Rectangle bounds = new Rectangle((int)_settingsPos.X, (int)_settingsPos.Y, (int)size.X, (int)size.Y);
+                return bounds.Contains(Mouse.GetState().Position);
+            },
+            Color.Gray, 
+            Color.White
+        );
+        _quitSprite = _quitSprite.WithHoverFunctionality(
+            () => {
+                Vector2 size = _quitSprite.GetDimensions();
+                Rectangle bounds = new Rectangle((int)_quitPos.X, (int)_quitPos.Y, (int)size.X, (int)size.Y);
+                return bounds.Contains(Mouse.GetState().Position);
+            },
+            Color.Gray, 
+            Color.White
+        );
     }
 
     public void Enter()
@@ -55,38 +115,16 @@ public class PauseGameState : IGameState
             onResumeRequested: () => _stateManager.RemoveState(),
             onQuitRequested: _quitGame);
         
-        Rectangle screen = _graphicsDevice.Viewport.Bounds;
-        Vector2 pausedSize = _pauseSprite.GetDimensions();
-        Vector2 resumeSize = _resumeSprite.GetDimensions();
-        Vector2 settingsSize = _settingsSprite.GetDimensions();
-        Vector2 quitSize = _quitSprite.GetDimensions();
-        
-        Vector2 pausedPos = new Vector2(
-            (screen.Width - pausedSize.X) * 0.5f,
-            (screen.Height - pausedSize.Y) * 0.5f
-        );
-        Vector2 resumePos = new Vector2(
-            (screen.Width - resumeSize.X) * 0.5f,
-            pausedPos.Y + resumeSize.Y + 30f
-        );
-        Vector2 settingsPos = new Vector2(
-            (screen.Width - settingsSize.X) * 0.5f,
-            resumePos.Y + settingsSize.Y + 30f
-        );
-        Vector2 quitPos = new Vector2(
-            (screen.Width - quitSize.X) * 0.5f,
-            settingsPos.Y + quitSize.Y + 30f
-        );
         
         Dictionary<MouseInput, Action> guiControls = new Dictionary<MouseInput, Action>();
         
         guiControls.Add(
             new MouseInput(
                 new MouseInputRegion(
-                    resumePos.X,
-                    resumePos.Y,
-                    resumeSize.X,
-                    resumeSize.Y
+                    _resumePos.X,
+                    _resumePos.Y,
+                    _resumeSprite.GetDimensions().X,
+                    _resumeSprite.GetDimensions().Y
                 ),
                 InputState.JustPressed,
                 MouseButton.Left
@@ -97,10 +135,10 @@ public class PauseGameState : IGameState
         guiControls.Add(
             new MouseInput(
                 new MouseInputRegion(
-                    settingsPos.X,
-                    settingsPos.Y,
-                    settingsSize.X,
-                    settingsSize.Y
+                    _settingsPos.X,
+                    _settingsPos.Y,
+                    _settingsSprite.GetDimensions().X,
+                    _settingsSprite.GetDimensions().Y
                 ),
                 InputState.JustPressed,
                 MouseButton.Left
@@ -117,10 +155,10 @@ public class PauseGameState : IGameState
         guiControls.Add(
             new MouseInput(
                 new MouseInputRegion(
-                    quitPos.X, 
-                    quitPos.Y, 
-                    quitSize.X, 
-                    quitSize.Y
+                    _quitPos.X, 
+                    _quitPos.Y, 
+                    _quitSprite.GetDimensions().X, 
+                    _quitSprite.GetDimensions().Y
                 ),
                 InputState.JustPressed,
                 MouseButton.Left
@@ -151,32 +189,10 @@ public class PauseGameState : IGameState
     {
         Rectangle screen = _graphicsDevice.Viewport.Bounds;
         
-        Vector2 pausedSize = _pauseSprite.GetDimensions();
-        Vector2 resumeSize = _resumeSprite.GetDimensions();
-        Vector2 settingsSize = _settingsSprite.GetDimensions();
-        Vector2 quitSize = _quitSprite.GetDimensions();
-        
-        Vector2 pausedPos = new Vector2(
-            (screen.Width - pausedSize.X) * 0.5f,
-            (screen.Height - pausedSize.Y) * 0.5f
-        );
-        Vector2 resumePos = new Vector2(
-            (screen.Width - resumeSize.X) * 0.5f,
-            pausedPos.Y + resumeSize.Y + 30f
-        );
-        Vector2 settingsPos = new Vector2(
-            (screen.Width - settingsSize.X) * 0.5f,
-            resumePos.Y + settingsSize.Y + 30f
-        );
-        Vector2 quitPos = new Vector2(
-            (screen.Width - quitSize.X) * 0.5f,
-            settingsPos.Y + quitSize.Y + 30f
-        );
-        
         _backgroundSprite.Draw(spriteBatch, screen, Color.White);
-        _pauseSprite.Draw(spriteBatch, pausedPos, Color.White);
-        _resumeSprite.Draw(spriteBatch, resumePos, Color.White);
-        _settingsSprite.Draw(spriteBatch, settingsPos, Color.White);
-        _quitSprite.Draw(spriteBatch, quitPos, Color.White);
+        _pauseSprite.Draw(spriteBatch, _pausedPos, Color.White);
+        _resumeSprite.Draw(spriteBatch, _resumePos, Color.White);
+        _settingsSprite.Draw(spriteBatch, _settingsPos, Color.White);
+        _quitSprite.Draw(spriteBatch, _quitPos, Color.White);
     }
 }

@@ -46,7 +46,7 @@ public class SettingsGameState : IGameState
     public void Enter()
     {
         _inputManager.ClearAllControls();
-        _inputManager.LoadDefaultSettingsControls(_quitGame);
+        _inputManager.LoadDefaultSettingsControls(_stateManager.RemoveState, _quitGame);
         Dictionary<MouseInput, Action> guiControls = new Dictionary<MouseInput, Action>();
         
         Rectangle screen = _graphicsDevice.Viewport.Bounds;
@@ -197,4 +197,5 @@ public class SettingsGameState : IGameState
         _incSprite.Draw(spriteBatch, new Vector2(musicPos.X + musicSize.X + 5, musicPos.Y), Color.White);
         _decSprite.Draw(spriteBatch, new Vector2(musicPos.X - decSize.X - 5, musicPos.Y), Color.White);
     }
+    
 }

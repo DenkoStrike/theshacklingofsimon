@@ -408,15 +408,23 @@ public class InputManager
         );
     }
 
-    public void LoadDefaultSettingsControls(Action onQuitRequested)
+    public void LoadDefaultSettingsControls(Action onResumeRequested, Action onQuitRequested)
     {
         _keyboardController.RegisterCommand(
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Q),
             new GenericActionCommand(onQuitRequested));
+        _keyboardController.RegisterCommand(
+            new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape),
+            new GenericActionCommand(onResumeRequested));
         
         _gamepadController.RegisterCommand(
-            new GamepadButtonInput(InputState.JustPressed, GamepadButton.Start),
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.X),
             new GenericActionCommand(onQuitRequested));
+        _gamepadController.RegisterCommand(
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.Start),
+            new GenericActionCommand(onResumeRequested)
+            );
+        
     }
 
     public void LoadGUIControls(Dictionary<MouseInput, Action> controlMapping)

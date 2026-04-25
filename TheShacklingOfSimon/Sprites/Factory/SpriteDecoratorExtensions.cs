@@ -1,8 +1,10 @@
 #region
 
+using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Decorators;
 using TheShacklingOfSimon.Sprites.Products;
+using TheShacklingOfSimon.UI;
 
 #endregion
 
@@ -61,5 +63,20 @@ public static class SpriteDecoratorExtensions
     public static ISprite WithTint(this ISprite baseSprite, Color tint)
     {
         return new TintedSprite(baseSprite, tint);
+    }
+
+    /// <summary>
+    /// Enhances a sprite with hover functionality, allowing it to change color when hovered over.
+    /// </summary>
+    /// <param name="baseSprite">The sprite to which hover behavior will be added.</param>
+    /// <param name="isHoveredOver">A function determining whether the sprite is currently being hovered over.
+    /// Returns true if hovered, false otherwise.</param>
+    /// <param name="normalColor">The color of the sprite when it is not being hovered over.</param>
+    /// <param name="hoverColor">The color of the sprite when it is being hovered over.</param>
+    /// <returns>A new sprite instance with hover functionality applied.</returns>
+    public static ISprite WithHoverFunctionality(this ISprite baseSprite, Func<bool> isHoveredOver, Color normalColor,
+        Color hoverColor)
+    {
+        return new HoverSprite(baseSprite, isHoveredOver, normalColor, hoverColor);
     }
 }

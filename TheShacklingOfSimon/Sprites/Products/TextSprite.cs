@@ -15,8 +15,8 @@ public class TextSprite : ISprite
 
     public TextSprite(SpriteFont font, string text)
     {
-        this._font = font;
-        this._text = text;
+        _font = font;
+        _text = text;
     }
 
     public void Draw(SpriteBatch spriteBatch, Vector2 pos, Color color)
@@ -53,7 +53,6 @@ public class TextSprite : ISprite
 
     public void Update(GameTime delta)
     {
-        // No-op
     }
     
     public Vector2 GetDimensions()
