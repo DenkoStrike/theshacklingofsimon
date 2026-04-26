@@ -344,7 +344,6 @@ public class Game1 : Game
             _player,
             this,
             _roomManager,
-            _pickupManager,
             Reset);
     }
 

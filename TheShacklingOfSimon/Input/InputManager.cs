@@ -41,6 +41,8 @@ public class InputManager
     private readonly Game1 _game;
     private readonly RoomManager _roomManager;
 
+    private readonly Dictionary<PlayerAction, ICommand> _actionToCommandMap;
+
     /*
      * Reset action
      */
@@ -50,7 +52,6 @@ public class InputManager
         IPlayer player,
         Game1 game,
         RoomManager roomManager,
-        PickupManager pickupManager,
         Action onResetRequest)
     {
         _keyboardService = new MonoGameKeyboardService();
@@ -69,6 +70,37 @@ public class InputManager
         _keyboardController.OnInputDetected += HandleInputDetected;
         _mouseController.OnInputDetected += HandleInputDetected;
         _gamepadController.OnInputDetected += HandleInputDetected;
+
+        _actionToCommandMap = new Dictionary<PlayerAction, ICommand>
+        {
+            // Movement
+            { PlayerAction.MoveUp, new MoveUpCommand(_player) },
+            { PlayerAction.MoveDown, new MoveDownCommand(_player) },
+            { PlayerAction.MoveLeft, new MoveLeftCommand(_player) },
+            { PlayerAction.MoveRight, new MoveRightCommand(_player) },
+            
+            // Attacking
+            { PlayerAction.PrimaryAttackUp, new PrimaryAttackUpCommand(_player) },
+            { PlayerAction.PrimaryAttackLeft, new PrimaryAttackLeftCommand(_player) },
+            { PlayerAction.PrimaryAttackRight, new PrimaryAttackRightCommand(_player) },
+            { PlayerAction.PrimaryAttackDown, new PrimaryAttackDownCommand(_player) },
+            { PlayerAction.SecondaryAttackDown, new SecondaryAttackDownCommand(_player) },
+            
+            // Rotary controls
+            { PlayerAction.NextPrimaryWeapon, new NextPrimaryWeaponCommand(_player) },
+            { PlayerAction.PreviousPrimaryWeapon, new PreviousPrimaryWeaponCommand(_player) },
+            { PlayerAction.NextSecondaryWeapon, new NextSecondaryWeaponCommand(_player) },
+            { PlayerAction.PreviousSecondaryWeapon, new PreviousSecondaryWeaponCommand(_player) },
+            { PlayerAction.PreviousActiveItem, new PreviousActiveItemCommand(_player) },
+            { PlayerAction.NextActiveItem, new NextActiveItemCommand(_player) },
+            
+            // Miscellaneous
+            // TODO: Find a way to do pause, resume and quit here (commands?)
+            { PlayerAction.Pause, new GenericActionCommand(onResetRequest) },
+            { PlayerAction.Resume, new GenericActionCommand(onResetRequest) },
+            { PlayerAction.Quit, new GenericActionCommand(onResetRequest) },
+            { PlayerAction.Reset, new GenericActionCommand(onResetRequest) },
+        };
     }
 
     public void Update()
@@ -447,12 +479,62 @@ public class InputManager
         }
     }
 
+    public void ApplyProfile(InputProfile profile)
+    {
+        foreach (var mapping in profile.KeyboardMap)
+        {
+            if (_actionToCommandMap.TryGetValue(mapping.Key, out ICommand command))
+            {
+                _keyboardController.RegisterCommand(mapping.Value, command);
+            }
+        }
+
+        foreach (var mapping in profile.GamepadButtonMap)
+        {
+            if (_actionToCommandMap.TryGetValue(mapping.Key, out ICommand command))
+            {
+                _gamepadController.RegisterCommand(mapping.Value, command);
+            }
+        }
+
+        foreach (var mapping in profile.GamepadJoystickMap)
+        {
+            if (_actionToCommandMap.TryGetValue(mapping.Key, out ICommand command))
+            {
+                _gamepadController.RegisterCommand(mapping.Value, command);
+            }
+        }
+
+        foreach (var mapping in profile.MouseMap)
+        {
+            if (_actionToCommandMap.TryGetValue(mapping.Key, out ICommand command))
+            {
+                _mouseController.RegisterCommand(mapping.Value, command);
+            }
+        }
+    }
+
     private void HandleInputDetected(InputSchema schema)
     {
-        if (schema == InputSchema.KeyboardMouse)
+        switch (schema)
         {
-            VirtualCursorPosition = _mouseService.GetPosition();
+            case InputSchema.KeyboardMouse:
+            {
+                VirtualCursorPosition = _mouseService.GetPosition();
+                break;
+            }
+            case InputSchema.Gamepad:
+            {
+                VirtualCursorPosition = _gamepadService.GetLeftJoystickPosition();
+                break;
+            }
+            default:
+            {
+                // Safety
+                break;
+            }
         }
+        
         if (ActiveSchema == schema) return;
         ActiveSchema = schema;
     }
