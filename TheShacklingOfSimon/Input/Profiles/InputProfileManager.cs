@@ -12,9 +12,10 @@ namespace TheShacklingOfSimon.Input.Profiles;
 
 public static class InputProfileManager
 {
-    private static readonly string _path = "controls_config.json";
-
-    private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
+    private static readonly string BaseDir = AppContext.BaseDirectory;
+    private static readonly string JsonPath = Path.Combine(BaseDir, SanitizeFilePath("Content/controls_config.json"));
+    
+    private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
     {
         WriteIndented = true,
         Converters = { new JsonStringEnumConverter() }
@@ -24,8 +25,10 @@ public static class InputProfileManager
     {
         try
         {
-            string jsonString = JsonSerializer.Serialize(profile, _options);
-            File.WriteAllText(_path, jsonString);
+            Directory.CreateDirectory(BaseDir);
+            string jsonString = JsonSerializer.Serialize(profile, Options);
+            File.WriteAllText(JsonPath, jsonString);
+            Console.WriteLine("Profile saved successfully to " + JsonPath);
         }
         catch (Exception e)
         {
@@ -35,15 +38,16 @@ public static class InputProfileManager
 
     public static InputProfile LoadProfile()
     {
-        if (!File.Exists(_path))
+        if (!File.Exists(JsonPath))
         {
+            Console.WriteLine("Profile file not found. Loading the default profile instead.");
             return GenerateDefaultProfile();
         }
 
         try
         {
-            string jsonString = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize<InputProfile>(jsonString, _options);
+            string jsonString = File.ReadAllText(JsonPath);
+            return JsonSerializer.Deserialize<InputProfile>(jsonString, Options);
         }
         catch (Exception e)
         {
@@ -151,5 +155,13 @@ public static class InputProfileManager
             new GamepadButtonInput(InputState.JustPressed, GamepadButton.A));
 
         return profile;
+    }
+    
+    private static string SanitizeFilePath(string filePath)
+    {
+        // Replace all slashes from input with the correct OS-specific separators
+        return filePath
+            .Replace('/', Path.DirectorySeparatorChar)
+            .Replace('\\', Path.DirectorySeparatorChar);
     }
 }
