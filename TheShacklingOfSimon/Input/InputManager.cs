@@ -27,15 +27,19 @@ namespace TheShacklingOfSimon.Input;
 public class InputManager
 {
     public InputSchema ActiveSchema { get; private set; }
+    public Vector2 VirtualCursorPosition { get; set; }
     
     private readonly IController<KeyboardInput> _keyboardController;
     private readonly IController<MouseInput> _mouseController;
     private readonly IGamepadController _gamepadController;
+
+    private readonly IKeyboardService _keyboardService;
+    private readonly IMouseService _mouseService;
+    private readonly IGamepadService _gamepadService;
     
     private readonly IPlayer _player;
     private readonly Game1 _game;
     private readonly RoomManager _roomManager;
-    private readonly PickupManager _pickupManager;
 
     /*
      * Reset action
@@ -43,27 +47,35 @@ public class InputManager
     private readonly Action _onResetRequest;
 
     public InputManager(
-        IController<KeyboardInput> keyboardController,
-        IController<MouseInput> mouseController,
-        IGamepadController gamepadController,
         IPlayer player,
         Game1 game,
         RoomManager roomManager,
         PickupManager pickupManager,
         Action onResetRequest)
     {
-        _keyboardController = keyboardController;
-        _mouseController = mouseController;
-        _gamepadController = gamepadController;
+        _keyboardService = new MonoGameKeyboardService();
+        _mouseService = new MonoGameMouseService();
+        _gamepadService = new MonoGameGamepadService(PlayerIndex.One);
+        
+        _keyboardController = new KeyboardController(_keyboardService);
+        _mouseController = new MouseController(_mouseService);
+        _gamepadController = new GamepadController(_gamepadService);
+        
         _player = player;
         _game = game;
         _roomManager = roomManager;
-        _pickupManager = pickupManager;
         _onResetRequest = onResetRequest;
         
         _keyboardController.OnInputDetected += HandleInputDetected;
         _mouseController.OnInputDetected += HandleInputDetected;
         _gamepadController.OnInputDetected += HandleInputDetected;
+    }
+
+    public void Update()
+    {
+        _keyboardController.Update();
+        _mouseController.Update();
+        _gamepadController.Update();
     }
 
     public void ClearAllControls()
@@ -437,6 +449,10 @@ public class InputManager
 
     private void HandleInputDetected(InputSchema schema)
     {
+        if (schema == InputSchema.KeyboardMouse)
+        {
+            VirtualCursorPosition = _mouseService.GetPosition();
+        }
         if (ActiveSchema == schema) return;
         ActiveSchema = schema;
     }

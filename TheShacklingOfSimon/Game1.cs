@@ -50,10 +50,6 @@ public class Game1 : Game
 
     private SpriteBatch _spriteBatch;
 
-    private IController<KeyboardInput> _keyboardController;
-    private IController<MouseInput> _mouseController;
-    private IGamepadController _gamepadController;
-
     private RoomManager _roomManager;
     private PickupManager _pickupManager;
     private InputManager _inputManager;
@@ -79,10 +75,6 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _keyboardController = new KeyboardController(new MonoGameKeyboardService());
-        _mouseController = new MouseController(new MonoGameMouseService());
-        _gamepadController = new GamepadController(new MonoGameGamepadService(PlayerIndex.One));
-
         base.Initialize();
     }
 
@@ -120,10 +112,8 @@ public class Game1 : Game
 
     protected override void Update(GameTime delta)
     {
-        _keyboardController.Update();
-        _mouseController.Update();
-        _gamepadController.Update();
         _gameStateManager.Update(delta);
+        _inputManager.Update();
         base.Update(delta);
     }
 
@@ -349,9 +339,6 @@ public class Game1 : Game
     private void CreateInputManager()
     {
         _inputManager = new InputManager(
-            _keyboardController,
-            _mouseController,
-            _gamepadController,
             _player,
             this,
             _roomManager,
