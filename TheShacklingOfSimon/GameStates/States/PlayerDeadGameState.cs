@@ -1,11 +1,15 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Timers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Commands;
+using TheShacklingOfSimon.Commands.Gamestate;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
@@ -74,7 +78,16 @@ public class PlayerDeadGameState : IGameState
     public void Enter()
     {
         _inputManager.ClearAllControls();
-        _inputManager.LoadDeadStateControls(_restartGame, _quitGame);
+        
+        InputProfile profile = InputProfileManager.LoadProfile();
+        Dictionary<PlayerAction, ICommand> actionToCommandMap = new Dictionary<PlayerAction, ICommand>
+        {
+            { PlayerAction.Reset, new GenericActionCommand(_restartGame) },
+            { PlayerAction.Quit, new GenericActionCommand(_quitGame) },
+        };
+        
+        _inputManager.LoadControls(profile, actionToCommandMap);
+        
         darkSouls = SoundManager.Instance.AddSFX("other", "dark-souls-you-died-sound-effect_hm5sYFG");
         darkSoulsPlayed = false;
     }

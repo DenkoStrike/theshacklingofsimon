@@ -1,4 +1,4 @@
-﻿namespace TheShacklingOfSimon.Input;
+﻿namespace TheShacklingOfSimon.Input.Profiles;
 
 public enum PlayerAction
 {
@@ -8,6 +8,9 @@ public enum PlayerAction
     // Attacking
     PrimaryAttackUp, PrimaryAttackLeft, PrimaryAttackRight, PrimaryAttackDown,
     SecondaryAttackUp, SecondaryAttackLeft, SecondaryAttackRight, SecondaryAttackDown,
+    
+    // Items
+    UseActiveItem,
     
     // Rotary controls
     NextPrimaryWeapon, PreviousPrimaryWeapon, NextSecondaryWeapon, PreviousSecondaryWeapon,

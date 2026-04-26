@@ -1,10 +1,13 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
 
@@ -69,7 +72,15 @@ public class WinGameState : IGameState
     public void Enter()
     {
         _inputManager.ClearAllControls();
-        _inputManager.LoadDeadStateControls(_restartGame, _quitGame);
+        
+        InputProfile profile = InputProfileManager.LoadProfile();
+        Dictionary<PlayerAction, ICommand> actionToCommandMap = new Dictionary<PlayerAction, ICommand>
+        {
+            { PlayerAction.Reset, new GenericActionCommand(_restartGame) },
+            { PlayerAction.Quit, new GenericActionCommand(_quitGame) },
+        };
+        
+        _inputManager.LoadControls(profile, actionToCommandMap);
     }
 
     public void Exit()

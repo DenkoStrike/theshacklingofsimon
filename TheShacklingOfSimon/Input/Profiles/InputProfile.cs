@@ -3,7 +3,7 @@ using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
 using TheShacklingOfSimon.Controllers.Mouse;
 
-namespace TheShacklingOfSimon.Input;
+namespace TheShacklingOfSimon.Input.Profiles;
 
 public class InputProfile
 {

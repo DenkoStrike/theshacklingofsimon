@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Controllers.Mouse;
 using TheShacklingOfSimon.Input;
 using TheShacklingOfSimon.Input.Mouse;
+using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
@@ -46,7 +48,16 @@ public class SettingsGameState : IGameState
     public void Enter()
     {
         _inputManager.ClearAllControls();
-        _inputManager.LoadDefaultSettingsControls(_stateManager.RemoveState, _quitGame);
+        
+        InputProfile profile = InputProfileManager.LoadProfile();
+        Dictionary<PlayerAction, ICommand> actionToCommandMap = new Dictionary<PlayerAction, ICommand>
+        {
+            { PlayerAction.Resume, new GenericActionCommand(_stateManager.RemoveState) },
+            { PlayerAction.Quit, new GenericActionCommand(_quitGame) },
+        };
+        
+        _inputManager.LoadControls(profile, actionToCommandMap);
+        
         Dictionary<MouseInput, Action> guiControls = new Dictionary<MouseInput, Action>();
         
         Rectangle screen = _graphicsDevice.Viewport.Bounds;

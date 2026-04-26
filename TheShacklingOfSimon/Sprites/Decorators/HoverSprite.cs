@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheShacklingOfSimon.Sprites.Decorators;
 using TheShacklingOfSimon.Sprites.Products;
 
-namespace TheShacklingOfSimon.UI;
+namespace TheShacklingOfSimon.Sprites.Decorators;
 
 public class HoverSprite : BaseDecoratedSprite
 {

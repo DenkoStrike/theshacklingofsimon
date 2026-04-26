@@ -75,6 +75,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
+        _inputManager = new InputManager();
         base.Initialize();
     }
 
@@ -105,7 +106,6 @@ public class Game1 : Game
 
         CreatePlayerWeapons();
         CreatePlayerItems();
-        CreateInputManager();
         ConfigureCollisionAndProjectileHooks();
         CreateGameStates();
     }
@@ -335,16 +335,6 @@ public class Game1 : Game
         _player.Inventory.Add(teleportItem);
         _player.Inventory.Add(new AdrenalineItem(_player));
         _player.Inventory.CurrentActiveItem = teleportItem;
-    }
-
-
-    private void CreateInputManager()
-    {
-        _inputManager = new InputManager(
-            _player,
-            this,
-            _roomManager,
-            Reset);
     }
 
     private void ConfigureCollisionAndProjectileHooks()

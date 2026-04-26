@@ -1,13 +1,19 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheShacklingOfSimon.Commands;
+using TheShacklingOfSimon.Commands.PlayerAttack;
+using TheShacklingOfSimon.Commands.PlayerInventoryManagement;
+using TheShacklingOfSimon.Commands.PlayerMovement;
 using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Level_Handling;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 using TheShacklingOfSimon.Sounds;
@@ -78,8 +84,7 @@ public class PlayGameState : IGameState
 
     public void Enter()
     {
-        _inputManager.ClearAllControls();
-        _inputManager.LoadGameplayControls(RequestPause);
+        RegisterControls();
         _objectiveManager.Reset();
         _objectiveManager.OnTransitionRequested += HandleTransition;
 
@@ -170,7 +175,7 @@ public class PlayGameState : IGameState
 
     private void EndRoomTransition()
     {
-        _inputManager.LoadGameplayControls(RequestPause);
+        RegisterControls();
         _fadeState = FadeState.None;
     }
 
@@ -193,5 +198,40 @@ public class PlayGameState : IGameState
     {
         _stateManager.AddState(newState);
         // Console.WriteLine("Transition requested"); // debug
+    }
+
+    private void RegisterControls()
+    {
+        _inputManager.ClearAllControls();
+        
+        InputProfile profile = InputProfileManager.LoadProfile();
+        Dictionary<PlayerAction, ICommand> actionToCommandMap = new Dictionary<PlayerAction, ICommand>
+        {
+            // Movement
+            { PlayerAction.MoveUp, new MoveUpCommand(_player) },
+            { PlayerAction.MoveDown, new MoveDownCommand(_player) },
+            { PlayerAction.MoveLeft, new MoveLeftCommand(_player) },
+            { PlayerAction.MoveRight, new MoveRightCommand(_player) },
+            
+            // Attacking
+            { PlayerAction.PrimaryAttackUp, new PrimaryAttackUpCommand(_player) },
+            { PlayerAction.PrimaryAttackLeft, new PrimaryAttackLeftCommand(_player) },
+            { PlayerAction.PrimaryAttackRight, new PrimaryAttackRightCommand(_player) },
+            { PlayerAction.PrimaryAttackDown, new PrimaryAttackDownCommand(_player) },
+            { PlayerAction.SecondaryAttackDown, new SecondaryAttackDownCommand(_player) },
+            
+            // Rotary controls
+            { PlayerAction.NextPrimaryWeapon, new NextPrimaryWeaponCommand(_player) },
+            { PlayerAction.PreviousPrimaryWeapon, new PreviousPrimaryWeaponCommand(_player) },
+            { PlayerAction.NextSecondaryWeapon, new NextSecondaryWeaponCommand(_player) },
+            { PlayerAction.PreviousSecondaryWeapon, new PreviousSecondaryWeaponCommand(_player) },
+            { PlayerAction.PreviousActiveItem, new PreviousActiveItemCommand(_player) },
+            { PlayerAction.NextActiveItem, new NextActiveItemCommand(_player) },
+            
+            // Miscellaneous
+            { PlayerAction.Pause, new GenericActionCommand(RequestPause) },
+        };
+        
+        _inputManager.LoadControls(profile, actionToCommandMap);
     }
 }
