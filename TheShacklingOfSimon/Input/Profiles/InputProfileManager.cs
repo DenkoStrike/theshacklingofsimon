@@ -12,9 +12,10 @@ namespace TheShacklingOfSimon.Input.Profiles;
 
 public static class InputProfileManager
 {
-    private static readonly string _path = "controls_config.json";
-
-    private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
+    private static readonly string BaseDir = AppContext.BaseDirectory;
+    private static readonly string JsonPath = Path.Combine(BaseDir, SanitizeFilePath("Content/controls_config.json"));
+    
+    private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
     {
         WriteIndented = true,
         Converters = { new JsonStringEnumConverter() }
@@ -24,8 +25,10 @@ public static class InputProfileManager
     {
         try
         {
-            string jsonString = JsonSerializer.Serialize(profile, _options);
-            File.WriteAllText(_path, jsonString);
+            Directory.CreateDirectory(BaseDir);
+            string jsonString = JsonSerializer.Serialize(profile, Options);
+            File.WriteAllText(JsonPath, jsonString);
+            Console.WriteLine("Profile saved successfully to " + JsonPath);
         }
         catch (Exception e)
         {
@@ -35,15 +38,16 @@ public static class InputProfileManager
 
     public static InputProfile LoadProfile()
     {
-        if (!File.Exists(_path))
+        if (!File.Exists(JsonPath))
         {
+            Console.WriteLine("Profile file not found. Loading the default profile instead.");
             return GenerateDefaultProfile();
         }
 
         try
         {
-            string jsonString = File.ReadAllText(_path);
-            return JsonSerializer.Deserialize<InputProfile>(jsonString, _options);
+            string jsonString = File.ReadAllText(JsonPath);
+            return JsonSerializer.Deserialize<InputProfile>(jsonString, Options);
         }
         catch (Exception e)
         {
@@ -63,13 +67,13 @@ public static class InputProfileManager
             MouseMap = new()
         };
 
-        // Movement
+        // Keyboard movement
         profile.KeyboardMap.Add(PlayerAction.MoveUp, new KeyboardInput(InputState.Pressed, KeyboardButton.W));
         profile.KeyboardMap.Add(PlayerAction.MoveLeft, new KeyboardInput(InputState.Pressed, KeyboardButton.A));
         profile.KeyboardMap.Add(PlayerAction.MoveDown, new KeyboardInput(InputState.Pressed, KeyboardButton.S));
         profile.KeyboardMap.Add(PlayerAction.MoveRight, new KeyboardInput(InputState.Pressed, KeyboardButton.D));
 
-        // Primary Attacks
+        // Keyboard attacking
         profile.KeyboardMap.Add(PlayerAction.PrimaryAttackUp, new KeyboardInput(InputState.Pressed, KeyboardButton.Up));
         profile.KeyboardMap.Add(PlayerAction.PrimaryAttackLeft,
             new KeyboardInput(InputState.Pressed, KeyboardButton.Left));
@@ -77,12 +81,10 @@ public static class InputProfileManager
             new KeyboardInput(InputState.Pressed, KeyboardButton.Down));
         profile.KeyboardMap.Add(PlayerAction.PrimaryAttackRight,
             new KeyboardInput(InputState.Pressed, KeyboardButton.Right));
-
-        // Secondary Attack (Choosing LeftShift as the primary default)
         profile.KeyboardMap.Add(PlayerAction.SecondaryAttackDown,
             new KeyboardInput(InputState.Pressed, KeyboardButton.LeftShift));
 
-        // Inventory & Weapons
+        // keyboard inventory and weapons
         profile.KeyboardMap.Add(PlayerAction.NextPrimaryWeapon,
             new KeyboardInput(InputState.JustPressed, KeyboardButton.J));
         profile.KeyboardMap.Add(PlayerAction.NextSecondaryWeapon,
@@ -94,19 +96,13 @@ public static class InputProfileManager
         profile.KeyboardMap.Add(PlayerAction.UseActiveItem,
             new KeyboardInput(InputState.JustPressed, KeyboardButton.Space));
 
-        // Game Flow
+        // Keyboard miscellaneous
         profile.KeyboardMap.Add(PlayerAction.Reset, new KeyboardInput(InputState.JustPressed, KeyboardButton.R));
         profile.KeyboardMap.Add(PlayerAction.Pause, new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape));
         profile.KeyboardMap.Add(PlayerAction.Quit, new KeyboardInput(InputState.JustPressed, KeyboardButton.Q));
-
-        // Note: The UI "Resume" action can share the exact same button as "Pause" 
         profile.KeyboardMap.Add(PlayerAction.Resume, new KeyboardInput(InputState.JustPressed, KeyboardButton.Escape));
-
-        // ==========================================
-        // GAMEPAD JOYSTICK DEFAULTS
-        // ==========================================
-
-        // Movement (Left Stick)
+        
+        // Gamepad movement
         profile.GamepadJoystickMap.Add(PlayerAction.MoveUp,
             new GamepadJoystickInput(GamepadStick.Left, new JoystickInputRegion(new Vector2(0, 1), 120f, 0.1f),
                 InputState.Pressed));
@@ -120,7 +116,7 @@ public static class InputProfileManager
             new GamepadJoystickInput(GamepadStick.Left, new JoystickInputRegion(new Vector2(0, -1), 120f, 0.1f),
                 InputState.Pressed));
 
-        // Primary Attacks (Right Stick)
+        // Gamepad attacking
         profile.GamepadJoystickMap.Add(PlayerAction.PrimaryAttackUp,
             new GamepadJoystickInput(GamepadStick.Right, new JoystickInputRegion(new Vector2(0, 1), 90f, 0.1f),
                 InputState.Pressed));
@@ -133,16 +129,10 @@ public static class InputProfileManager
         profile.GamepadJoystickMap.Add(PlayerAction.PrimaryAttackRight,
             new GamepadJoystickInput(GamepadStick.Right, new JoystickInputRegion(new Vector2(1, 0), 90f, 0.1f),
                 InputState.Pressed));
-
-        // ==========================================
-        // GAMEPAD BUTTON DEFAULTS
-        // ==========================================
-
-        // Secondary Attack (Choosing LeftTrigger as the primary default)
         profile.GamepadButtonMap.Add(PlayerAction.SecondaryAttackDown,
-            new GamepadButtonInput(InputState.Pressed, GamepadButton.LeftTrigger));
+            new GamepadButtonInput(InputState.Pressed, GamepadButton.B));
 
-        // Inventory & Weapons
+        // gamepad inventory & buttons
         profile.GamepadButtonMap.Add(PlayerAction.UseActiveItem,
             new GamepadButtonInput(InputState.Pressed, GamepadButton.RightTrigger));
         profile.GamepadButtonMap.Add(PlayerAction.NextActiveItem,
@@ -154,18 +144,24 @@ public static class InputProfileManager
         profile.GamepadButtonMap.Add(PlayerAction.NextPrimaryWeapon,
             new GamepadButtonInput(InputState.Pressed, GamepadButton.DPadLeft));
 
-        // Game Flow
+        // gamepad miscellaneous
         profile.GamepadButtonMap.Add(PlayerAction.Pause,
             new GamepadButtonInput(InputState.JustPressed, GamepadButton.Start));
         profile.GamepadButtonMap.Add(PlayerAction.Reset,
             new GamepadButtonInput(InputState.JustPressed, GamepadButton.Back));
         profile.GamepadButtonMap.Add(PlayerAction.Quit,
-            new GamepadButtonInput(InputState.JustPressed, GamepadButton.X)); // Settings quit was X in old manager
-
-        // UI Resume maps to standard UI confirm (A)
+            new GamepadButtonInput(InputState.JustPressed, GamepadButton.X));
         profile.GamepadButtonMap.Add(PlayerAction.Resume,
             new GamepadButtonInput(InputState.JustPressed, GamepadButton.A));
 
         return profile;
+    }
+    
+    private static string SanitizeFilePath(string filePath)
+    {
+        // Replace all slashes from input with the correct OS-specific separators
+        return filePath
+            .Replace('/', Path.DirectorySeparatorChar)
+            .Replace('\\', Path.DirectorySeparatorChar);
     }
 }

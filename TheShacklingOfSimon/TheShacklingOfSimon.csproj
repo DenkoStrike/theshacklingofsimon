@@ -154,6 +154,10 @@
         <None Update="Content\fonts\spritefont\OptimusPrinceps16.spritefont">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+
+        <None Update="Content\controls_config.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Icon.ico">
