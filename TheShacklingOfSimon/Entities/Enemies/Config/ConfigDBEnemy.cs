@@ -48,7 +48,7 @@ public static class ConfigDBEnemy
         ["AdultLeech"] = new EnemyConfig
         {
             IsBoss = true,
-            MoveSpeed = 80f,
+            MoveSpeed = 120f,
             AttackCooldown = 4f,
             AttackRange = 10f,
             ContactDamage = 3f,

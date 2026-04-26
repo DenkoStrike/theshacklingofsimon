@@ -13,7 +13,7 @@ public static class ConfigDBPlayer
     {
         ["PlayerWithTwoSprites"] = new PlayerConfig
         {
-            MaxHealth = 6,
+            MaxHealth = 30,
             HitboxWidth = 20,
             HitboxHeight = 20,
             InvulnerabilityDuration = 0.5f,

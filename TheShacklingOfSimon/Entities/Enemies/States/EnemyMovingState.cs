@@ -109,10 +109,12 @@ public class EnemyMovingState : IEnemyState
             _enemy.Sprite = SpriteFactory.Instance.CreateAnimatedSprite(newAnimationName, 0.5f);
             _currentAnimation = newAnimationName;
 
+            /*
             if (_enemy.Name == "AdultLeech")
             {
                 _enemy.HitboxEnabled = false;
             }
+            */
         }
     }
 
