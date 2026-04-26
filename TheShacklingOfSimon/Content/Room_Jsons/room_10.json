@@ -1,0 +1,70 @@
+{
+    "id": "room_10",
+    "isBossRoom": false,
+    "tiles": [
+    ],
+    "entities": [],
+    "enemies": [
+        {
+            "type": "AxisEnemy",
+            "x": 6,
+            "y": 3,
+            "name": "BlindCreep",
+            "weapon": "NoneWeapon"
+        },
+        {
+            "type": "AxisEnemy",
+            "x": 3,
+            "y": 5,
+            "name": "BlindCreep",
+            "weapon": "NoneWeapon"
+        },
+        {
+            "type": "AxisEnemy",
+            "x": 9,
+            "y": 7,
+            "name": "BlindCreep",
+            "weapon": "NoneWeapon"
+        },
+        {
+            "type": "AxisEnemy",
+            "x": 6,
+            "y": 2,
+            "name": "Clotty",
+            "weapon": "NoneWeapon"
+        },
+        {
+            "type": "AxisEnemy",
+            "x": 11,
+            "y": 6,
+            "name": "Clotty",
+            "weapon": "NoneWeapon"
+        }
+    ],
+    "doors": [
+        {
+            "x": 14,
+            "y": 4,
+            "to": {
+                "room": "room_08",
+                "spawn": {
+                    "x": 1,
+                    "y": 4
+                }
+            },
+            "unlockType": "ClearEnemies"
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "to": {
+                "room": "room_11",
+                "spawn": {
+                    "x": 13,
+                    "y": 4
+                }
+            },
+            "unlockType": "ClearEnemies"
+        }
+    ]
+}

@@ -72,6 +72,18 @@
             "unlockType": "ClearEnemies"
         },
         {
+            "x": 0,
+            "y": 4,
+            "to": {
+                "room": "room_10",
+                "spawn": {
+                    "x": 13,
+                    "y": 4
+                }
+            },
+            "unlockType": "ClearEnemies"
+        },
+        {
             "x": 7,
             "y": 8,
             "to": {

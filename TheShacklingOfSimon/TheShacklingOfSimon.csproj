@@ -202,6 +202,12 @@
       <None Update="Content\Room_Jsons\room_09.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Content\Room_Jsons\room_10.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Content\Room_Jsons\room_11.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Content\Room_Jsons\room_index.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

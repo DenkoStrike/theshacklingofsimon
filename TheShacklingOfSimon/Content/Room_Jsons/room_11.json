@@ -1,0 +1,75 @@
+{
+    "id": "room_11",
+    "isBossRoom": false,
+    "tiles": [
+        {
+            "x": 3,
+            "y": 2,
+            "type": "Rock"
+        },
+        {
+            "x": 11,
+            "y": 2,
+            "type": "Rock"
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "type": "Rock"
+        },
+        {
+            "x": 10,
+            "y": 3,
+            "type": "Rock"
+        },
+        {
+            "x": 3,
+            "y": 5,
+            "type": "Rock"
+        },
+        {
+            "x": 11,
+            "y": 5,
+            "type": "Rock"
+        },
+        {
+            "x": 4,
+            "y": 6,
+            "type": "Rock"
+        },
+        {
+            "x": 10,
+            "y": 6,
+            "type": "Rock"
+        },
+        {
+            "x": 7,
+            "y": 6,
+            "type": "Rock"
+        }
+    ],
+    "entities": [],
+    "enemies": [
+        {
+            "type": "SpawnerEnemy",
+            "x": 5,
+            "y": 5,
+            "name": "Cohort",
+            "weapon": "NoneWeapon"
+        }
+    ],
+    "doors": [
+        {
+            "x": 14,
+            "y": 4,
+            "to": {
+                "room": "room_04",
+                "spawn": {
+                    "x": 1,
+                    "y": 4
+                }
+            },
+            "unlockType": "ClearEnemies"
+        }
+    ]
+}

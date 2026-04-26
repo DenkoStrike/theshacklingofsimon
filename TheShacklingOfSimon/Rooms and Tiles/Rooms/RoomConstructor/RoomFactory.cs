@@ -67,12 +67,15 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
             PlaceTiles(tileMap, tileFactory, data.Tiles);
             PlaceDoors(tileMap, data.Doors);
 
+            IPathfindingService pathfindingService = new GridPathfindingService(tileMap);
             IList<IEntity> entities = new List<IEntity>();
-            PlaceEnemies(tileMap, entities, data.Enemies);
+            PlaceEnemies(tileMap, entities, data.Enemies, pathfindingService);
             PlacePickups(tileMap, entities, data.Pickups);
 
             IEnumerable<IEntity> exposedEntities = entities;
-            return new Room(data.Id, data.IsBossRoom, tileMap, exposedEntities, data.Doors, background);
+            var room = new Room(data.Id, data.IsBossRoom, tileMap, exposedEntities, data.Doors, background);
+            WireSpawnedEnemiesToRoom(room, PlayerProvider(), pathfindingService);
+            return room;
         }
 
         private static void BuildBorderWalls(TileMap tileMap, TileFactory tileFactory)
@@ -216,12 +219,11 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
             return (new Point(maxX, d.Y), DoorSide.East);
         }
 
-        private void PlaceEnemies(TileMap tileMap, IList<IEntity> entities, List<EnemyData> enemies)
+        private void PlaceEnemies(TileMap tileMap, IList<IEntity> entities, List<EnemyData> enemies, IPathfindingService pathfindingService)
         {
             if (enemies == null) return;
 
             IPlayer player = PlayerProvider();
-            IPathfindingService pathfindingService = new GridPathfindingService(tileMap);
 
             foreach (var e in enemies)
             {
@@ -272,6 +274,43 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
                 IPickup pickup = pickupFactory.CreatePickup(p, player, tileMap);
                 entities.Add((IEntity)pickup);
             }
+        }
+
+        private void WireSpawnedEnemiesToRoom(Room room, IPlayer player, IPathfindingService pathfindingService)
+        {
+            foreach (var entity in room.Entities)
+            {
+                if (entity is IEnemy enemy)
+                {
+                    WireEnemySpawnHandler(enemy, room, player, pathfindingService);
+                }
+            }
+        }
+
+        private void WireEnemySpawnHandler(IEnemy enemy, Room room, IPlayer player, IPathfindingService pathfindingService)
+        {
+            if (enemy == null) return;
+
+            enemy.OnEnemySpawned += spawnedEnemy =>
+            {
+                if (spawnedEnemy == null) return;
+
+                if (spawnedEnemy is BaseEnemy spawnedBase)
+                {
+                    spawnedBase.SetTargetPlayer(player);
+                    spawnedBase.SetPathfindingService(pathfindingService);
+                }
+
+                spawnedEnemy.OnProjectileCreated += proj => OnProjectileCreated?.Invoke(proj);
+                spawnedEnemy.OnItemDropped += (item, pos) =>
+                {
+                    IPickup pickup = pickupFactory.CreateDroppedPickup(item, pos);
+                    OnItemDropped?.Invoke(pickup);
+                };
+
+                WireEnemySpawnHandler(spawnedEnemy, room, player, pathfindingService);
+                room.AddEntity(spawnedEnemy);
+            };
         }
     }
 }
