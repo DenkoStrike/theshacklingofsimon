@@ -211,10 +211,17 @@ public class PauseGameState : IGameState
     public void Update(GameTime delta)
     {
         Vector2 mousePos = _inputManager.VirtualCursorPosition;
-        Vector2 size = _resumeSprite.GetDimensions();
-        Rectangle bounds = new Rectangle((int)_resumePos.X, (int)_resumePos.Y, (int)size.X, (int)size.Y);
-        if (bounds.Contains(mousePos)) _hoverIndex = 0;
+        Vector2 resumeSize = _resumeSprite.GetDimensions();
+        Vector2 settingsSize = _settingsSprite.GetDimensions();
+        Vector2 quitSize = _quitSprite.GetDimensions();
         
+        // TODO: Move this out of Update() so it's not called every frame
+        Rectangle resumeBounds = new Rectangle((int)_resumePos.X, (int)_resumePos.Y, (int)resumeSize.X, (int)resumeSize.Y);
+        Rectangle settingsBounds = new Rectangle((int)_settingsPos.X, (int)_settingsPos.Y, (int)settingsSize.X, (int)settingsSize.Y);
+        Rectangle quitBounds = new Rectangle((int)_quitPos.X, (int)_quitPos.Y, (int)quitSize.X, (int)quitSize.Y);
+        if (resumeBounds.Contains(mousePos)) _hoverIndex = 0;
+        else if (settingsBounds.Contains(mousePos)) _hoverIndex = 1;
+        else if (quitBounds.Contains(mousePos)) _hoverIndex = 2;
         
         _backgroundSprite.Update(delta);
         _pauseSprite.Update(delta);

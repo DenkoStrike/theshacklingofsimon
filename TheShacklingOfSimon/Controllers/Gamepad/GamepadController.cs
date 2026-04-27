@@ -73,7 +73,7 @@ public class GamepadController : IGamepadController
         // we use snapshots so bindings can safely change while commands run.
         KeyValuePair<GamepadButtonInput, ICommand>[] buttonBindings = _buttonMap.ToArray();
 
-        foreach (KeyValuePair<GamepadButtonInput, ICommand> entry in buttonBindings)
+        foreach (var entry in buttonBindings)
         {
             GamepadButtonInput input = entry.Key;
             ICommand command = entry.Value;
@@ -92,7 +92,7 @@ public class GamepadController : IGamepadController
             )
             {
                 command.Execute();
-                OnInputDetected?.Invoke(InputSchema.Gamepad);
+                OnInputDetected?.Invoke(InputSchema.GamepadButton);
             }
 
             _previousButtonStates[input.Button] = currentState;
@@ -100,7 +100,7 @@ public class GamepadController : IGamepadController
 
         KeyValuePair<GamepadJoystickInput, ICommand>[] joystickBindings = _joystickMap.ToArray();
 
-        foreach (KeyValuePair<GamepadJoystickInput, ICommand> entry in joystickBindings)
+        foreach (var entry in joystickBindings)
         {
             GamepadJoystickInput input = entry.Key;
             ICommand command = entry.Value;
@@ -136,7 +136,7 @@ public class GamepadController : IGamepadController
             )
             {
                 command.Execute();
-                OnInputDetected?.Invoke(InputSchema.Gamepad);
+                OnInputDetected?.Invoke(InputSchema.GamepadJoystick);
             }
 
             _previousJoystickStates[input] = isInRegion;

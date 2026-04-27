@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Input;
+using TheShacklingOfSimon.Input.Gamepad;
 using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Sprites.Factory;
@@ -14,6 +15,7 @@ public class RebindingGameState : IGameState
     private readonly GameStateManager _stateManager;
     private readonly InputManager _inputManager;
     private readonly GraphicsDevice _graphicsDevice;
+    private readonly InputSchema _targetHardware;
     private readonly PlayerAction _actionToBeRebound;
     private readonly Action<KeyboardButton?> _onRebindComplete;
 
@@ -25,11 +27,12 @@ public class RebindingGameState : IGameState
     private Vector2 _promptTextPos;
     private Vector2 _actionTextPos;
     
-    public RebindingGameState(GameStateManager stateManager, InputManager inputManager, GraphicsDevice graphicsDevice, PlayerAction actionToBeRebound, Action<KeyboardButton?> onRebindComplete)
+    public RebindingGameState(GameStateManager stateManager, InputManager inputManager, GraphicsDevice graphicsDevice, InputSchema targetHardware, PlayerAction actionToBeRebound, Action<KeyboardButton?> onRebindComplete)
     {
         _stateManager = stateManager;
         _inputManager = inputManager;
         _graphicsDevice = graphicsDevice;
+        _targetHardware = targetHardware;
         _actionToBeRebound = actionToBeRebound;
         _onRebindComplete = onRebindComplete;
 
@@ -48,8 +51,8 @@ public class RebindingGameState : IGameState
             (screen.Height - promptTextSize.Y) * 0.5f
         );
         _promptTextPos = new Vector2(
-            (screen.Width - promptTextSize.X) * 0.5f,
-            (screen.Height - promptTextSize.Y) * 0.5f + 40f
+            (screen.Width - actionTextSize.X) * 0.5f,
+            (screen.Height - actionTextSize.Y) * 0.5f + 40f
         );
     }
 
@@ -64,21 +67,52 @@ public class RebindingGameState : IGameState
     
     public void Update(GameTime delta)
     {
-        KeyboardButton? newKey = _inputManager.GetAnyKeyboardKeyJustPressed();
-
-        if (newKey.HasValue)
+        switch (_targetHardware)
         {
-            if (newKey.Value == KeyboardButton.Escape)
+            case InputSchema.GamepadButton:
             {
-                _onRebindComplete.Invoke(null);
+                GamepadButton? newButton = _inputManager.GetAnyGamepadButtonJustPressed();
+                if (newButton.HasValue)
+                {
+                    
+                }
+                break;
             }
-            else
+            case InputSchema.GamepadJoystick:
             {
-                _onRebindComplete.Invoke(newKey);
+                // No-op, rebinding not supported.
+                break;
             }
-            
-            _stateManager.RemoveState();
+            case InputSchema.Keyboard:
+            {
+                KeyboardButton? newKey = _inputManager.GetAnyKeyboardKeyJustPressed();
+                 if (newKey.HasValue)
+                 {
+                     if (newKey.Value == KeyboardButton.Escape)
+                     {
+                         _onRebindComplete.Invoke(null);
+                     }
+                     else
+                     {
+                         _onRebindComplete.Invoke(newKey);
+                     }
+                     
+                     _stateManager.RemoveState();
+                 }
+                break;
+            }
+            case InputSchema.Mouse:
+            {
+                // No-op, rebinding not supported.
+                break;
+            }
+            default:
+            {
+                // safety
+                break;
+            }
         }
+        
         
         _backgroundSprite.Update(delta);
         _promptTextSprite.Update(delta);

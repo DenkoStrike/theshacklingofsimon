@@ -30,6 +30,7 @@ public class InputManager
     public InputSchema ActiveSchema { get; private set; }
     public Vector2 VirtualCursorPosition { get; set; }
     
+    
     private readonly IController<KeyboardInput> _keyboardController;
     private readonly IController<MouseInput> _mouseController;
     private readonly IGamepadController _gamepadController;
@@ -37,6 +38,9 @@ public class InputManager
     private readonly IKeyboardService _keyboardService;
     private readonly IMouseService _mouseService;
     private readonly IGamepadService _gamepadService;
+    
+    // TODO: Replace this with custom gamepad service
+    private Microsoft.Xna.Framework.Input.GamePadState _prevGamepadState;
 
     public InputManager()
     {
@@ -58,6 +62,9 @@ public class InputManager
         _keyboardController.Update();
         _mouseController.Update();
         _gamepadController.Update();
+        
+        // TODO: Replace this with custom gamepad service
+        _prevGamepadState = Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
     }
 
     public void ClearAllControls()
@@ -116,6 +123,41 @@ public class InputManager
         }
     }
 
+    public KeyboardButton? GetAnyKeyboardKeyJustPressed()
+    {
+        // TODO: Replace this with custom keyboard service
+        var keys = Microsoft.Xna.Framework.Input.Keyboard.GetState().GetPressedKeys();
+
+        if (keys.Length > 0)
+        {
+            if (Enum.TryParse(keys[0].ToString(), out KeyboardButton result))
+            {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    public GamepadButton? GetAnyGamepadButtonJustPressed()
+    {
+        // TODO: Replace this with custom gamepad service
+        var currentState = Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
+        if (!currentState.IsConnected) return null;
+
+        foreach (GamepadButton button in Enum.GetValues<GamepadButton>())
+        {
+            var monoGamepadButton = ConvertToMonoGameButton(button);
+            if (currentState.IsButtonDown(monoGamepadButton)
+                && _prevGamepadState.IsButtonUp(monoGamepadButton))
+            {
+                return button;
+            }
+        }
+        
+        return null;
+    }
+
     private void HandleInputDetected(InputSchema schema)
     {
         switch (schema)
@@ -125,7 +167,7 @@ public class InputManager
                 VirtualCursorPosition = _mouseService.GetPosition();
                 break;
             }
-            case InputSchema.Gamepad:
+            case InputSchema.GamepadButton or InputSchema.GamepadJoystick:
             {
                 VirtualCursorPosition = _gamepadService.GetLeftJoystickPosition();
                 break;
@@ -139,5 +181,30 @@ public class InputManager
         
         if (ActiveSchema == schema) return;
         ActiveSchema = schema;
+    }
+    
+    // TODO: Delete this when this implementation is updated to use gamepad service
+    private Microsoft.Xna.Framework.Input.Buttons ConvertToMonoGameButton(GamepadButton button)
+    {
+        return button switch
+        {
+            GamepadButton.A => Microsoft.Xna.Framework.Input.Buttons.A,
+            GamepadButton.B => Microsoft.Xna.Framework.Input.Buttons.B,
+            GamepadButton.X => Microsoft.Xna.Framework.Input.Buttons.X,
+            GamepadButton.Y => Microsoft.Xna.Framework.Input.Buttons.Y,
+            GamepadButton.Start => Microsoft.Xna.Framework.Input.Buttons.Start,
+            GamepadButton.Back => Microsoft.Xna.Framework.Input.Buttons.Back,
+            GamepadButton.DPadUp => Microsoft.Xna.Framework.Input.Buttons.DPadUp,
+            GamepadButton.DPadDown => Microsoft.Xna.Framework.Input.Buttons.DPadDown,
+            GamepadButton.DPadLeft => Microsoft.Xna.Framework.Input.Buttons.DPadLeft,
+            GamepadButton.DPadRight => Microsoft.Xna.Framework.Input.Buttons.DPadRight,
+            GamepadButton.LeftShoulder => Microsoft.Xna.Framework.Input.Buttons.LeftShoulder,
+            GamepadButton.RightShoulder => Microsoft.Xna.Framework.Input.Buttons.RightShoulder,
+            GamepadButton.LeftTrigger => Microsoft.Xna.Framework.Input.Buttons.LeftTrigger,
+            GamepadButton.RightTrigger => Microsoft.Xna.Framework.Input.Buttons.RightTrigger,
+            GamepadButton.LeftStick => Microsoft.Xna.Framework.Input.Buttons.LeftStick,
+            GamepadButton.RightStick => Microsoft.Xna.Framework.Input.Buttons.RightStick,
+            _ => 0 // Fallback
+        };
     }
 }

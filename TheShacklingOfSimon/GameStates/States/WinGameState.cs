@@ -122,7 +122,7 @@ public class WinGameState : IGameState
                 controlsSprite = _keyboardControlsSprite;
                 break;
             }
-            case InputSchema.Gamepad:
+            case InputSchema.GamepadButton or InputSchema.GamepadJoystick:
             {
                 controlsSprite = _gamepadControlsSprite;
                 break;
