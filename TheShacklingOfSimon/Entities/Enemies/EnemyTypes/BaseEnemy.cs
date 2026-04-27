@@ -77,6 +77,8 @@ public abstract class BaseEnemy : DamageableEntity, IEnemy
         ContactDamage = config.ContactDamage;
         AttackRange = config.AttackRange;
 
+        EffectManager.ClearAllEffects();
+        EffectStats.Clear();
         EffectStats.Add(StatType.InvulnerabilityDuration, config.InvulnerabilityDuration);
 
         AttackTimer = 0f;
