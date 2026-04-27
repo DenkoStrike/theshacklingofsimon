@@ -46,6 +46,16 @@
             "x": 7,
             "y": 6,
             "type": "Rock"
+        },
+        {
+            "x": 5,
+            "y": 7,
+            "type": "Rock"
+        },
+        {
+            "x": 9,
+            "y": 7,
+            "type": "Rock"
         }
     ],
     "entities": [],
