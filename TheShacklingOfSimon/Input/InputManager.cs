@@ -4,23 +4,16 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using TheShacklingOfSimon.Commands;
-using TheShacklingOfSimon.Commands.Gamestate;
-using TheShacklingOfSimon.Commands.PlayerAttack;
-using TheShacklingOfSimon.Commands.PlayerInventoryManagement;
-using TheShacklingOfSimon.Commands.PlayerMovement;
-using TheShacklingOfSimon.Commands.Room_Commands;
-using TheShacklingOfSimon.Commands.Temporary_Commands;
 using TheShacklingOfSimon.Controllers;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
 using TheShacklingOfSimon.Controllers.Mouse;
-using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Input.Gamepad;
 using TheShacklingOfSimon.Input.Keyboard;
-using TheShacklingOfSimon.Input.Mouse;
 using TheShacklingOfSimon.Input.Profiles;
-using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
+using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
 
 #endregion
 
@@ -44,8 +37,8 @@ public class InputManager
     private Vector2 _prevMousePos;
     
     // TODO: Replace this with custom gamepad and keyboard services?
-    private Microsoft.Xna.Framework.Input.GamePadState _prevGamepadState;
-    private Microsoft.Xna.Framework.Input.KeyboardState _prevKeyboardState;
+    private GamePadState _prevGamepadState;
+    private KeyboardState _prevKeyboardState;
 
     public InputManager(GraphicsDevice graphicsDevice)
     {
@@ -114,7 +107,7 @@ public class InputManager
         );
 
         // Track previous states for JustPressed logic
-        _prevGamepadState = Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
+        _prevGamepadState = GamePad.GetState(PlayerIndex.One);
         _prevKeyboardState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
     }
 
@@ -194,7 +187,7 @@ public class InputManager
     public GamepadButton? GetAnyGamepadButtonJustPressed()
     {
         // TODO: Replace this with custom gamepad service
-        var currentState = Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
+        var currentState = GamePad.GetState(PlayerIndex.One);
         if (!currentState.IsConnected) return null;
 
         foreach (GamepadButton button in Enum.GetValues<GamepadButton>())
@@ -217,26 +210,26 @@ public class InputManager
     }
     
     // TODO: Delete this when this implementation is updated to use gamepad service
-    private Microsoft.Xna.Framework.Input.Buttons ConvertToMonoGameButton(GamepadButton button)
+    private Buttons ConvertToMonoGameButton(GamepadButton button)
     {
         return button switch
         {
-            GamepadButton.A => Microsoft.Xna.Framework.Input.Buttons.A,
-            GamepadButton.B => Microsoft.Xna.Framework.Input.Buttons.B,
-            GamepadButton.X => Microsoft.Xna.Framework.Input.Buttons.X,
-            GamepadButton.Y => Microsoft.Xna.Framework.Input.Buttons.Y,
-            GamepadButton.Start => Microsoft.Xna.Framework.Input.Buttons.Start,
-            GamepadButton.Back => Microsoft.Xna.Framework.Input.Buttons.Back,
-            GamepadButton.DPadUp => Microsoft.Xna.Framework.Input.Buttons.DPadUp,
-            GamepadButton.DPadDown => Microsoft.Xna.Framework.Input.Buttons.DPadDown,
-            GamepadButton.DPadLeft => Microsoft.Xna.Framework.Input.Buttons.DPadLeft,
-            GamepadButton.DPadRight => Microsoft.Xna.Framework.Input.Buttons.DPadRight,
-            GamepadButton.LeftShoulder => Microsoft.Xna.Framework.Input.Buttons.LeftShoulder,
-            GamepadButton.RightShoulder => Microsoft.Xna.Framework.Input.Buttons.RightShoulder,
-            GamepadButton.LeftTrigger => Microsoft.Xna.Framework.Input.Buttons.LeftTrigger,
-            GamepadButton.RightTrigger => Microsoft.Xna.Framework.Input.Buttons.RightTrigger,
-            GamepadButton.LeftStick => Microsoft.Xna.Framework.Input.Buttons.LeftStick,
-            GamepadButton.RightStick => Microsoft.Xna.Framework.Input.Buttons.RightStick,
+            GamepadButton.A => Buttons.A,
+            GamepadButton.B => Buttons.B,
+            GamepadButton.X => Buttons.X,
+            GamepadButton.Y => Buttons.Y,
+            GamepadButton.Start => Buttons.Start,
+            GamepadButton.Back => Buttons.Back,
+            GamepadButton.DPadUp => Buttons.DPadUp,
+            GamepadButton.DPadDown => Buttons.DPadDown,
+            GamepadButton.DPadLeft => Buttons.DPadLeft,
+            GamepadButton.DPadRight => Buttons.DPadRight,
+            GamepadButton.LeftShoulder => Buttons.LeftShoulder,
+            GamepadButton.RightShoulder => Buttons.RightShoulder,
+            GamepadButton.LeftTrigger => Buttons.LeftTrigger,
+            GamepadButton.RightTrigger => Buttons.RightTrigger,
+            GamepadButton.LeftStick => Buttons.LeftStick,
+            GamepadButton.RightStick => Buttons.RightStick,
             _ => 0 // Fallback
         };
     }

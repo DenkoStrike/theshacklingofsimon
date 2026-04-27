@@ -10,7 +10,6 @@ using TheShacklingOfSimon.Entities.Enemies.Managers;
 using TheShacklingOfSimon.Entities.Pickup;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.Entities.Projectiles;
-using TheShacklingOfSimon.Items;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomClass;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.TileConstructor;

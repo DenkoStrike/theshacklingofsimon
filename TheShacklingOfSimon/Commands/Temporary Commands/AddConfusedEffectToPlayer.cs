@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using TheShacklingOfSimon.Entities.Players;
 using TheShacklingOfSimon.StatusEffects.Implementations.Complex;
 using TheShacklingOfSimon.StatusEffects.Templates;
+
+#endregion
 
 namespace TheShacklingOfSimon.Commands.Temporary_Commands;
 

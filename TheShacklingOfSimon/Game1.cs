@@ -1,9 +1,10 @@
 ﻿#region
 
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-using System.Collections.Generic;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Collisions;
 using TheShacklingOfSimon.Entities.Pickup;
@@ -23,11 +24,9 @@ using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.StatusEffects.Implementations.Recurring;
-using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 using TheShacklingOfSimon.StatusEffects.Templates;
 using TheShacklingOfSimon.UI;
 using TheShacklingOfSimon.Weapons;
-using KeyboardInput = TheShacklingOfSimon.Controllers.Keyboard.KeyboardInput;
 
 #endregion
 
@@ -359,18 +358,18 @@ public class Game1 : Game
 
     private void CreateGameStates()
     {
-        // string fogEffectPath = System.IO.Path.Combine(
-        //     AppContext.BaseDirectory,
-        //     "Content",
-        //     "Effects",
-        //     "FogOfWarEffect.xnb"
-        // );
+        string fogEffectPath = System.IO.Path.Combine(
+            AppContext.BaseDirectory,
+            "Content",
+            "Effects",
+            "FogOfWarEffect.xnb"
+        );
 
         // System.Diagnostics.Debug.WriteLine("Fog effect expected at: " + fogEffectPath);
         // System.Diagnostics.Debug.WriteLine("Fog effect exists: " + System.IO.File.Exists(fogEffectPath));
 
-        // Effect fogEffect = Content.Load<Effect>("Effects/FogOfWarEffect");
-        HUD = new HUD(_player, _roomManager, GraphicsDevice/*, fogEffect*/);
+        Effect fogEffect = Content.Load<Effect>("Effects/FogOfWarEffect");
+        HUD = new HUD(_player, _roomManager, GraphicsDevice, fogEffect);
 
         _gameStateManager = new GameStateManager();
         _gameStateManager.AddState(

@@ -1,6 +1,10 @@
-namespace TheShacklingOfSimon.Commands;
+#region
 
 using TheShacklingOfSimon.UI;
+
+#endregion
+
+namespace TheShacklingOfSimon.Commands;
 
 public class ToggleFogOfWarCommand : ICommand
 {

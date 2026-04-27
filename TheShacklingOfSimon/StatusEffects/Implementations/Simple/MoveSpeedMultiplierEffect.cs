@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.StatusEffects.Templates;
+
+#endregion
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 

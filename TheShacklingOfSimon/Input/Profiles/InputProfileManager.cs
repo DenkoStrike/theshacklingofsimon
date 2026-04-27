@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -8,6 +10,8 @@ using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
 using TheShacklingOfSimon.Input.Gamepad;
 using TheShacklingOfSimon.Input.Keyboard;
+
+#endregion
 
 namespace TheShacklingOfSimon.Input.Profiles;
 

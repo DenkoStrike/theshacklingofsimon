@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Input;
@@ -7,6 +9,8 @@ using TheShacklingOfSimon.Input.Keyboard;
 using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
+
+#endregion
 
 namespace TheShacklingOfSimon.GameStates.States;
 

@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles.Border.Doors;
-using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion

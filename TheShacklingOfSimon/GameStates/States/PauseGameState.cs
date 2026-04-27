@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +11,8 @@ using TheShacklingOfSimon.Input.Profiles;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
-using TheShacklingOfSimon.Sprites.Decorators;
+
+#endregion
 
 namespace TheShacklingOfSimon.GameStates.States;
 

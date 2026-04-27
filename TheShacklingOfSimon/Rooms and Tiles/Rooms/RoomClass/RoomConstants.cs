@@ -1,7 +1,6 @@
 ﻿#region
 
 using Microsoft.Xna.Framework;
-using TheShacklingOfSimon.Commands.Temporary_Commands;
 using TheShacklingOfSimon.Sounds;
 
 #endregion

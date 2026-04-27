@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.StatusEffects.Implementations.Simple;
 using TheShacklingOfSimon.StatusEffects.Templates;
+
+#endregion
 
 namespace TheShacklingOfSimon.StatusEffects.Implementations.Complex;
 

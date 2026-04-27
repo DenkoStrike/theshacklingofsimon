@@ -1,6 +1,5 @@
 #region
 
-using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.AttackBehaviours;
 using TheShacklingOfSimon.Entities.Enemies.EnemyBehaviours.MovementBehaviours;
 using TheShacklingOfSimon.Entities.Enemies.Managers;

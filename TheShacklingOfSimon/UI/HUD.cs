@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using TheShacklingOfSimon.Entities;
 using TheShacklingOfSimon.Entities.Enemies;
 using TheShacklingOfSimon.Entities.Players;
-using TheShacklingOfSimon.Items.Active_Items;
 using TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomManager;
 using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;

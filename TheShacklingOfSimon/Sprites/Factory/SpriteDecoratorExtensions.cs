@@ -4,7 +4,6 @@ using System;
 using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Sprites.Decorators;
 using TheShacklingOfSimon.Sprites.Products;
-using TheShacklingOfSimon.UI;
 
 #endregion
 

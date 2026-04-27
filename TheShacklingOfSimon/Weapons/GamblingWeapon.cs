@@ -1,11 +1,10 @@
 ﻿#region
 
-using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework;
 using TheShacklingOfSimon.Entities.Projectiles;
 using TheShacklingOfSimon.Sounds;
 using TheShacklingOfSimon.Sprites.Factory;
-using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
 

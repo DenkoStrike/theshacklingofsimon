@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
 using TheShacklingOfSimon.Controllers.Mouse;
+
+#endregion
 
 namespace TheShacklingOfSimon.Input.Profiles;
 

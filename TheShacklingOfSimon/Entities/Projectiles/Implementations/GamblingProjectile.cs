@@ -2,10 +2,8 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using TheShacklingOfSimon.Rooms_and_Tiles.Tiles;
 using TheShacklingOfSimon.Sounds;
-using TheShacklingOfSimon.Sprites.Factory;
 using TheShacklingOfSimon.Sprites.Products;
 
 #endregion
