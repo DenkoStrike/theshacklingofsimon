@@ -101,8 +101,9 @@ public class Game1 : Game
 
         CreateRoomManager(roomFactory);
 
-        // _roomManager holds a reference to roomFactory, so this is safe
+        // _roomManager holds a reference to roomFactory, so these subscriptions are safe
         roomFactory.OnItemDropped += _pickupManager.AddPickup;
+        roomFactory.OnEnemySpawned += _collisionManager.AddDynamicEntity;
 
         CreatePlayerWeapons();
         CreatePlayerItems();

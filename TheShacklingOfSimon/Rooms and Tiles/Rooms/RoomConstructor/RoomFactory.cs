@@ -29,6 +29,7 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
         // Events for wiring managers.
         public Action<IProjectile> OnProjectileCreated { get; set; }
         public Action<IPickup> OnItemDropped { get; set; }
+        public Action<IEnemy> OnEnemySpawned { get; set; }
 
         // Lets special puzzle/boss/key door rules be added without rewriting DoorTile.
         public Func<DoorData, IDoorUnlockCondition> DoorConditionFactory { get; set; }
@@ -307,6 +308,8 @@ namespace TheShacklingOfSimon.Rooms_and_Tiles.Rooms.RoomConstructor
                     IPickup pickup = pickupFactory.CreateDroppedPickup(item, pos);
                     OnItemDropped?.Invoke(pickup);
                 };
+                
+                OnEnemySpawned?.Invoke(spawnedEnemy);
 
                 WireEnemySpawnHandler(spawnedEnemy, room, player, pathfindingService);
                 room.AddEntity(spawnedEnemy);
