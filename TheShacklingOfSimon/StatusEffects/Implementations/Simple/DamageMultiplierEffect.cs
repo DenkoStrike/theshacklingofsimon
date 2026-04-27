@@ -20,7 +20,7 @@ public class DamageMultiplierEffect : SimpleStatusEffect
     /// <param name="strength">The amount of damage multiplier to be added or removed.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
     /// "
-    public DamageMultiplierEffect(string name, IDamageableEntity owner, float strength, float duration) 
+    public DamageMultiplierEffect(string name, IDamageableEntity owner, float strength, float duration = float.MaxValue) 
         : base(name, EffectType.DamageMultiplier, owner, strength, duration)
     {
     }

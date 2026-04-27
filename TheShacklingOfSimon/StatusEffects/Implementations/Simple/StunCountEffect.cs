@@ -17,7 +17,7 @@ public class StunCountEffect : SimpleStatusEffect
     /// <param name="name">The name of the effect.</param>
     /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is applied.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
-    public StunCountEffect(string name, IDamageableEntity owner, float duration) 
+    public StunCountEffect(string name, IDamageableEntity owner, float duration = float.MaxValue) 
         : base(name, EffectType.Stun, owner, 1.0f, duration)
     {
     }

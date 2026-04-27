@@ -15,7 +15,7 @@ public class MoveSpeedMultiplierEffect : SimpleStatusEffect
     /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is to be applied</param>
     /// <param name="strength">The amount of move speed multiplier to be added or removed</param>
     /// <param name="duration">The duration of the effect in seconds</param>
-    public MoveSpeedMultiplierEffect(string name, IDamageableEntity owner, float strength, float duration)
+    public MoveSpeedMultiplierEffect(string name, IDamageableEntity owner, float strength, float duration = float.MaxValue)
         : base(name, EffectType.MoveSpeedMultiplier, owner, strength, duration)
     {
     }

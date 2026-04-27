@@ -22,7 +22,7 @@ public class ProjectileSpeedEffect : SimpleStatusEffect
     /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is applied.</param>
     /// <param name="strength">The amount of projectile speed to be added or removed.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
-    public ProjectileSpeedEffect(string name, IDamageableEntity owner, float strength, float duration)
+    public ProjectileSpeedEffect(string name, IDamageableEntity owner, float strength, float duration = float.MaxValue)
         : base(name, EffectType.ProjectileSpeedMultiplier, owner, strength, duration)
     {
     }

@@ -21,7 +21,7 @@ public class MaxHealthEffect : SimpleStatusEffect
     /// <param name="strength">The amount of health to be added or removed.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
     /// 
-    public MaxHealthEffect(string name, IDamageableEntity owner, float strength, float duration) 
+    public MaxHealthEffect(string name, IDamageableEntity owner, float strength, float duration = float.MaxValue) 
         : base(name, EffectType.MaxHealth, owner, strength, duration)
     {
     }

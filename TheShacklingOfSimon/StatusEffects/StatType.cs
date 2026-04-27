@@ -11,6 +11,7 @@ public enum StatType
     PrimaryCooldown,
     SecondaryCooldown,
     StunCount,
+    InvulnerableCount,
     
     // Enemy specific stuff
     ContactDamage,

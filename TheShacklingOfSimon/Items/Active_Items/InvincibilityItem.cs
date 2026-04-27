@@ -11,7 +11,7 @@ using TheShacklingOfSimon.StatusEffects.Templates;
 
 namespace TheShacklingOfSimon.Items.Active_Items;
 
-public class InvinciblityItem : ActiveItem, IInventoryItem
+public class InvincibilityItem : ActiveItem, IInventoryItem
 {
     private readonly string _sfx;
     private float _timer;
@@ -19,14 +19,11 @@ public class InvinciblityItem : ActiveItem, IInventoryItem
     private bool _buffActive;
 
     private readonly float _buffDuration;
-    private readonly float _moveSpeedMultiplier;
-    private readonly float _fireRateMultiplier;
-    private readonly float _projSpeedMultiplier;
 
-    public InvinciblityItem(
+    public InvincibilityItem(
         IDamageableEntity entity,
-        float buffDuration = 1000f,
-        float cooldownDuration = 5.0f)
+        float buffDuration = 5.0f,
+        float cooldownDuration = 10.0f)
         : base(entity)
     {
         _cooldownDuration = cooldownDuration;
@@ -57,15 +54,13 @@ public class InvinciblityItem : ActiveItem, IInventoryItem
         _timer = _cooldownDuration;
         
         // Create effects here to avoid issues with the effects being applied to the wrong entity
-        var invincibleEffect = new InvulnerabilityDurationEffect(
+        var invincibleEffect = new InvulnerableEffect(
             Name, 
             Entity,
-            10000, 
             _buffDuration
         );
         Entity.EffectManager.AddTemporaryEffect(invincibleEffect);
         SoundManager.Instance.PlaySFX(_sfx);
-
         return true;
     }
 }

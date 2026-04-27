@@ -342,7 +342,7 @@ public class Game1 : Game
 
         _player.Inventory.Add(teleportItem);
         _player.Inventory.Add(new AdrenalineItem(_player));
-        _player.Inventory.Add(new InvinciblityItem(_player, 5, 5));
+        _player.Inventory.Add(new InvincibilityItem(_player));
         
         
         _player.Inventory.CurrentActiveItem = teleportItem;
@@ -365,18 +365,18 @@ public class Game1 : Game
 
     private void CreateGameStates()
     {
-        string fogEffectPath = System.IO.Path.Combine(
-            AppContext.BaseDirectory,
-            "Content",
-            "Effects",
-            "FogOfWarEffect.xnb"
-        );
+        // string fogEffectPath = System.IO.Path.Combine(
+        //     AppContext.BaseDirectory,
+        //     "Content",
+        //     "Effects",
+        //     "FogOfWarEffect.xnb"
+        // );
 
         // System.Diagnostics.Debug.WriteLine("Fog effect expected at: " + fogEffectPath);
         // System.Diagnostics.Debug.WriteLine("Fog effect exists: " + System.IO.File.Exists(fogEffectPath));
 
-        Effect fogEffect = Content.Load<Effect>("Effects/FogOfWarEffect");
-        HUD = new HUD(_player, _roomManager, GraphicsDevice, fogEffect);
+        // Effect fogEffect = Content.Load<Effect>("Effects/FogOfWarEffect");
+        HUD = new HUD(_player, _roomManager, GraphicsDevice/*, fogEffect*/);
 
         _gameStateManager = new GameStateManager();
         _gameStateManager.AddState(

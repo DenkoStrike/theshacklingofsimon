@@ -24,7 +24,7 @@ public class DamageItem : PassiveItem, IInventoryItem
         _damageMultiplierEffect = new DamageMultiplierEffect(
             Name, 
             Entity, 
-            amt * Entity.GetStat(StatType.DamageMultiplier), 
+            amt * Entity.GetStat(StatType.DamageMultiplier),
             duration
         );
     }

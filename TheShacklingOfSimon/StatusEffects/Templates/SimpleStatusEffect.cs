@@ -34,6 +34,9 @@ public abstract class SimpleStatusEffect : IStatusEffect
 
     public virtual void Update(GameTime delta)
     {
+        // Don't do time logic if the effect is "permanent"
+        if (Duration >= float.MaxValue - float.Epsilon) return;
+        
         Timer += (float) delta.ElapsedGameTime.TotalSeconds;
         if (Timer >= Duration)
         {

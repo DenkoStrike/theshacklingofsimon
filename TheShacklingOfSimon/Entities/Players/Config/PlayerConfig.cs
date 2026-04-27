@@ -9,6 +9,7 @@ namespace TheShacklingOfSimon.Entities.Players.Config;
 
 public class PlayerConfig
 {
+    // The base stats
     public int MaxHealth { get; set; }
     public int HitboxWidth { get; set; }
     public int HitboxHeight { get; set; }
@@ -19,6 +20,10 @@ public class PlayerConfig
     public float ProjectileSpeedMultiplier { get; set; }
     public float PrimaryCooldown { get; set; }
     public float SecondaryCooldown { get; set; }
+    
+    // Counters for complex effects
+    public int StunCount { get; set; }
+    public int InvulnerableCount { get; set; }
     
     // Animation data
     public float MovementFrameDuration { get; set; }

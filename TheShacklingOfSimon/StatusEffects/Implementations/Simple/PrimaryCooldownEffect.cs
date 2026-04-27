@@ -23,7 +23,7 @@ public class PrimaryCooldownEffect : SimpleStatusEffect
     /// <param name="owner">The object of type <c>IDamageableEntity</c> to which the effect is applied.</param>
     /// <param name="strength">The amount of cooldown reduction to be added or removed.</param>
     /// <param name="duration">The duration of the effect in seconds.</param>
-    public PrimaryCooldownEffect(string name, IDamageableEntity owner, float strength, float duration)
+    public PrimaryCooldownEffect(string name, IDamageableEntity owner, float strength, float duration = float.MaxValue)
         : base(name, EffectType.PrimaryCooldown, owner, strength, duration)
     {
     }

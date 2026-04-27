@@ -50,11 +50,10 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
 
     public override bool TakeDamage(int damage, bool bypassInvulnerability = false)
     {
+        if (EffectStats[StatType.InvulnerableCount] > 0) return false;
         if (!base.TakeDamage(damage, bypassInvulnerability)) return false;
-        InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
         
         StatesManager.HandleDamageInterrupt(Health <= 0);
-        
         return true;
     }
 
@@ -150,6 +149,8 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         EffectStats.Add(StatType.ProjectileSpeedMultiplier, config.ProjectileSpeedMultiplier);
         EffectStats.Add(StatType.PrimaryCooldown, config.PrimaryCooldown);
         EffectStats.Add(StatType.SecondaryCooldown, config.SecondaryCooldown);
+        EffectStats.Add(StatType.StunCount, config.StunCount);
+        EffectStats.Add(StatType.InvulnerableCount, config.InvulnerableCount);
 
         HurtSFX = SoundManager.Instance.AddSFX("isaac","Isaac_Hurt_Grunt0");
         HealSFX = SoundManager.Instance.AddSFX("isaac","1up");
@@ -167,10 +168,5 @@ public class PlayerWithTwoSprites : DamageableEntity, IPlayer, ITargetProvider
         // These, however, can be safely replaced; they are internal
         SpritesManager = new PlayerTwoSpritesManager(this);
         StatesManager = new PlayerTwoStatesManager(this, SpritesManager);
-    }
-    public void TriggerInvulnerability()
-    {
-        
-        InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
     }
 }

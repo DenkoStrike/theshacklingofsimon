@@ -19,7 +19,8 @@ public class ArmorItem : PassiveItem, IInventoryItem
         string name = "Trusty Armor", 
         string description = "Allows you to take more hits", 
         float amt = 0.25f,
-        float duration = float.MaxValue) 
+        float duration = float.MaxValue
+        ) 
         : base(name, description, entity)
     {
         _maxHealthEffect = new MaxHealthEffect(
@@ -32,7 +33,7 @@ public class ArmorItem : PassiveItem, IInventoryItem
         _invulnerabilityDurationEffect = new InvulnerabilityDurationEffect(
             Name, 
             Entity, 
-            amt * Entity.GetStat(StatType.InvulnerabilityDuration), 
+            amt * Entity.GetStat(StatType.InvulnerabilityDuration),
             duration
         );
     }

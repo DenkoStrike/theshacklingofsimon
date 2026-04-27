@@ -79,9 +79,7 @@ public abstract class DamageableEntity : IDamageableEntity
         if (InvulnerabilityTimer > 0) return false;
         
         InvulnerabilityTimer = EffectStats[StatType.InvulnerabilityDuration];
-        
         Health -= amt;
-
         return true;
     }
 

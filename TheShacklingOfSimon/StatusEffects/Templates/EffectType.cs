@@ -19,5 +19,6 @@ public enum EffectType
     
     // Complex
     Stun,
-    Confusion
+    Confusion,
+    Invulnerable
 }

@@ -13,6 +13,7 @@ public static class ConfigDBPlayer
     {
         ["PlayerWithTwoSprites"] = new PlayerConfig
         {
+            // Base stats
             MaxHealth = 30,
             HitboxWidth = 20,
             HitboxHeight = 20,
@@ -23,9 +24,17 @@ public static class ConfigDBPlayer
             ProjectileSpeedMultiplier = 1f,
             PrimaryCooldown = 0.0f,
             SecondaryCooldown = 0f,
+            
+            // Counters for complex effects
+            StunCount = 0,
+            InvulnerableCount = 0,
+            
+            // Animation data
             MovementFrameDuration = 0.05f,
             DeathFrameDuration = 1f,
             HurtFrameDuration = 0.1f,
+            
+            // Sprite drawing data
             HeadOffset = new Vector2(-4.75f, -16),
             DamagedStateOffset = new Vector2(0, -5),
             SkinsDictionary = new Dictionary<string, string>
