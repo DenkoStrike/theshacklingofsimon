@@ -214,6 +214,9 @@ public class Game1 : Game
         Song song = SoundFactory.Instance.GetSong(songStr);
         MediaPlayer.Play(song);
         MediaPlayer.IsRepeating = true;
+        
+        // Allow game states to control if the music is playing or not
+        MediaPlayer.Pause(); 
     }
 
     private RoomFactory CreateRoomFactory()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Controllers.Gamepad;
 using TheShacklingOfSimon.Controllers.Keyboard;
@@ -176,8 +177,9 @@ public class InputSettingsGameState : IGameState
         }
 
         // Bottom buttons
-        CreateMenuButton("SAVE & APPLY", screen.Width * 0.4f, screen.Height * 0.85f, SaveAndApply);
-        CreateMenuButton("CANCEL", screen.Width * 0.6f, screen.Height * 0.85f, () => _stateManager.RemoveState());
+        CreateMenuButton("SAVE & APPLY", screen.Width * 0.25f, screen.Height * 0.85f, SaveAndApply);
+        CreateMenuButton("RESET DEFAULTS", screen.Width * 0.50f, screen.Height * 0.85f, ResetToDefaults);
+        CreateMenuButton("CANCEL", screen.Width * 0.75f, screen.Height * 0.85f, () => _stateManager.RemoveState());
         
         var actionToCommandMap = new Dictionary<PlayerAction, ICommand>
         {
@@ -328,5 +330,12 @@ public class InputSettingsGameState : IGameState
     {
         InputProfileManager.SaveProfile(_draftProfile);
         _stateManager.RemoveState();
+    }
+
+    private void ResetToDefaults()
+    {
+        _draftProfile = InputProfileManager.GenerateDefaultProfile();
+        RefreshUI();
+        // Do not save here
     }
 }

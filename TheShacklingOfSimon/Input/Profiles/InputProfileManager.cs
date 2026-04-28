@@ -69,12 +69,8 @@ public static class InputProfileManager
             return GenerateDefaultProfile();
         }
     }
-
-    /*
-     * This method will only be called if the profile file cannot be found OR is unparsable.
-     * Otherwise, loading and saving on a single .json file will happen
-     */
-    private static InputProfile GenerateDefaultProfile()
+    
+    public static InputProfile GenerateDefaultProfile()
     {
         InputProfile profile = new InputProfile()
         {

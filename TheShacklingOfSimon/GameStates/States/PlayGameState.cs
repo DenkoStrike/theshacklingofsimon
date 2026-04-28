@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using TheShacklingOfSimon.Commands;
 using TheShacklingOfSimon.Commands.PlayerAttack;
 using TheShacklingOfSimon.Commands.PlayerInventoryManagement;
@@ -93,11 +94,13 @@ public class PlayGameState : IGameState
             _fadeTexture = new Texture2D(_graphicsDevice, 1, 1);
             _fadeTexture.SetData(new[] { Color.White });
         }
+        MediaPlayer.Resume();
     }
 
     public void Exit()
     {
         _objectiveManager.OnTransitionRequested -= HandleTransition;
+        MediaPlayer.Pause();
     }
 
     public void Update(GameTime delta)
